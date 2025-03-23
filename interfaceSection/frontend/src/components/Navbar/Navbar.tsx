@@ -2,8 +2,11 @@ import Logo from "../../assets/logo.png";
 import { IoMdSearch } from "react-icons/io";
 import { FaCaretDown, FaCartShopping } from "react-icons/fa6";
 import DarkMode from "./DarkMode";
+import { useState } from "react";
+import ResponsiveMenu from "./ResponsiveMenu";
+import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
 
-const Menu = [
+export const Menu = [
     {
         id: 2,
         name: "GIÀY NAM",
@@ -49,6 +52,13 @@ const Menu = [
 ];
 
 export const Navbar = () => {
+
+    const [showMenu, setShowMenu] = useState(false);
+
+    const toggleMenu = () => {
+        setShowMenu(!showMenu);
+    };
+
     return (
         <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
             {/* upper bar */}
@@ -105,6 +115,25 @@ export const Navbar = () => {
                         <div>
                             <DarkMode />
                         </div>
+
+
+                        {/* Mobile view  */}
+                        {showMenu ? (
+                            <HiMenuAlt1
+                                onClick={toggleMenu}
+                                className=" cursor-pointer transition-all sm:hidden"
+                                size={30}
+                            />
+                        ) : (
+                            <HiMenuAlt3
+                                onClick={toggleMenu}
+                                className="cursor-pointer transition-all sm:hidden"
+                                size={30}
+                            />
+                        )}
+
+                        {/* responsive menu */}
+                        <ResponsiveMenu showMenu={showMenu}/>
                     </div>
 
                 </div>

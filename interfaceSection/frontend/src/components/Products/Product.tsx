@@ -5,6 +5,7 @@ import Img4 from "../../assets/male-sneaker/sneaker4.png";
 import Img5 from "../../assets/male-sneaker/sneaker5.png";
 import Img6 from "../../assets/male-sneaker/sneaker6.png";
 import Button from "../Shared/Button";
+import { Link } from "react-router-dom";
 
 const ProductsData = [
   {
@@ -102,11 +103,14 @@ const Products = () => {
                 left-1/2 -translate-x-1/2 h-full w-full text-center
                 group-hover:backdrop-blur-sm justify-center 
                 items-center duration-200">
+                    {/* <Link to="/ProductDetail">}
+                    
+                    {/* </Link> */}
+
                     <Button
                       text={"Xem chi tiết"}
                       bgColor={"bg-primary"}
-                      textColor={"text-white"}
-                    />
+                      textColor={"text-white"} />
                   </div>
                 </div>
 
