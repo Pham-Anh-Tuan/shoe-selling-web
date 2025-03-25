@@ -1,10 +1,11 @@
 import Logo from "../../assets/logo.png";
 import { IoMdSearch } from "react-icons/io";
-import { FaCaretDown, FaCartShopping } from "react-icons/fa6";
+import { FaCaretDown, FaCartShopping, FaUser } from "react-icons/fa6";
 import DarkMode from "./DarkMode";
 import { useState } from "react";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 export const Menu = [
     {
@@ -51,7 +52,11 @@ export const Menu = [
     },
 ];
 
-export const Navbar = () => {
+interface NavbarProps {
+    handleSignInPopup: () => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
 
     const [showMenu, setShowMenu] = useState(false);
 
@@ -65,12 +70,14 @@ export const Navbar = () => {
             <div className="bg-primary/40 py-2">
                 <div className="container flex justify-between items-center">
                     <div>
-                        <a href="#" className="font-bold 
+                        <Link to="">
+                            <a href="#" className="font-bold 
                     text-xl sm:text-xl flex gap-2 items-center">
-                            <img src={Logo} alt="Logo"
-                                className="w-12" />
-                            KuShoe
-                        </a>
+                                <img src={Logo} alt="Logo"
+                                    className="w-12" />
+                                KuShoe
+                            </a>
+                        </Link>
                     </div>
 
                     {/* search bar*/}
@@ -94,26 +101,63 @@ export const Navbar = () => {
                         </div>
 
                         {/* cart */}
-                        <button
-                            onClick={() =>
-                                alert("asdsad")
-                            }
-                            className="bg-gradient-to-r from-primary to-secondary
+                        <Link to="/Cart">
+                            <button
+                                className="bg-gradient-to-r from-primary to-secondary
                     transition-all duration-200 text-white py-1 px-4 rounded-full
                     flex items-center gap-3 group"
-                        >
-                            <span
-                                className="group-hover:block hidden transition-all duration-200">
-                                Giỏ hàng
-                            </span>
-                            <FaCartShopping
-                                className="text-xl text-white drop-shadow-sm cursor-pointer" />
-
-                        </button>
-
+                            >
+                                <span
+                                    className="group-hover:block hidden transition-all duration-200">
+                                    Giỏ hàng
+                                </span>
+                                <FaCartShopping
+                                    className="text-xl text-white drop-shadow-sm cursor-pointer" />
+                            </button>
+                        </Link>
                         {/* Darkmode Switch */}
                         <div>
                             <DarkMode />
+                        </div>
+
+                        <div className="group relative cursor-pointer">
+                            <button onClick={() => handleSignInPopup()}
+                                className="bg-gradient-to-r from-primary to-secondary
+                     text-white py-1 px-2 rounded-full
+                    flex items-center gap-2 group">
+                                <FaUser className="text-xl text-white drop-shadow-sm cursor-pointer" />
+                                <span>
+                                    <FaCaretDown
+                                        className="transition-all
+                                duration-200
+                                group-hover:rotate-180"/>
+                                </span>
+                            </button>
+
+                            <div className="absolute z-[9999] hidden
+                        group-hover:block w-[200px] rounded-md
+                        bg-white p-2 text-black shadow-md right-0">
+                                <ul>
+                                    <Link to="/Orders">
+                                        <li>
+                                            <a href="#"
+                                                className="inline-block w-full rounded-md p-2
+                                        hover:bg-primary/20">
+                                                Đơn hàng của tôi
+                                            </a>
+                                        </li>
+                                    </Link>
+
+                                    <li>
+                                        <a href="#"
+                                            className="inline-block w-full rounded-md p-2
+                                        hover:bg-primary/20">
+                                            Đăng xuất
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
                         </div>
 
 
@@ -133,7 +177,7 @@ export const Navbar = () => {
                         )}
 
                         {/* responsive menu */}
-                        <ResponsiveMenu showMenu={showMenu}/>
+                        <ResponsiveMenu showMenu={showMenu} />
                     </div>
 
                 </div>
@@ -143,14 +187,16 @@ export const Navbar = () => {
             {/* lower bar */}
             <div className="flex justify-center">
                 <ul className="sm:flex hidden items-center gap-4">
-                    <div>
-                        <a href="#"
-                            className="inline-block px-4
+                    <Link to="">
+                        <div>
+                            <a href="#"
+                                className="inline-block px-4
                                 hover:text-primary font-medium"
-                        >
-                            TRANG CHỦ
-                        </a>
-                    </div>
+                            >
+                                TRANG CHỦ
+                            </a>
+                        </div>
+                    </ Link>
 
                     {/* Simple Dropdown and Links*/}
                     {Menu.map((data) => (
@@ -185,7 +231,6 @@ export const Navbar = () => {
                         </li>
                     ))}
                 </ul>
-
             </div>
         </div>
     )

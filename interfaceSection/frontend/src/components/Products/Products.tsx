@@ -103,14 +103,12 @@ const Products = () => {
                 left-1/2 -translate-x-1/2 h-full w-full text-center
                 group-hover:backdrop-blur-sm justify-center 
                 items-center duration-200">
-                    {/* <Link to="/ProductDetail">}
-                    
-                    {/* </Link> */}
-
-                    <Button
-                      text={"Xem chi tiết"}
-                      bgColor={"bg-primary"}
-                      textColor={"text-white"} />
+                    <Link to="/ProductDetail">
+                      <Button
+                        text={"Xem chi tiết"}
+                        bgColor={"bg-primary"}
+                        textColor={"text-white"} />
+                    </Link>
                   </div>
                 </div>
 

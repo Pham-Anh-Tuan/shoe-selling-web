@@ -59,7 +59,7 @@ const ProductDetail = () => {
                         <div className="flex items-center gap-2">
                             {/* single size */}
                             <div className="size-selector">
-                                <input type="radio" name="size" className="hidden" id="size-38" />
+                                <input type="radio" name="size" className="hidden" id="size-38" defaultChecked />
                                 <label htmlFor="size-38" className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600 dark:text-white">
                                     38
                                 </label>
@@ -91,7 +91,7 @@ const ProductDetail = () => {
                         <div className="flex items-center gap-2">
                             {/* single color */}
                             <div className="color-selector">
-                                <input type="radio" name="color" className="hidden" id="color-white" />
+                                <input type="radio" name="color" className="hidden" id="color-white" defaultChecked />
                                 <label htmlFor="color-white" className="border border-gray-200 rounded-sm h-5 w-5 cursor-pointer shadow-sm bg-white block" onClick={() => setActiveImage(Img1)}></label>
                             </div>
                             {/* single color end*/}
