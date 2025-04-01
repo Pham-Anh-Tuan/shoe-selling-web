@@ -207,8 +207,11 @@ const Cart: React.FC<CartProps> = ({ handleNeedSignIn }) => {
 
                 <div className="mt-8 space-y-2">
                     {/* <Link to="/DeliveryInformation"> */}
-                    <button onClick={() => handleNeedSignIn()} className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md">Thanh toán ngay</button>
+                    {/* <button onClick={() => handleNeedSignIn()} className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md">Thanh toán ngay</button> */}
                     {/* </Link> */}
+                    <Link to="/DeliveryInformation">
+                        <button className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md">Thanh toán ngay</button>
+                    </Link>
                     <button type="button" className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent hover:bg-slate-100 text-slate-900 border border-slate-300 rounded-md">Tiếp tục mua hàng</button>
                 </div>
 

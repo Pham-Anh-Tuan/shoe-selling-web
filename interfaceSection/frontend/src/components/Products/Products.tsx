@@ -115,7 +115,7 @@ const Products = () => {
 
                 <div className="sm:w-[217px] md:w-[217px] lg:w-[217px] xl:w-[281px]">
                   <h3 className="uppercase truncate text-center">{data.title}</h3>
-                  <p className="text-sm text-gray-600 font-bold text-center">{data.price}</p>
+                  <p className="text-sm text-gray-600 font-bold text-center dark:text-white">{data.price}</p>
                   {/* <div className="flex items-center gap-1">
                     <FaStar className="text-yellow-400" />
                     <span>{data.rating}</span>

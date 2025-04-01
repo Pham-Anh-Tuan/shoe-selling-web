@@ -147,14 +147,15 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                                             </a>
                                         </li>
                                     </Link>
-
-                                    <li>
-                                        <a href="#"
-                                            className="inline-block w-full rounded-md p-2
+                                    <form action="#" method="POST">
+                                        <li>
+                                            <a href="#"
+                                                className="inline-block w-full rounded-md p-2
                                         hover:bg-primary/20">
-                                            Đăng xuất
-                                        </a>
-                                    </li>
+                                                Đăng xuất
+                                            </a>
+                                        </li>
+                                    </form>
 
                                 </ul>
                             </div>

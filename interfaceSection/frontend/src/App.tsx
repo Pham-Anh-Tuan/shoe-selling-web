@@ -16,6 +16,8 @@ import Orders from './components/Orders/Orders'
 import OrderDetail from './components/OrderDetail/OrderDetail'
 import AdminDashboard from './components/Admin/AdminDashboard'
 import MainLayout from './components/MainLayout/MainLayout'
+import ProductList from './components/Admin/ProductManager/ProductList'
+import ProductHelp from './components/Admin/ProductManager/ProductHelp'
 
 
 
@@ -94,9 +96,15 @@ const App: React.FC = () => {
           handleForgotPWPopup={handleForgotPWPopup}
           handleSignOutPopup={handleSignOutPopup}
         />}>
-          <Route index element={<Hero />} />
+          <Route index element={<>
+            <Hero />
+            <Product />
+          </>} />
           <Route path="ProductDetail" element={<ProductDetail />} />
-          <Route path="Cart" element={<Cart handleNeedSignIn={handleNeedSignIn} />} />
+          <Route path="Cart" element={<>
+            <Cart handleNeedSignIn={handleNeedSignIn} />
+            <NeedSignIn needSignInPopup={needSignInPopup} setNeedSignInPopup={setNeedSignInPopup} handleSignInPopup={handleSignInPopup} />
+          </>} />
           <Route path="DeliveryInformation" element={<DeliveryInfor />} />
           <Route path="Orders" element={<Orders />} />
           <Route path="OrderDetail" element={<OrderDetail />} />
@@ -104,9 +112,12 @@ const App: React.FC = () => {
 
         {/* Trang Admin không có Navbar & Footer */}
         <Route path="/AdminDashboard" element={<AdminDashboard />} />
+        <Route path="/ProductList" element={<ProductList />} />
+        <Route path="/ProductHelp" element={<ProductHelp />} />
       </Routes>
     </Router>
   );
+
 };
 
 export default App;

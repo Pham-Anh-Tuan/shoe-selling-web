@@ -47,7 +47,8 @@ const ProductManagement = () => {
             </button>
             {/* Danh sách sản phẩm (chỉ là mẫu) */}
             <div className="mt-4 bg-white p-4 rounded shadow">
-                <p>Danh sách sản phẩm sẽ hiển thị ở đây...</p>
+                {/* <p>Danh sách sản phẩm sẽ hiển thị ở đây...</p> */}
+                
             </div>
         </div>
     );

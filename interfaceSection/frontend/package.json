@@ -10,7 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@heroicons/react": "^2.2.0",
     "@types/react-slick": "^0.23.13",
+    "dropzone": "^6.0.0-beta.2",
+    "flowbite": "^3.1.2",
+    "lodash": "^4.17.21",
+    "preline": "^3.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
@@ -21,6 +27,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@types/dropzone": "^5.7.9",
+    "@types/lodash": "^4.17.16",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react-swc": "^3.8.0",
