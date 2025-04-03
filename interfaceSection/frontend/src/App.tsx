@@ -14,10 +14,11 @@ import DeliveryInfor from './components/Payment/DeliveryInfor'
 import NeedSignIn from './components/SignInOut/NeedSignIn'
 import Orders from './components/Orders/Orders'
 import OrderDetail from './components/OrderDetail/OrderDetail'
-import AdminDashboard from './components/Admin/AdminDashboard'
 import MainLayout from './components/MainLayout/MainLayout'
 import ProductList from './components/Admin/ProductManager/ProductList'
 import ProductHelp from './components/Admin/ProductManager/ProductHelp'
+import AdNavbar from './components/Admin/AdNavbar'
+import OrderList from './components/Admin/OrderManager/OrderList'
 
 
 
@@ -111,8 +112,9 @@ const App: React.FC = () => {
         </Route>
 
         {/* Trang Admin không có Navbar & Footer */}
-        <Route path="/AdminDashboard" element={<AdminDashboard />} />
+        <Route path="/AdNavbar" element={<AdNavbar />} />
         <Route path="/ProductList" element={<ProductList />} />
+        <Route path="/OrderList" element={<OrderList />} />
         <Route path="/ProductHelp" element={<ProductHelp />} />
       </Routes>
     </Router>

@@ -116,10 +116,21 @@ const Products = () => {
                 <div className="sm:w-[217px] md:w-[217px] lg:w-[217px] xl:w-[281px]">
                   <h3 className="uppercase truncate text-center">{data.title}</h3>
                   <p className="text-sm text-gray-600 font-bold text-center dark:text-white">{data.price}</p>
-                  {/* <div className="flex items-center gap-1">
-                    <FaStar className="text-yellow-400" />
-                    <span>{data.rating}</span>
-                  </div> */}
+                  <div className="flex items-center justify-center gap-2">
+                    {/* single color */}
+                    <div className="color-selector">
+                      <input type="radio" name="color" className="hidden" id="color-white" />
+                      <label htmlFor="color-white" className="border border-gray-200 rounded-full h-6 w-6 cursor-pointer shadow-sm bg-white block"></label>
+                    </div>
+                    {/* single color end*/}
+
+                    {/* single color */}
+                    <div className="color-selector">
+                      <input type="radio" name="color" className="hidden" id="color-blue" />
+                      <label htmlFor="color-blue" className="text-xs border border-gray-200 rounded-full h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm bg-blue-950"></label>
+                    </div>
+                    {/* single color end*/}
+                  </div>
                 </div>
               </div>
             ))}

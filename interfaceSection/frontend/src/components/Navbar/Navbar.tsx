@@ -83,7 +83,7 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                     {/* search bar*/}
                     <div className="flex justify-between items-center gap-4">
                         <div className="relative group hidden sm:block">
-                            <input type="text" placeholder="Tìm kiếm"
+                            {/* <input type="text" placeholder="Tìm kiếm"
                                 className="w-[200px] sm:w-[200px] 
                         group-hover:w-[300px] transition-all
                         duration-300 rounded-full
@@ -97,7 +97,19 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                             />
                             <IoMdSearch
                                 className="text-gray-500 group-hover:text-primary 
-                        absolute top-1/2 -translate-y-1/2 right-3" />
+                        absolute top-1/2 -translate-y-1/2 right-3" /> */}
+                            <form className="flex items-center max-w-sm mx-auto">
+                                <label htmlFor="simple-search" className="sr-only">Search</label>
+                                <div className="relative w-full">
+                                    <input type="text" id="simple-search" className="w-[160px] md:w-[200px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block h-8" placeholder="Tên sản phẩm..." required />
+                                </div>
+                                <button type="submit" className="bg-gradient-to-r from-primary to-secondary rounded-md px-2 py-0 ms-2 text-sm font-medium text-white h-8">
+                                    <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                    </svg>
+                                    <span className="sr-only">Search</span>
+                                </button>
+                            </form>
                         </div>
 
                         {/* cart */}
@@ -178,7 +190,7 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                         )}
 
                         {/* responsive menu */}
-                        <ResponsiveMenu showMenu={showMenu} />
+                        <ResponsiveMenu showMenu={showMenu} toggleMenu={toggleMenu} />
                     </div>
 
                 </div>
