@@ -4,7 +4,7 @@ import ProductRead from "./ProductRead";
 
 const ProductList = () => {
     return (
-        <div>
+        <div className="p-4 sm:ml-64">
             <section className="bg-gray-50 dark:bg-gray-900 antialiased">
                 <div className="mx-auto max-w-screen-xl">
                     <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
@@ -12,9 +12,8 @@ const ProductList = () => {
                             <div className="flex-1 flex items-center space-x-2">
                                 <h3 className="text-lg font-bold">
                                     Danh sách sản phẩm:
-                                    {/* <span className="dark:text-white">123456</span> */}
                                 </h3>
-
+                                <span className="dark:text-white text-sm">(100)</span>
                             </div>
                         </div>
                         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">

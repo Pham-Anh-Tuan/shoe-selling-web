@@ -1,9 +1,9 @@
-import React from 'react';
-import { MdOutlineCancel } from "react-icons/md";
+import OrderRead from './OrderRead';
+import OrderUpdation from './OrderUpdation';
 
 const OrderList = () => {
     return (
-        <div>
+        <div className="p-4 sm:ml-64">
             <section className="bg-gray-50 dark:bg-gray-900 antialiased">
                 <div className="mx-auto max-w-screen-xl">
                     <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
@@ -12,7 +12,7 @@ const OrderList = () => {
                                 <h3 className="text-lg font-bold">
                                     Danh sách đơn hàng:
                                 </h3>
-
+                                <span className="dark:text-white text-sm">(99)</span>
                             </div>
                         </div>
                         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -41,10 +41,12 @@ const OrderList = () => {
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
                                         <th scope="col" className="px-4 py-4">Mã đơn hàng</th>
+                                        <th scope="col" className="px-4 py-3">Số điện thoại</th>
                                         <th scope="col" className="px-4 py-3">Ngày đặt</th>
                                         <th scope="col" className="px-4 py-3">Ngày giao</th>
                                         <th scope="col" className="px-4 py-3">Tổng tiền</th>
                                         <th scope="col" className="px-4 py-3">Trạng thái</th>
+                                        <th scope="col" className="px-4 py-3">Thanh toán</th>
                                         <th scope="col" className="px-4 py-3">
                                             <span className="sr-only">Actions</span>
                                         </th>
@@ -53,8 +55,9 @@ const OrderList = () => {
                                 <tbody>
                                     <tr className="border-b dark:border-gray-700">
                                         <th scope="row" className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">#FWB127364372 </th>
-                                        <td className="px-4 py-3">20.12.2023</td>
-                                        <td className="px-4 py-3">23.12.2023</td>
+                                        <td className="px-4 py-3">0773506505</td>
+                                        <td className="px-4 py-3">20/12/2023</td>
+                                        <td className="px-4 py-3">23/12/2023</td>
                                         <td className="px-4 py-3">2,200,000₫</td>
                                         <td>
                                             <dd className="me-2 mt-1.5 inline-flex items-center rounded bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
@@ -62,6 +65,14 @@ const OrderList = () => {
                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
                                                 </svg>
                                                 Đang giao
+                                            </dd>
+                                        </td>
+                                        <td>
+                                            <dd className="me-2 mt-1.5 inline-flex items-center rounded bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
+                                                <svg className="me-1 h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5" />
+                                                </svg>
+                                                Đã thanh toán
                                             </dd>
                                         </td>
                                         <td className="px-4 py-3 flex items-center justify-end">
@@ -73,7 +84,7 @@ const OrderList = () => {
                                             <div id="giay-the-thao-1-dropdown" className="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
                                                 <ul className="py-1 text-sm" aria-labelledby="giay-the-thao-1-dropdown-button">
                                                     <li>
-                                                        <button type="button" data-modal-target="updateProductModal" data-modal-toggle="updateProductModal" className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
+                                                        <button type="button" data-modal-target="updateOrderModal" data-modal-toggle="updateOrderModal" className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
                                                             <svg className="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                                 <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
@@ -82,7 +93,7 @@ const OrderList = () => {
                                                         </button>
                                                     </li>
                                                     <li>
-                                                        <button type="button" data-modal-target="readProductModal" data-modal-toggle="readProductModal" className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
+                                                        <button type="button" data-modal-target="readOrderModal" data-modal-toggle="readOrderModal" className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
                                                             <svg className="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                                                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -104,8 +115,9 @@ const OrderList = () => {
                                     </tr>
                                     <tr className="border-b dark:border-gray-700">
                                         <th scope="row" className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">#FWB125467980</th>
-                                        <td className="px-4 py-3">11.12.2023</td>
-                                        <td className="px-4 py-3">14.12.2023</td>
+                                        <td className="px-4 py-3">0773566234</td>
+                                        <td className="px-4 py-3">11/12/2023</td>
+                                        <td className="px-4 py-3">14/12/2023</td>
                                         <td className="px-4 py-3">8,800,000₫</td>
                                         <td>
                                             <dd className="me-2 mt-1.5 inline-flex items-center rounded bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
@@ -113,6 +125,14 @@ const OrderList = () => {
                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5" />
                                                 </svg>
                                                 Đã giao
+                                            </dd>
+                                        </td>
+                                        <td>
+                                            <dd className="me-2 mt-1.5 inline-flex items-center rounded bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
+                                                <svg className="me-1 h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5" />
+                                                </svg>
+                                                Đã thanh toán
                                             </dd>
                                         </td>
                                         <td className="px-4 py-3 flex items-center justify-end">
@@ -155,6 +175,7 @@ const OrderList = () => {
                                     </tr>
                                     <tr className="border-b dark:border-gray-700">
                                         <th scope="row" className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">#FWB125467980</th>
+                                        <td className="px-4 py-3">0973561435</td>
                                         <td className="px-4 py-3">11.12.2023</td>
                                         <td className="px-4 py-3">14.12.2023</td>
                                         <td className="px-4 py-3">8,800,000₫</td>
@@ -164,6 +185,14 @@ const OrderList = () => {
                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6" />
                                                 </svg>
                                                 Đã hủy
+                                            </dd>
+                                        </td>
+                                        <td>
+                                            <dd className="me-2 mt-1.5 inline-flex items-center rounded bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
+                                                <svg className="me-1 h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6" />
+                                                </svg>
+                                                Chưa thanh toán
                                             </dd>
                                         </td>
                                         <td className="px-4 py-3 flex items-center justify-end">
@@ -206,6 +235,7 @@ const OrderList = () => {
                                     </tr>
                                     <tr className="border-b dark:border-gray-700">
                                         <th scope="row" className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">#FWB125467980</th>
+                                        <td className="px-4 py-3">0995526785</td>
                                         <td className="px-4 py-3">11.12.2023</td>
                                         <td className="px-4 py-3">14.12.2023</td>
                                         <td className="px-4 py-3">8,800,000₫</td>
@@ -215,6 +245,14 @@ const OrderList = () => {
                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.5 4h-13m13 16h-13M8 20v-3.333a2 2 0 0 1 .4-1.2L10 12.6a1 1 0 0 0 0-1.2L8.4 8.533a2 2 0 0 1-.4-1.2V4h8v3.333a2 2 0 0 1-.4 1.2L13.957 11.4a1 1 0 0 0 0 1.2l1.643 2.867a2 2 0 0 1 .4 1.2V20H8Z" />
                                                 </svg>
                                                 Chưa giao
+                                            </dd>
+                                        </td>
+                                        <td>
+                                            <dd className="me-2 mt-1.5 inline-flex items-center rounded bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
+                                                <svg className="me-1 h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5" />
+                                                </svg>
+                                                Đã thanh toán
                                             </dd>
                                         </td>
                                         <td className="px-4 py-3 flex items-center justify-end">
@@ -302,6 +340,12 @@ const OrderList = () => {
                     </div>
                 </div>
             </section>
+            <div id="updateOrderModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <OrderUpdation />
+            </div>
+            <div id="readOrderModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <OrderRead />
+            </div>
         </div>
     )
 }

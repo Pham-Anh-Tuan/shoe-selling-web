@@ -1,14 +1,8 @@
-import Footer from './components/Footer/Footer'
 import Hero from './components/Hero/Hero'
 import Product from './components/Products/Products'
-import { Navbar } from './components/Navbar/Navbar'
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom"
 import ProductDetail from './components/ProductDetail/ProductDetail'
-import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 import Cart from './components/Cart/Cart'
-import SignIn from './components/SignInOut/SignIn'
-import SignOut from './components/SignInOut/SignOut'
-import ForgotPassword from './components/SignInOut/ForgotPassword'
 import { useState } from 'react'
 import DeliveryInfor from './components/Payment/DeliveryInfor'
 import NeedSignIn from './components/SignInOut/NeedSignIn'
@@ -17,8 +11,10 @@ import OrderDetail from './components/OrderDetail/OrderDetail'
 import MainLayout from './components/MainLayout/MainLayout'
 import ProductList from './components/Admin/ProductManager/ProductList'
 import ProductHelp from './components/Admin/ProductManager/ProductHelp'
-import AdNavbar from './components/Admin/AdNavbar'
 import OrderList from './components/Admin/OrderManager/OrderList'
+import Chart from './components/Admin/Charts/Chart'
+import AdminLayout from './components/Admin/AdminLayout/AdminLayout'
+import AccountList from './components/Admin/AccountManager/AccountList'
 
 
 
@@ -111,11 +107,18 @@ const App: React.FC = () => {
           <Route path="OrderDetail" element={<OrderDetail />} />
         </Route>
 
-        {/* Trang Admin không có Navbar & Footer */}
-        <Route path="/AdNavbar" element={<AdNavbar />} />
-        <Route path="/ProductList" element={<ProductList />} />
-        <Route path="/OrderList" element={<OrderList />} />
+        
+        <Route path="Admin/" element={<AdminLayout />}>
+          <Route index element={<>
+            <Chart />
+          </>} />
+          <Route path="ProductList" element={<ProductList />} />
+          <Route path="OrderList" element={<OrderList />} />
+          <Route path="AccountList" element={<AccountList />} />
+        </Route>
+        
         <Route path="/ProductHelp" element={<ProductHelp />} />
+
       </Routes>
     </Router>
   );

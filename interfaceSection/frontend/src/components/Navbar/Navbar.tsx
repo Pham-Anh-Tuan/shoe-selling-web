@@ -119,10 +119,10 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                     transition-all duration-200 text-white py-1 px-4 rounded-full
                     flex items-center gap-3 group"
                             >
-                                <span
+                                {/* <span
                                     className="group-hover:block hidden transition-all duration-200">
                                     Giỏ hàng
-                                </span>
+                                </span> */}
                                 <FaCartShopping
                                     className="text-xl text-white drop-shadow-sm cursor-pointer" />
                             </button>
@@ -150,15 +150,24 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                         group-hover:block w-[200px] rounded-md
                         bg-white p-2 text-black shadow-md right-0">
                                 <ul>
-                                    <Link to="/Orders">
+                                    {/* <Link to="/Orders"> */}
                                         <li>
-                                            <a href="#"
+                                            <a href="Orders"
                                                 className="inline-block w-full rounded-md p-2
                                         hover:bg-primary/20">
                                                 Đơn hàng của tôi
                                             </a>
                                         </li>
-                                    </Link>
+                                    {/* </Link> */}
+                                    {/* <Link to="/AdNavbar"> */}
+                                        <li>
+                                            <a href="Admin"
+                                                className="inline-block w-full rounded-md p-2
+                                        hover:bg-primary/20">
+                                                Quản lí
+                                            </a>
+                                        </li>
+                                    {/* </Link> */}
                                     <form action="#" method="POST">
                                         <li>
                                             <a href="#"
