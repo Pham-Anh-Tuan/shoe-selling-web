@@ -81,7 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                     </div>
 
                     {/* search bar*/}
-                    <div className="flex justify-between items-center gap-4">
+                    <div className="flex justify-between items-center gap-2 sm:gap-4">
                         <div className="relative group hidden sm:block">
                             {/* <input type="text" placeholder="Tìm kiếm"
                                 className="w-[200px] sm:w-[200px] 
@@ -116,7 +116,7 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                         <Link to="/Cart">
                             <button
                                 className="bg-gradient-to-r from-primary to-secondary
-                    transition-all duration-200 text-white py-1 px-4 rounded-full
+                    transition-all duration-200 text-white py-1 px-3 rounded-full
                     flex items-center gap-3 group"
                             >
                                 {/* <span
@@ -136,7 +136,7 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                             <button onClick={() => handleSignInPopup()}
                                 className="bg-gradient-to-r from-primary to-secondary
                      text-white py-1 px-2 rounded-full
-                    flex items-center gap-2 group">
+                    flex items-center group">
                                 <FaUser className="text-xl text-white drop-shadow-sm cursor-pointer" />
                                 <span>
                                     <FaCaretDown
@@ -164,7 +164,7 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                                             <a href="Admin"
                                                 className="inline-block w-full rounded-md p-2
                                         hover:bg-primary/20">
-                                                Quản lí
+                                                Quản lý cửa hàng
                                             </a>
                                         </li>
                                     {/* </Link> */}

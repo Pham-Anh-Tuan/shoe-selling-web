@@ -1,22 +1,100 @@
 import Img1 from "../../assets/male-sneaker/sneaker.png";
+import ImgWhite1 from "../../assets/male-sneaker/sneakerWhite1.png";
+import ImgWhite2 from "../../assets/male-sneaker/sneakerWhite2.png";
+import ImgWhite3 from "../../assets/male-sneaker/sneakerWhite3.png";
+
 import Img1Blue from "../../assets/male-sneaker/sneaker-blue.png";
+import Img1Blue1 from "../../assets/male-sneaker/sneakerBlue1.png";
+import Img1Blue2 from "../../assets/male-sneaker/sneakerBlue2.png";
+import Img1Blue3 from "../../assets/male-sneaker/sneakerBlue3.png";
+
 import { FaStar, FaBagShopping } from "react-icons/fa6";
 import { useState } from "react";
+import RelatedProducts from "./RelatedProducts";
+import React, { useRef } from 'react';
+
+import { GrSecure } from "react-icons/gr";
+import { IoFastFood } from "react-icons/io5";
+import { GiFoodTruck } from "react-icons/gi";
+import { TbTruckDelivery } from "react-icons/tb";
+import { FaExchangeAlt } from "react-icons/fa";
+import { FiPhone } from "react-icons/fi";
 
 const ProductDetail = () => {
     const [count, setCount] = useState<number>(1);
     const increase = () => setCount(count + 1);
     const decrease = () => setCount(count > 1 ? count - 1 : 1);
 
+    const [whiteImages, setWhiteImages] = useState({
+        img0: Img1,
+        img1: ImgWhite1,
+        img2: ImgWhite2,
+        img3: ImgWhite3,
+    })
+
+    const [blueImages, setBlueImages] = useState({
+        img0: Img1Blue,
+        img1: Img1Blue1,
+        img2: Img1Blue2,
+        img3: Img1Blue3,
+    })
+
     const [activeImg, setActiveImage] = useState(Img1);
+    const [currentImages, setCurrentImages] = useState(whiteImages);
+
+    const imgRef = useRef<HTMLImageElement | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const container = containerRef.current;
+        const image = imgRef.current;
+
+        if (container && image) {
+            const rect = container.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+            image.style.transformOrigin = `${x}% ${y}%`;
+            image.classList.add('scale-150');
+        }
+    };
+
+    const handleMouseLeave = () => {
+        const image = imgRef.current;
+        if (image) {
+            image.style.transformOrigin = 'center center';
+            image.classList.remove('scale-150');
+        }
+    }
 
     return (
         <div className="container">
             {/* product properties */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-14 mb-12">
                 {/* product image */}
-                <div>
-                    <img src={activeImg} alt="" className="w-full h-full aspect-square object-cover rounded-xl" />
+                <div className="">
+                    <div className="overflow-hidden aspect-square group relative rounded-xl"
+                        ref={containerRef}
+                        onMouseMove={handleMouseMove}
+                        onMouseLeave={handleMouseLeave}>
+                        <img ref={imgRef} src={activeImg} alt="Zoomed" className="w-full aspect-square object-cover transform transition-transform duration-500 group-hover:scale-150" />
+
+                    </div>
+                    <div className='grid grid-cols-4 mt-4 w-full place-items-center gap-7'>
+                        {/* <img src={whiteImages.img0} alt="" className='w-28 h-28 aspect-square object-cover rounded-md cursor-pointer' onClick={() => setActiveImage(whiteImages.img0)} />
+                        <img src={whiteImages.img1} alt="" className='w-28 h-28 aspect-square object-cover rounded-md cursor-pointer' onClick={() => setActiveImage(whiteImages.img1)} />
+                        <img src={whiteImages.img2} alt="" className='w-28 h-28 aspect-square object-cover rounded-md cursor-pointer' onClick={() => setActiveImage(whiteImages.img2)} />
+                        <img src={whiteImages.img3} alt="" className='w-28 h-28 aspect-square object-cover rounded-md cursor-pointer' onClick={() => setActiveImage(whiteImages.img3)} /> */}
+                        {Object.entries(currentImages).map(([key, src]) => (
+                            <img
+                                key={key}
+                                src={src}
+                                alt=""
+                                className='w-20 h-20 sm:w-28 sm:h-28 aspect-square object-cover rounded-md cursor-pointer'
+                                onClick={() => setActiveImage(src)}
+                            />
+                        ))}
+                    </div>
                 </div>
                 {/* product image end*/}
 
@@ -92,14 +170,26 @@ const ProductDetail = () => {
                             {/* single color */}
                             <div className="color-selector">
                                 <input type="radio" name="color" className="hidden" id="color-white" defaultChecked />
-                                <label htmlFor="color-white" className="border border-gray-200 rounded-sm h-5 w-5 cursor-pointer shadow-sm bg-white block" onClick={() => setActiveImage(Img1)}></label>
+                                {/* <label htmlFor="color-white" className="border border-gray-200 rounded-sm h-5 w-5 cursor-pointer shadow-sm bg-white block" onClick={() => setActiveImage(Img1)}></label> */}
+                                <label htmlFor="color-white" className="border border-gray-200 rounded-sm h-5 w-5 cursor-pointer shadow-sm bg-white block"
+                                    onClick={() => {
+                                        setCurrentImages(whiteImages);
+                                        setActiveImage(whiteImages.img0);
+                                    }}>
+                                </label>
                             </div>
                             {/* single color end*/}
 
                             {/* single color */}
                             <div className="color-selector">
                                 <input type="radio" name="color" className="hidden" id="color-blue" />
-                                <label htmlFor="color-blue" className="text-xs border border-gray-200 rounded-sm h-5 w-5 flex items-center justify-center cursor-pointer shadow-sm bg-blue-950" onClick={() => setActiveImage(Img1Blue)}></label>
+                                {/* <label htmlFor="color-blue" className="text-xs border border-gray-200 rounded-sm h-5 w-5 flex items-center justify-center cursor-pointer shadow-sm bg-blue-950" onClick={() => setActiveImage(Img1Blue)}></label> */}
+                                <label htmlFor="color-blue" className="text-xs border border-gray-200 rounded-sm h-5 w-5 flex items-center justify-center cursor-pointer shadow-sm bg-blue-950"
+                                    onClick={() => {
+                                        setCurrentImages(blueImages);
+                                        setActiveImage(blueImages.img0);
+                                    }}>
+                                </label>
                             </div>
                             {/* single color end*/}
                         </div>
@@ -122,7 +212,24 @@ const ProductDetail = () => {
                         <a href="#" className="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
                             <FaBagShopping /> Thêm vào giỏ hàng
                         </a>
-
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
+                        <div data-aos="fade-up" className="flex items-center gap-4">
+                            <TbTruckDelivery className="text-4xl h-10 w-10 shadow-sm p-2 rounded-full bg-violet-100 dark:bg-violet-400" />
+                            <p>Miễn phí vận chuyển toàn quốc</p>
+                        </div>
+                        <div data-aos="fade-up" className="flex items-center gap-4">
+                            <GiFoodTruck className="text-4xl h-10 w-10 shadow-sm p-2 rounded-full bg-orange-100 dark:bg-orange-400" />
+                            <p>Giao hàng siêu nhanh</p>
+                        </div>
+                        <div data-aos="fade-up" className="flex items-center gap-4">
+                            <FaExchangeAlt className="text-4xl h-10 w-10 shadow-sm p-2 rounded-full bg-green-100 dark:bg-green-400" />
+                            <p>Đổi trả trong vòng 1 tháng</p>
+                        </div>
+                        <div data-aos="fade-up" className="flex items-center gap-4">
+                            <FiPhone className="text-4xl h-10 w-10 shadow-sm p-2 rounded-full bg-yellow-100 dark:bg-yellow-400" />
+                            <p>Hotline 1900 8897</p>
+                        </div>
                     </div>
                     {/* cart button end */}
                 </div>
@@ -148,6 +255,10 @@ const ProductDetail = () => {
                 </div>
             </div>
             {/* product description end */}
+
+            {/* related products */}
+            <RelatedProducts />
+            {/* related products end*/}
         </div>
     )
 }

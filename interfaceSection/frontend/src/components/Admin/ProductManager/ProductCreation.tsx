@@ -8,10 +8,15 @@ const ProductCreation = () => {
         amount: number;
     }
 
-    interface ColorImage {
+    interface Image {
+        id: number;
+        image: string | ArrayBuffer | null;
+    }
+
+    interface Color {
         id: number;
         color: string;
-        image: string | ArrayBuffer | null;
+        images: Image[];
         sizeAmounts: SizeAmount[];
     }
 
@@ -22,7 +27,7 @@ const ProductCreation = () => {
         type: string;
         mainDes: string;
         sideDes: string;
-        colorImages: ColorImage[];
+        colors: Color[];
     }
 
     const [product, setProduct] = useState<Product>({
@@ -32,11 +37,13 @@ const ProductCreation = () => {
         type: "0",
         mainDes: "",
         sideDes: "",
-        colorImages: [
+        colors: [
             {
                 id: Date.now() % 100000,
                 color: "#ffffff",
-                image: "",
+                images: [{ id: Date.now() % 100000, image: "" },
+
+                ],
                 sizeAmounts: [
                     { id: Date.now() % 100000, size: 0, amount: 0 },
                 ],
@@ -51,43 +58,52 @@ const ProductCreation = () => {
         }));
     };
 
-    const addColorImage = () => {
+    const addColor = () => {
         const temp = Date.now() % 100000;
-        const newColorImage = {
+        const newColor: Color = {
             id: temp,
             color: "#ffffff",
-            image: null,
+            images: [],
             sizeAmounts: [{ id: temp + 101, size: 0, amount: 0 }],
         };
 
         setProduct((prev) => ({
             ...prev,
-            colorImages: [...prev.colorImages, newColorImage],
+            colors: [...prev.colors, newColor],
         }));
-
     };
 
-    const deleteColorImage = (colorImageId: number) => {
+    const deleteColor = (colorId: number) => {
         setProduct((prev) => ({
             ...prev,
-            colorImages: prev.colorImages.filter((colorImage) => colorImage.id !== colorImageId),
+            colors: prev.colors.filter((color) => color.id !== colorId),
         }));
     };
 
-    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
+    const handleImageUpload = (
+        event: React.ChangeEvent<HTMLInputElement>,
+        colorId: number,
+        imageId: number
+    ) => {
         const file = event.target.files?.[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = () => {
+                const newImageValue = reader.result;
+
                 setProduct((prev) => ({
                     ...prev,
-                    colorImages: prev.colorImages.map((colorImage) =>
-                        colorImage.id === id
+                    colors: prev.colors.map((color) =>
+                        color.id === colorId
                             ? {
-                                ...colorImage,
-                                image: reader.result, // Cập nhật hình ảnh cho màu này
+                                ...color,
+                                images: color.images.map((img) =>
+                                    img.id === imageId
+                                        ? { ...img, image: newImageValue }
+                                        : img
+                                ),
                             }
-                            : colorImage
+                            : color
                     ),
                 }));
             };
@@ -95,8 +111,40 @@ const ProductCreation = () => {
         }
     };
 
-    const addSizeAmount = (colorImageId: number) => {
-        const newSizeAmount = {
+    const addImage = (colorId: number) => {
+        const newImage = {
+            id: Date.now() % 100000, // tạo id tạm thời
+            image: "", // giá trị mặc định
+        };
+
+        setProduct((prev) => ({
+            ...prev,
+            colors: prev.colors.map((color) =>
+                color.id === colorId
+                    ? {
+                        ...color,
+                        images: [...color.images, newImage],
+                    }
+                    : color
+            ),
+        }));
+    };
+
+    const deleteImage = (colorId: number, imageId: number) => {
+        setProduct((prev) => ({
+            ...prev,
+            colors: prev.colors.map((color) =>
+                color.id === colorId
+                    ? {
+                        ...color,
+                        images: color.images.filter((img) => img.id !== imageId),
+                    }
+                    : color
+            ),
+        }));
+    };
+    const addSizeAmount = (colorId: number) => {
+        const newSizeAmount: SizeAmount = {
             id: Date.now() % 10000,
             size: 0,
             amount: 0,
@@ -104,47 +152,45 @@ const ProductCreation = () => {
 
         setProduct((prev) => ({
             ...prev,
-            colorImages: prev.colorImages.map((colorImage) =>
-                colorImage.id === colorImageId
-                    ? {
-                        ...colorImage,
-                        sizeAmounts: [...colorImage.sizeAmounts, newSizeAmount],
-                    }
-                    : colorImage
+            colors: prev.colors.map((color) =>
+                color.id === colorId
+                    ? { ...color, sizeAmounts: [...color.sizeAmounts, newSizeAmount] }
+                    : color
             ),
         }));
     };
 
-    const deleteSizeAmount = (colorImageId: number, sizeAmountId: number) => {
+    const deleteSizeAmount = (colorId: number, sizeAmountId: number) => {
         setProduct((prev) => ({
             ...prev,
-            colorImages: prev.colorImages.map((colorImage) =>
-                colorImage.id === colorImageId
+            colors: prev.colors.map((color) =>
+                color.id === colorId
                     ? {
-                        ...colorImage,
-                        sizeAmounts: colorImage.sizeAmounts.filter(
-                            (sizeAmount) => sizeAmount.id !== sizeAmountId
-                        ),
+                        ...color,
+                        sizeAmounts: color.sizeAmounts.filter((sa) => sa.id !== sizeAmountId),
                     }
-                    : colorImage
+                    : color
             ),
         }));
     };
 
-    const setSizeAmount = (colorImageId: number, sizeAmountId: number, field: "size" | "amount", value: number) => {
+    const setSizeAmount = (
+        colorId: number,
+        sizeAmountId: number,
+        field: "size" | "amount",
+        value: number
+    ) => {
         setProduct((prev) => ({
             ...prev,
-            colorImages: prev.colorImages.map((colorImage) =>
-                colorImage.id === colorImageId
+            colors: prev.colors.map((color) =>
+                color.id === colorId
                     ? {
-                        ...colorImage,
-                        sizeAmounts: colorImage.sizeAmounts.map((sizeAmount) =>
-                            sizeAmount.id === sizeAmountId
-                                ? { ...sizeAmount, [field]: value < 0 ? 0 : value } // Đảm bảo giá trị không nhỏ hơn 0
-                                : sizeAmount
+                        ...color,
+                        sizeAmounts: color.sizeAmounts.map((sa) =>
+                            sa.id === sizeAmountId ? { ...sa, [field]: value < 0 ? 0 : value } : sa
                         ),
                     }
-                    : colorImage
+                    : color
             ),
         }));
     };
@@ -196,8 +242,13 @@ const ProductCreation = () => {
                         <div className="sm:col-span-2"><label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả chi tiết</label><textarea id="description" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết chi tiết cho phần mô tả sản phẩm"></textarea></div>
                     </div>
 
-                    <div className="flex items-center space-x-4 mb-1">
-                        <button type="button" onClick={addColorImage} className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg px-1 py-1 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 text-xs">Thêm màu</button>
+                    <div className="flex items-center justify-end space-x-4 mb-1">
+                        <button type="button" onClick={addColor} className="flex items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg w-28 px-2 py-2 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 text-sm">
+                            <svg className="h-3.5 w-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
+                            </svg>
+                            Thêm màu
+                        </button>
                     </div>
 
                     <div className="overflow-x-auto mb-4">
@@ -213,32 +264,59 @@ const ProductCreation = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {product.colorImages.map((colorImage) => (
-                                    <tr key={colorImage.id} className="border-b dark:border-gray-700">
+                                {product.colors.map((color) => (
+                                    <tr key={color.id} className="border-b dark:border-gray-700">
                                         <th scope="row" className="px-4 py-3">
                                             <div className="flex flex-col items-center justify-center space-y-1">
-                                                <input type="color" defaultValue={colorImage.color} className="p-1 h-10 w-14 block bg-white cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700" id="hs-color-input" title="Choose your color" />
+                                                <input type="color" defaultValue={color.color} className="p-1 h-10 w-14 block bg-white cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700" id="hs-color-input" title="Choose your color" />
                                             </div>
                                         </th>
                                         <td className="px-4 py-3">
-                                            <div className="flex flex-col items-center justify-center space-y-1">
-                                                <label className="cursor-pointer bg-orange-500 text-white px-1 py-1 rounded-lg hover:bg-orange-600 text-xs">
-                                                    Chọn ảnh
-                                                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, colorImage.id)} />
-                                                </label>
+                                            <div className="flex flex-col items-center justify-center">
+                                                <button
+                                                    type='button'
+                                                    onClick={() => addImage(color.id)}
+                                                    className="bg-orange-300 hover:bg-orange-400 w-20 rounded-md block px-1 py-1 text-sm text-white mb-2"
+                                                >
+                                                    Thêm ảnh
+                                                </button>
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    {color.images.map((image) => (
+                                                        <div className="flex flex-col items-center justify-center space-y-1">
+                                                            <div className="mb-1">
+                                                                <label className="cursor-pointer bg-blue-500 text-white px-1 py-1 rounded-lg hover:bg-blue-600 text-xs mr-1">
+                                                                    Chọn
+                                                                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, color.id, image.id)} />
+                                                                </label>
+                                                                <button type='button' className="cursor-pointer bg-red-500 text-white px-1 py-1 rounded-lg hover:bg-red-600 text-xs" onClick={() => deleteImage(color.id, image.id)}>
+                                                                    Xóa
+                                                                </button>
+                                                            </div>
 
-                                                <div className="mt-1 border w-fit">
-                                                    <img src={typeof colorImage.image === 'string'
-                                                        ? colorImage.image // Nếu image là string, dùng luôn
-                                                        : colorImage.image instanceof ArrayBuffer
-                                                            ? URL.createObjectURL(new Blob([colorImage.image])) // Nếu image là ArrayBuffer, tạo URL từ nó
-                                                            : '/path/to/default-image.jpg'}
-                                                        className="w-16 h-16 object-cover rounded-lg shadow" />
+                                                            <div className="mt-1 w-fit">
+                                                                <img src={typeof image.image === 'string'
+                                                                    ? image.image // Nếu image là string, dùng luôn
+                                                                    : image.image instanceof ArrayBuffer
+                                                                        ? URL.createObjectURL(new Blob([image.image])) // Nếu image là ArrayBuffer, tạo URL từ nó
+                                                                        : '/path/to/default-image.jpg'}
+                                                                    key={image.id}
+                                                                    className="w-20 h-20 object-cover rounded-lg shadow border" />
+                                                            </div>
+                                                        </div>
+                                                    ))}
                                                 </div>
                                             </div>
+
                                         </td>
                                         <td>
                                             <div className="flex flex-col items-center justify-center space-y-1">
+                                                <button
+                                                    type='button'
+                                                    onClick={() => addSizeAmount(color.id)}
+                                                    className="bg-orange-300 hover:bg-orange-400 w-23 rounded-md block px-1 py-1 text-sm text-white"
+                                                >
+                                                    Thêm KT-SL
+                                                </button>
                                                 <table className="table-auto">
                                                     <thead>
                                                         <tr>
@@ -248,19 +326,19 @@ const ProductCreation = () => {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {colorImage.sizeAmounts.map((sizeAmount) => (
+                                                        {color.sizeAmounts.map((sizeAmount) => (
                                                             <tr>
                                                                 <td>
-                                                                    <input type="number" value={sizeAmount.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="2,200,000" required
-                                                                        onChange={(e) => setSizeAmount(colorImage.id, sizeAmount.id, "size", parseInt(e.target.value, 10) || 0)} />
+                                                                    <input type="number" value={sizeAmount.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
+                                                                        onChange={(e) => setSizeAmount(color.id, sizeAmount.id, "size", parseInt(e.target.value, 10) || 0)} />
                                                                     -
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" value={sizeAmount.amount} name="amount" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="2,200,000" required
-                                                                        onChange={(e) => setSizeAmount(colorImage.id, sizeAmount.id, "amount", parseInt(e.target.value, 10) || 0)} />
+                                                                    <input type="number" value={sizeAmount.amount} name="amount" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
+                                                                        onChange={(e) => setSizeAmount(color.id, sizeAmount.id, "amount", parseInt(e.target.value, 10) || 0)} />
                                                                 </td>
                                                                 <td>
-                                                                    <button onClick={() => deleteSizeAmount(colorImage.id, sizeAmount.id)} type="button" className="text-gray-400 bg-transparent hover:text-red-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:text-red-600">
+                                                                    <button onClick={() => deleteSizeAmount(color.id, sizeAmount.id)} type="button" className="text-gray-400 bg-transparent hover:text-red-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:text-red-600">
                                                                         <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                                         </svg>
@@ -274,20 +352,12 @@ const ProductCreation = () => {
                                             </div>
                                         </td>
 
-                                        <td className="px-4 py-3 flex flex-col items-center justify-end">
+                                        <td>
                                             <div className='flex flex-col items-center justify-center space-y-2'>
                                                 <button
                                                     type='button'
-                                                    onClick={() => addSizeAmount(colorImage.id)}
-                                                    className="bg-orange-300 hover:bg-orange-400 w-20 rounded-md block px-1 py-1 text-sm text-gray-700"
-                                                >
-                                                    Thêm size
-                                                </button>
-
-                                                <button
-                                                    type='button'
-                                                    onClick={() => deleteColorImage(colorImage.id)}
-                                                    className="bg-red-500 hover:bg-red-600 w-20 rounded-md block px-1 py-1 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
+                                                    onClick={() => deleteColor(color.id)}
+                                                    className="bg-red-500 hover:bg-red-600 w-20 rounded-md block px-1 py-1 text-sm text-white data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
                                                 >
                                                     Xóa màu
                                                 </button>

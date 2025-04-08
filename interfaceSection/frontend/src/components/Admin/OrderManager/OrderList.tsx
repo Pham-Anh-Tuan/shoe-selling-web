@@ -3,10 +3,10 @@ import OrderUpdation from './OrderUpdation';
 
 const OrderList = () => {
     return (
-        <div className="p-4 sm:ml-64">
-            <section className="bg-gray-50 dark:bg-gray-900 antialiased">
-                <div className="mx-auto max-w-screen-xl">
-                    <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+        <div className="p-4 w-full h-screen bg-gray-100 dark:bg-gray-900">
+            <section className="antialiased mt-16">
+                <div className="mx-auto w-full">
+                    <div className="w-full bg-white dark:bg-gray-800 relative shadow-md overflow-hidden rounded-2xl">
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                             <div className="flex-1 flex items-center space-x-2">
                                 <h3 className="text-lg font-bold">
@@ -55,10 +55,10 @@ const OrderList = () => {
                                 <tbody>
                                     <tr className="border-b dark:border-gray-700">
                                         <th scope="row" className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">#FWB127364372 </th>
-                                        <td className="px-4 py-3">0773506505</td>
-                                        <td className="px-4 py-3">20/12/2023</td>
-                                        <td className="px-4 py-3">23/12/2023</td>
-                                        <td className="px-4 py-3">2,200,000₫</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">0773506505</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">20/12/2023</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">23/12/2023</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">2,200,000₫</td>
                                         <td>
                                             <dd className="me-2 mt-1.5 inline-flex items-center rounded bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
                                                 <svg className="me-1 h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -115,10 +115,10 @@ const OrderList = () => {
                                     </tr>
                                     <tr className="border-b dark:border-gray-700">
                                         <th scope="row" className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">#FWB125467980</th>
-                                        <td className="px-4 py-3">0773566234</td>
-                                        <td className="px-4 py-3">11/12/2023</td>
-                                        <td className="px-4 py-3">14/12/2023</td>
-                                        <td className="px-4 py-3">8,800,000₫</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">0773566234</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">11/12/2023</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">14/12/2023</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">8,800,000₫</td>
                                         <td>
                                             <dd className="me-2 mt-1.5 inline-flex items-center rounded bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
                                                 <svg className="me-1 h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -175,10 +175,10 @@ const OrderList = () => {
                                     </tr>
                                     <tr className="border-b dark:border-gray-700">
                                         <th scope="row" className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">#FWB125467980</th>
-                                        <td className="px-4 py-3">0973561435</td>
-                                        <td className="px-4 py-3">11.12.2023</td>
-                                        <td className="px-4 py-3">14.12.2023</td>
-                                        <td className="px-4 py-3">8,800,000₫</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">0973561435</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">11.12.2023</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">14.12.2023</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">8,800,000₫</td>
                                         <td>
                                             <dd className="me-2 mt-1.5 inline-flex items-center rounded bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
                                                 <svg className="me-1 h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -235,10 +235,10 @@ const OrderList = () => {
                                     </tr>
                                     <tr className="border-b dark:border-gray-700">
                                         <th scope="row" className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">#FWB125467980</th>
-                                        <td className="px-4 py-3">0995526785</td>
-                                        <td className="px-4 py-3">11.12.2023</td>
-                                        <td className="px-4 py-3">14.12.2023</td>
-                                        <td className="px-4 py-3">8,800,000₫</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">0995526785</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">11.12.2023</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">14.12.2023</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">8,800,000₫</td>
                                         <td>
                                             <dd className="me-2 mt-1.5 inline-flex items-center rounded bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
                                                 <svg className="me-1 h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

@@ -64,22 +64,15 @@ const ProductsData = [
   },
 ];
 
-const Products = () => {
+const RelatedProducts = () => {
   return (
-    <div className="mt-14 mb-12">
-      <div className="container">
+    <div className="mb-12">
+      <div className="border-t border-gray-200 pt-8">
         {/* Header section */}
         <div className="text-center mb-10 max-w-[600px] mx-auto">
-          {/* <p data-aos="fade-up" className="text-sm text-primary">
-            Top Selling Products for you
-          </p> */}
           <h1 data-aos="fade-up" className="text-3xl font-bold">
-            SẢN PHẨM NỔI BẬT
+            SẢN PHẨM TƯƠNG TỰ
           </h1>
-          {/* <p data-aos="fade-up" className="text-xs text-gray-400">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sit
-            asperiores modi Sit asperiores modi
-          </p> */}
         </div>
         {/* Body section */}
         <div>
@@ -148,4 +141,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default RelatedProducts;

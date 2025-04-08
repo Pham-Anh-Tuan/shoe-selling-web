@@ -30,7 +30,7 @@ const OrderUpdation = () => {
             <div>
               <label htmlFor="category" className="block mb-2 text-base font-medium text-dark dark:text-white">Trạng thái</label>
               <select
-                id="category" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500">
+                id="category" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-orange-500 dark:focus:border-orange-500">
                 <option value="1" className="bg-yellow-100">Đang giao</option>
                 <option value="2" className="bg-green-100">Đã giao</option>
                 <option value="3" className="bg-red-100">Đã hủy</option>
@@ -41,7 +41,7 @@ const OrderUpdation = () => {
             <div>
               <label htmlFor="category" className="block mb-2 text-base font-medium text-dark dark:text-white">Thanh toán</label>
               <select
-                id="category" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500">
+                id="category" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-orange-500 dark:focus:border-orange-500">
                 <option value="1" className="bg-green-100">Đã thanh toán</option>
                 <option value="2" className="bg-red-100">Chưa thanh toán</option>
               </select>

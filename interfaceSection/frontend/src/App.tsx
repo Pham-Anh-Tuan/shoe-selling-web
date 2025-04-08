@@ -1,5 +1,5 @@
 import Hero from './components/Hero/Hero'
-import Product from './components/Products/Products'
+import Products from './components/Products/Products'
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom"
 import ProductDetail from './components/ProductDetail/ProductDetail'
 import Cart from './components/Cart/Cart'
@@ -15,6 +15,7 @@ import OrderList from './components/Admin/OrderManager/OrderList'
 import Chart from './components/Admin/Charts/Chart'
 import AdminLayout from './components/Admin/AdminLayout/AdminLayout'
 import AccountList from './components/Admin/AccountManager/AccountList'
+import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 
 
 
@@ -40,44 +41,6 @@ const App: React.FC = () => {
     setNeedSignInPopup(!needSignInPopup);
   };
 
-  // return (
-  //   <Router>
-  //     <ScrollToTop />
-  //     <div className="bg-white dark:bg-gray-900 dark:text-white duration-200">
-  //       <Navbar handleSignInPopup={handleSignInPopup} />
-  //       <Routes>
-  //         <Route
-  //           path=""
-  //           element={
-  //             <>
-  //               <Hero />
-  //               <Product />
-  //             </>
-  //           }
-  //         />
-  //         <Route path="/ProductDetail" element={<ProductDetail />} />
-  //         <Route
-  //           path="/Cart"
-  //           element={
-  //             <>
-  //               <Cart handleNeedSignIn={handleNeedSignIn} />
-  //               <NeedSignIn needSignInPopup={needSignInPopup} setNeedSignInPopup={setNeedSignInPopup} handleSignInPopup={handleSignInPopup} />
-  //             </>
-  //           }
-  //         />
-  //         <Route path="/DeliveryInformation" element={<DeliveryInfor />} />
-  //         <Route path="/Orders" element={<Orders />} />
-  //         <Route path="/OrderDetail" element={<OrderDetail />} />
-  //         <Route path="/AdminDashboard" element={<AdminDashboard />} />
-  //       </Routes>
-  //       <SignIn signInPopup={signInPopup} setSignInPopup={setSignInPopup} handleSignOutPopup={handleSignOutPopup} handleForgotPWPopup={handleForgotPWPopup} />
-  //       <SignOut signOutPopup={signOutPopup} setSignOutPopup={setSignOutPopup} handleSignInPopup={handleSignInPopup} />
-  //       <ForgotPassword forgotPWPopup={forgotPWPopup} setForgotPWPopup={setForgotPWPopup} />
-  //       <Footer/>
-  //     </div>
-  //   </Router>
-  // )
-
   return (
     <Router>
       <Routes>
@@ -95,9 +58,14 @@ const App: React.FC = () => {
         />}>
           <Route index element={<>
             <Hero />
-            <Product />
+            <Products />
           </>} />
-          <Route path="ProductDetail" element={<ProductDetail />} />
+          <Route path="ProductDetail" element={
+            <>
+              <ScrollToTop />
+              <ProductDetail />
+            </>}
+          />
           <Route path="Cart" element={<>
             <Cart handleNeedSignIn={handleNeedSignIn} />
             <NeedSignIn needSignInPopup={needSignInPopup} setNeedSignInPopup={setNeedSignInPopup} handleSignInPopup={handleSignInPopup} />
@@ -107,7 +75,7 @@ const App: React.FC = () => {
           <Route path="OrderDetail" element={<OrderDetail />} />
         </Route>
 
-        
+
         <Route path="Admin/" element={<AdminLayout />}>
           <Route index element={<>
             <Chart />
@@ -116,7 +84,7 @@ const App: React.FC = () => {
           <Route path="OrderList" element={<OrderList />} />
           <Route path="AccountList" element={<AccountList />} />
         </Route>
-        
+
         <Route path="/ProductHelp" element={<ProductHelp />} />
 
       </Routes>

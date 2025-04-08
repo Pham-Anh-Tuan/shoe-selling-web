@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import Img1 from "../../../assets/male-sneaker/sneaker.png";
+import ImgWhite1 from "../../../assets/male-sneaker/sneakerWhite1.png";
+import ImgWhite2 from "../../../assets/male-sneaker/sneakerWhite2.png";
+import ImgWhite3 from "../../../assets/male-sneaker/sneakerWhite3.png";
 const ProductRead = () => {
     // các biến của read
     interface SizeAmount {
@@ -7,11 +10,15 @@ const ProductRead = () => {
         size: number;
         amount: number;
     }
+    interface Image {
+        id: number;
+        image: string | ArrayBuffer | null;
+    }
 
-    interface ColorImage {
+    interface Color {
         id: number;
         color: string;
-        image: string | ArrayBuffer | null;
+        images: Image[];
         sizeAmounts: SizeAmount[];
     }
 
@@ -22,7 +29,7 @@ const ProductRead = () => {
         type: string;
         mainDes: string;
         sideDes: string;
-        colorImages: ColorImage[];
+        colors: Color[];
     }
 
     const [product, setProduct] = useState<Product>({
@@ -32,11 +39,14 @@ const ProductRead = () => {
         type: "1",
         mainDes: "Giày Sneaker Da Bò Nam MULGATI - Màu Trắng Kem, Phong Cách Thể Thao, Đế Cao Su Êm Ái.",
         sideDes: "Chất liệu cao cấp: Giày được làm từ da bò thật, mềm mại, bền bỉ, giúp ôm chân thoải mái và thoáng khí. \nThiết kế năng động: Phối màu trắng kem sang trọng với điểm nhấn sọc đen tạo phong cách trẻ trung, dễ dàng phối đồ.\nĐế cao su đúc nguyên khối: Nhẹ, êm chân, hỗ trợ di chuyển linh hoạt và chống trơn trượt hiệu quả.\nGia công tỉ mỉ: Đường may chắc chắn, hoàn thiện tinh tế, đảm bảo độ bền lâu dài.\nỨng dụng linh hoạt: Phù hợp cho nhiều dịp: đi chơi, dạo phố, đi làm, du lịch,...",
-        colorImages: [
+        colors: [
             {
                 id: 1,
                 color: "#1e3a8a",
-                image: Img1,
+                images: [{ id: 1, image: Img1 },
+                { id: 2, image: ImgWhite1 },
+                { id: 3, image: ImgWhite2 },
+                { id: 4, image: ImgWhite3 }],
                 sizeAmounts: [
                     { id: 1, size: 38, amount: 13 },
                     { id: 2, size: 39, amount: 20 },
@@ -94,8 +104,8 @@ const ProductRead = () => {
                         </div>
                     </div>
 
-                    <div className="overflow-x-auto mb-4">
-                        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <div className="w-full overflow-x-auto mb-4">
+                        <table className="min-w-[600px] w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" className="px-4 py-4 text-center">Màu</th>
@@ -107,24 +117,32 @@ const ProductRead = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {product.colorImages.map((colorImage) => (
-                                    <tr key={colorImage.id} className="border-b dark:border-gray-700">
+                                {product.colors.map((color) => (
+                                    <tr key={color.id} className="border-b dark:border-gray-700">
                                         <th scope="row" className="px-4 py-3">
                                             <div className="flex flex-col items-center justify-center space-y-1">
-                                                <input disabled type="color" defaultValue={colorImage.color} className="p-1 h-10 w-14 block bg-white cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700" id="hs-color-input" title="Choose your color" />
+                                                <input type="color" defaultValue={color.color} className="p-1 h-10 w-14 block bg-white cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700" id="hs-color-input" title="Choose your color" />
                                             </div>
                                         </th>
                                         <td className="px-4 py-3">
-                                            <div className="flex flex-col items-center justify-center space-y-1">
-                                                <div className="mt-1 border w-fit">
-                                                    <img src={typeof colorImage.image === 'string'
-                                                        ? colorImage.image // Nếu image là string, dùng luôn
-                                                        : colorImage.image instanceof ArrayBuffer
-                                                            ? URL.createObjectURL(new Blob([colorImage.image])) // Nếu image là ArrayBuffer, tạo URL từ nó
-                                                            : ''}
-                                                        className="w-16 h-16 object-cover rounded-lg shadow" />
+                                            <div className="flex flex-col items-center justify-center">
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    {color.images.map((image) => (
+                                                        <div className="flex flex-col items-center justify-center space-y-1">
+                                                            <div className="mt-1 w-fit">
+                                                                <img src={typeof image.image === 'string'
+                                                                    ? image.image // Nếu image là string, dùng luôn
+                                                                    : image.image instanceof ArrayBuffer
+                                                                        ? URL.createObjectURL(new Blob([image.image])) // Nếu image là ArrayBuffer, tạo URL từ nó
+                                                                        : '/path/to/default-image.jpg'}
+                                                                    key={image.id}
+                                                                    className="w-20 h-20 object-cover rounded-lg shadow border" />
+                                                            </div>
+                                                        </div>
+                                                    ))}
                                                 </div>
                                             </div>
+
                                         </td>
                                         <td>
                                             <div className="flex flex-col items-center justify-center space-y-1">
@@ -137,16 +155,15 @@ const ProductRead = () => {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {colorImage.sizeAmounts.map((sizeAmount) => (
+                                                        {color.sizeAmounts.map((sizeAmount) => (
                                                             <tr>
                                                                 <td>
-                                                                    <input disabled type="number" value={sizeAmount.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
+                                                                    <input type="number" disabled value={sizeAmount.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
                                                                     -
                                                                 </td>
                                                                 <td>
-                                                                    <input disabled type="number" value={sizeAmount.amount} name="amount" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
+                                                                    <input type="number" disabled value={sizeAmount.amount} name="amount" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
                                                                 </td>
-
                                                             </tr>
                                                         ))}
                                                     </tbody>

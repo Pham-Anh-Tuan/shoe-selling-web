@@ -33,7 +33,7 @@ const DatePicker = () => {
         for (let i = 1; i <= daysInMonth; i++) {
             const dayDiv = document.createElement("div");
             dayDiv.className =
-                "flex items-center justify-center cursor-pointer w-[46px] h-[46px] text-dark-3 dark:text-dark-6 rounded-full hover:bg-primary hover:text-white";
+                "flex items-center justify-center cursor-pointer w-[46px] h-[46px] text-dark-3 dark:text-black rounded-full hover:bg-primary hover:text-white dark:hover:text-white";
             dayDiv.textContent = i.toString();
             dayDiv.addEventListener("click", () => {
                 const selectedDateValue = `${month + 1}/${i}/${year}`;
@@ -45,7 +45,7 @@ const DatePicker = () => {
                             d.classList.remove("bg-primary", "text-white"),
                         );
                 }
-                dayDiv.classList.add("bg-primary", "text-white", "dark:text-white");
+                dayDiv.classList.add("bg-primary", "text-white", "dark:text-black");
             });
             if (daysContainer) {
                 daysContainer.appendChild(dayDiv);
@@ -112,7 +112,7 @@ const DatePicker = () => {
     }, []);
 
     return (
-        <section className="bg-white py-2 lg:py-[2px] dark:bg-dark">
+        <section className="bg-white py-2 lg:py-[2px] dark:bg-gray-800">
             <div className="">
                 <div className="-mx-4 flex flex-wrap">
                     <div className="w-full px-4">
@@ -121,7 +121,7 @@ const DatePicker = () => {
                                 Ngày giao
                             </label>
 
-                            <div className="relative">
+                            <div className="relative dark:bg-gray-700">
                                 <div className="relative flex items-center">
                                     <span className="absolute left-0 pl-5 text-dark-5">
                                         <svg
@@ -184,7 +184,7 @@ const DatePicker = () => {
                                         type="text"
 
                                         placeholder=""
-                                        className="w-full rounded-lg border border-stroke bg-transparent py-2.5 pl-[50px] pr-8 text-dark-2 outline-none transition focus:border-primary dark:border-dark-3 dark:text-dark-6 dark:focus:border-primary"
+                                        className="w-full rounded-lg border border-stroke bg-transparent py-2.5 pl-[50px] pr-8 text-dark-2 outline-none transition focus:border-primary dark:border-white dark:text-dark-6 dark:focus:border-primary"
                                         value={selectedDate || ""}
                                         readOnly
                                         onClick={handleToggleCalendar}
@@ -221,7 +221,7 @@ const DatePicker = () => {
                                         <div className="flex items-center justify-between px-5">
                                             <button
                                                 id="prevMonth"
-                                                className="rounded-md px-2 py-2 text-dark hover:bg-gray-2 dark:text-white dark:hover:bg-dark"
+                                                className="rounded-md px-2 py-2 text-dark hover:bg-gray-2 dark:text-black dark:hover:bg-dark"
                                                 onClick={handlePrevMonth}
                                             >
                                                 <svg
@@ -241,7 +241,7 @@ const DatePicker = () => {
 
                                             <div
                                                 id="currentMonth"
-                                                className="text-lg font-medium text-dark-3 dark:text-white"
+                                                className="text-lg font-medium text-dark-3 dark:text-black"
                                             >
                                                 {currentDate.toLocaleDateString("en-US", {
                                                     month: "long",
@@ -251,7 +251,7 @@ const DatePicker = () => {
 
                                             <button
                                                 id="nextMonth"
-                                                className="rounded-md px-2 py-2 text-dark hover:bg-gray-2 dark:text-white dark:hover:bg-dark"
+                                                className="rounded-md px-2 py-2 text-dark hover:bg-gray-2 dark:text-black dark:hover:bg-dark"
                                                 onClick={handleNextMonth}
                                             >
                                                 <svg
@@ -272,7 +272,7 @@ const DatePicker = () => {
 
                                         <div
                                             id="days-of-week"
-                                            className="mb-4 mt-6 grid grid-cols-7 gap-2 px-5"
+                                            className="mb-4 mt-6 grid grid-cols-7 gap-2 px-5 dark:text-black"
                                         >
                                             <div className="text-center text-sm font-medium text-secondary-color">
                                                 Sun
