@@ -1,8 +1,15 @@
 import ProductUpdation from "./ProductUpdation";
 import ProductCreation from "./ProductCreation";
 import ProductRead from "./ProductRead";
+import { useState } from "react";
 
 const ProductList = () => {
+    const [showAdd, setShowAdd] = useState(false);
+
+    const toggleAdd = () => {
+        setShowAdd(!showAdd);
+    };
+
     return (
         <div className="p-4 w-full h-screen bg-gray-100 dark:bg-gray-900">
             <section className="antialiased mt-16">
@@ -31,7 +38,8 @@ const ProductList = () => {
                                 </form>
                             </div>
                             <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                                <button type="button" id="createProductModalButton" data-modal-target="createProductModal" data-modal-toggle="createProductModal" className="flex items-center justify-center text-white bg-primary hover:bg-orange-400 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-orange-600 dark:hover:bg-orange-700 focus:outline-none dark:focus:ring-orange-800">
+                                <button onClick={toggleAdd}
+                                    type="button" className="flex items-center justify-center text-white bg-primary hover:bg-orange-400 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-orange-600 dark:hover:bg-orange-700 focus:outline-none dark:focus:ring-orange-800">
                                     <svg className="h-3.5 w-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                         <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                                     </svg>
@@ -186,9 +194,11 @@ const ProductList = () => {
                 </div>
             </section>
 
-            <div id="createProductModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <ProductCreation />
-            </div>
+            {showAdd && (
+                <div tabIndex={-1} aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full bg-black bg-opacity-50">
+                    <ProductCreation toggleAdd={toggleAdd}/>
+                </div>
+            )}
 
             <div id="updateProductModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                 <ProductUpdation />

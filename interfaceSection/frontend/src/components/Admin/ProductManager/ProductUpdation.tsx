@@ -6,10 +6,10 @@ import React, { useState } from "react";
 
 const ProductUpdation = () => {
     // các biến của update
-    interface SizeAmount {
+    interface SizeQuantity {
         id: number;
         size: number;
-        amount: number;
+        quantity: number;
     }
     interface Image {
         id: number;
@@ -20,7 +20,7 @@ const ProductUpdation = () => {
         id: number;
         color: string;
         images: Image[];
-        sizeAmounts: SizeAmount[];
+        sizeQuantitys: SizeQuantity[];
     }
 
     interface Product {
@@ -48,9 +48,9 @@ const ProductUpdation = () => {
                 { id: 2, image: ImgWhite1 },
                 { id: 3, image: ImgWhite2 },
                 { id: 4, image: ImgWhite3 }],
-                sizeAmounts: [
-                    { id: 1, size: 38, amount: 13 },
-                    { id: 2, size: 39, amount: 20 },
+                sizeQuantitys: [
+                    { id: 1, size: 38, quantity: 13 },
+                    { id: 2, size: 39, quantity: 20 },
                 ],
             },
         ],
@@ -69,7 +69,7 @@ const ProductUpdation = () => {
             id: temp,
             color: "#ffffff",
             images: [],
-            sizeAmounts: [{ id: temp + 101, size: 0, amount: 0 }],
+            sizeQuantitys: [{ id: temp + 101, size: 0, quantity: 0 }],
         };
 
         setProduct((prev) => ({
@@ -149,41 +149,41 @@ const ProductUpdation = () => {
         }));
     };
 
-    const addSizeAmount = (colorId: number) => {
-        const newSizeAmount: SizeAmount = {
+    const addSizeQuantity = (colorId: number) => {
+        const newSizeQuantity: SizeQuantity = {
             id: Date.now() % 10000,
             size: 0,
-            amount: 0,
+            quantity: 0,
         };
 
         setProduct((prev) => ({
             ...prev,
             colors: prev.colors.map((color) =>
                 color.id === colorId
-                    ? { ...color, sizeAmounts: [...color.sizeAmounts, newSizeAmount] }
+                    ? { ...color, sizeQuantitys: [...color.sizeQuantitys, newSizeQuantity] }
                     : color
             ),
         }));
     };
 
-    const deleteSizeAmount = (colorId: number, sizeAmountId: number) => {
+    const deleteSizeQuantity = (colorId: number, sizeQuantityId: number) => {
         setProduct((prev) => ({
             ...prev,
             colors: prev.colors.map((color) =>
                 color.id === colorId
                     ? {
                         ...color,
-                        sizeAmounts: color.sizeAmounts.filter((sa) => sa.id !== sizeAmountId),
+                        sizeQuantitys: color.sizeQuantitys.filter((sa) => sa.id !== sizeQuantityId),
                     }
                     : color
             ),
         }));
     };
 
-    const setSizeAmount = (
+    const setSizeQuantity = (
         colorId: number,
-        sizeAmountId: number,
-        field: "size" | "amount",
+        sizeQuantityId: number,
+        field: "size" | "Quantity",
         value: number
     ) => {
         setProduct((prev) => ({
@@ -192,8 +192,8 @@ const ProductUpdation = () => {
                 color.id === colorId
                     ? {
                         ...color,
-                        sizeAmounts: color.sizeAmounts.map((sa) =>
-                            sa.id === sizeAmountId ? { ...sa, [field]: value < 0 ? 0 : value } : sa
+                        sizeQuantitys: color.sizeQuantitys.map((sa) =>
+                            sa.id === sizeQuantityId ? { ...sa, [field]: value < 0 ? 0 : value } : sa
                         ),
                     }
                     : color
@@ -329,7 +329,7 @@ const ProductUpdation = () => {
                                             <div className="flex flex-col items-center justify-center space-y-1">
                                                 <button
                                                     type='button'
-                                                    onClick={() => addSizeAmount(color.id)}
+                                                    onClick={() => addSizeQuantity(color.id)}
                                                     className="bg-orange-300 hover:bg-orange-400 w-23 rounded-md block px-1 py-1 text-sm text-white"
                                                 >
                                                     Thêm KT-SL
@@ -343,19 +343,19 @@ const ProductUpdation = () => {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {color.sizeAmounts.map((sizeAmount) => (
+                                                        {color.sizeQuantitys.map((sizeQuantity) => (
                                                             <tr>
                                                                 <td>
-                                                                    <input type="number" value={sizeAmount.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
-                                                                        onChange={(e) => setSizeAmount(color.id, sizeAmount.id, "size", parseInt(e.target.value, 10) || 0)} />
+                                                                    <input type="number" value={sizeQuantity.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
+                                                                        onChange={(e) => setSizeQuantity(color.id, sizeQuantity.id, "size", parseInt(e.target.value, 10) || 0)} />
                                                                     -
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" value={sizeAmount.amount} name="amount" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
-                                                                        onChange={(e) => setSizeAmount(color.id, sizeAmount.id, "amount", parseInt(e.target.value, 10) || 0)} />
+                                                                    <input type="number" value={sizeQuantity.quantity} name="Quantity" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
+                                                                        onChange={(e) => setSizeQuantity(color.id, sizeQuantity.id, "Quantity", parseInt(e.target.value, 10) || 0)} />
                                                                 </td>
                                                                 <td>
-                                                                    <button onClick={() => deleteSizeAmount(color.id, sizeAmount.id)} type="button" className="text-gray-400 bg-transparent hover:text-red-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:text-red-600">
+                                                                    <button onClick={() => deleteSizeQuantity(color.id, sizeQuantity.id)} type="button" className="text-gray-400 bg-transparent hover:text-red-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:text-red-600">
                                                                         <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                                         </svg>

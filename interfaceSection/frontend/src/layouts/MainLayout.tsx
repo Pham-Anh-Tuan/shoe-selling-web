@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
-import { Navbar } from "../Navbar/Navbar";
-import SignIn from "../SignInOut/SignIn";
-import SignOut from "../SignInOut/SignOut";
-import ForgotPassword from "../SignInOut/ForgotPassword";
-import Footer from "../Footer/Footer";
+import { Navbar } from "../components/Navbar/Navbar";
+import SignIn from "../components/SignInOut/SignIn";
+import SignOut from "../components/SignInOut/SignOut";
+import ForgotPassword from "../components/SignInOut/ForgotPassword";
+import Footer from "../components/Footer/Footer";
 
 interface MainLayoutProps {
     handleSignInPopup: () => void;

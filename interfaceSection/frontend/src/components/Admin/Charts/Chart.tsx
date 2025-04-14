@@ -151,8 +151,8 @@ const Chart = () => {
                             key={year}
                             onClick={() => setSelectedYear(+year)}
                             className={`px-4 py-2 rounded-md border text-sm font-medium ${+year === selectedYear
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-white text-blue-600 border-blue-600 hover:bg-blue-100'
+                                ? 'bg-[#fea928] text-white'
+                                : 'bg-white text-[#fea928] border-[#fea928] hover:bg-orange-100'
                                 }`}
                         >
                             {year}
@@ -164,7 +164,7 @@ const Chart = () => {
                     <BarChart data={data} margin={{ top: 30, right: 30, left: 20, bottom: 40 }}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="month">
-                            <Label value="Tháng" offset={-10} position="insideBottomRight" style={{ fill: '#2563eb', fontWeight: 'bold' }} />
+                            <Label value="Tháng" offset={-10} position="insideBottomRight" style={{ fill: '#fea928', fontWeight: 'bold' }} />
                         </XAxis>
                         <YAxis tickFormatter={formatVND}>
                             <Label
@@ -172,7 +172,7 @@ const Chart = () => {
                                 angle={0}
                                 position="top"
                                 offset={10}
-                                style={{ textAnchor: 'middle', fill: '#2563eb', fontWeight: 'bold' }}
+                                style={{ textAnchor: 'middle', fill: '#fea928', fontWeight: 'bold' }}
                             />
                         </YAxis>
                         <Tooltip
@@ -188,7 +188,8 @@ const Chart = () => {
                                 return null;
                             }}
                         />
-                        <Bar dataKey="revenue" fill="#3b82f6" radius={[6, 6, 0, 0]} />
+                        {/* <Bar dataKey="revenue" fill="#3b82f6" radius={[6, 6, 0, 0]} /> */}
+                        <Bar dataKey="revenue" fill="#fea928" radius={[6, 6, 0, 0]} />
                     </BarChart>
                 </ResponsiveContainer>
 
@@ -201,7 +202,7 @@ const Chart = () => {
                             <input
                                 type="date"
                                 id="date"
-                                className="border rounded-md px-2 py-1 w-36 text-blue-600 dark:bg-gray-800"
+                                className="border rounded-md px-2 py-1 w-36 text-[#fea928] dark:bg-gray-800"
                                 value={selectedDate}
                                 onChange={(e) => {
                                     const date = e.target.value;
@@ -215,7 +216,7 @@ const Chart = () => {
                             <label htmlFor="date" className="text-xl font-medium">
                                 Doanh thu:
                             </label>
-                            <p className="text-lg text-blue-600">
+                            <p className="text-lg text-[#fea928]">
                                 {dailyRevenue !== null ? formatVND2(dailyRevenue) : "Không có số liệu"}
                             </p>
                         </div>

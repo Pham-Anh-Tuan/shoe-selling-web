@@ -1,4 +1,4 @@
-import AdNavbar from "../AdNavbar";
+import AdNavbar from "../components/Admin/AdNavbar";
 import { Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
