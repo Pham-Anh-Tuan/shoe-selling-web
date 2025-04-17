@@ -56,7 +56,7 @@ const AppRoutes = () => {
                         <Hero />
                         <Products />
                     </>} />
-                    <Route path="ProductDetail" element={
+                    <Route path="ProductDetail/:id" element={
                         <>
                             <ScrollToTop />
                             <ProductDetail />

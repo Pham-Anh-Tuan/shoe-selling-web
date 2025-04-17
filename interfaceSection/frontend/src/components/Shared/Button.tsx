@@ -6,7 +6,7 @@ interface ButtonProps {
     textColor: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ text, bgColor, textColor}) => {
+const Button: React.FC<ButtonProps> = ({ text, bgColor, textColor }) => {
     return <button
         className={`${bgColor} ${textColor}
     cursor-pointer hover:scale-105

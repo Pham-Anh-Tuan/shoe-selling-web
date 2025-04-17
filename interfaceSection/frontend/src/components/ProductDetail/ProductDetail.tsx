@@ -9,7 +9,7 @@ import Img1Blue2 from "../../assets/male-sneaker/sneakerBlue2.png";
 import Img1Blue3 from "../../assets/male-sneaker/sneakerBlue3.png";
 
 import { FaStar, FaBagShopping } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RelatedProducts from "./RelatedProducts";
 import React, { useRef } from 'react';
 
@@ -19,28 +19,15 @@ import { GiFoodTruck } from "react-icons/gi";
 import { TbTruckDelivery } from "react-icons/tb";
 import { FaExchangeAlt } from "react-icons/fa";
 import { FiPhone } from "react-icons/fi";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { productDetailApi } from "../../api-client/api";
+import formatCurrencyVND from '../../hooks/FormatCurrency';
 
 const ProductDetail = () => {
     const [count, setCount] = useState<number>(1);
     const increase = () => setCount(count + 1);
     const decrease = () => setCount(count > 1 ? count - 1 : 1);
-
-    const [whiteImages, setWhiteImages] = useState({
-        img0: Img1,
-        img1: ImgWhite1,
-        img2: ImgWhite2,
-        img3: ImgWhite3,
-    })
-
-    const [blueImages, setBlueImages] = useState({
-        img0: Img1Blue,
-        img1: Img1Blue1,
-        img2: Img1Blue2,
-        img3: Img1Blue3,
-    })
-
-    const [activeImg, setActiveImage] = useState(Img1);
-    const [currentImages, setCurrentImages] = useState(whiteImages);
 
     const imgRef = useRef<HTMLImageElement | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -67,6 +54,70 @@ const ProductDetail = () => {
         }
     }
 
+    interface SizeQuantity {
+        id: string;
+        size: number;
+        quantity: number;
+    }
+    interface Image {
+        id: string;
+        path: string | ArrayBuffer | null;
+    }
+
+    interface Color {
+        id: string;
+        colorHex: string;
+        images: Image[];
+        sizeQuantities: SizeQuantity[];
+    }
+
+    interface Product {
+        id: string;
+        productName: string;
+        price: number;
+        type: number;
+        sideDes: string;
+        mainDes: string;
+        colors: Color[];
+    }
+
+    const { id } = useParams<{ id: string }>();
+    const [product, setProduct] = useState<Product | null>(null);
+
+    const [activeImg, setActiveImage] = useState('');
+    const [currentImages, setCurrentImages] = useState<Image[] | null>();
+
+    const [colorIndex, setColorIndex] = useState<number>(0);
+    const [sizeIndex, setSizeIndex] = useState<number>(0);
+    const [available, setAvailable] = useState<Boolean>(false);
+
+    function checkQuantity(colorIndex: number, sizeQuantityIndex: number) {
+        if (product !== null) {
+            const isAvailable = product?.colors[colorIndex]?.sizeQuantities[sizeQuantityIndex].quantity > 0;
+            setAvailable(isAvailable);
+        }
+    }
+
+    useEffect(() => {
+        if (!id) return;  // Chặn gọi API nếu id là undefined
+        const fetchApi = async () => {
+            try {
+                const { data } = await productDetailApi.getById(id);
+                setProduct(data);
+                setCurrentImages(data.colors[0].images);
+                setActiveImage(import.meta.env.VITE_API_URL + "/productImages/" + data.colors[0].images[0].path); // hoặc: setActiveImg(data.images[0])
+            } catch (error) {
+                console.error("Lỗi khi gọi API sản phẩm:", error);
+            }
+        };
+        fetchApi();
+    }, [id]);
+
+    useEffect(() => {
+        const quantity = product?.colors?.[colorIndex]?.sizeQuantities?.[sizeIndex]?.quantity;
+        setAvailable(typeof quantity === 'number' && quantity > 0);
+    }, [colorIndex, sizeIndex, product]);
+
     return (
         <div className="container">
             {/* product properties */}
@@ -81,17 +132,13 @@ const ProductDetail = () => {
 
                     </div>
                     <div className='grid grid-cols-4 mt-4 w-full place-items-center gap-7'>
-                        {/* <img src={whiteImages.img0} alt="" className='w-28 h-28 aspect-square object-cover rounded-md cursor-pointer' onClick={() => setActiveImage(whiteImages.img0)} />
-                        <img src={whiteImages.img1} alt="" className='w-28 h-28 aspect-square object-cover rounded-md cursor-pointer' onClick={() => setActiveImage(whiteImages.img1)} />
-                        <img src={whiteImages.img2} alt="" className='w-28 h-28 aspect-square object-cover rounded-md cursor-pointer' onClick={() => setActiveImage(whiteImages.img2)} />
-                        <img src={whiteImages.img3} alt="" className='w-28 h-28 aspect-square object-cover rounded-md cursor-pointer' onClick={() => setActiveImage(whiteImages.img3)} /> */}
-                        {Object.entries(currentImages).map(([key, src]) => (
+                        {currentImages && currentImages.map((image, i) => (
                             <img
-                                key={key}
-                                src={src}
+                                key={i}
+                                src={import.meta.env.VITE_API_URL + '/productImages/' + image.path}
                                 alt=""
                                 className='w-20 h-20 sm:w-28 sm:h-28 aspect-square object-cover rounded-md cursor-pointer'
-                                onClick={() => setActiveImage(src)}
+                                onClick={() => setActiveImage(import.meta.env.VITE_API_URL + "/productImages/" + image.path)}
                             />
                         ))}
                     </div>
@@ -100,7 +147,7 @@ const ProductDetail = () => {
 
                 {/* product content */}
                 <div>
-                    <h2 className="text-3xl font-medium uppercase mb-2">Giày Thể Thao Sneaker MULGATI YC25051P</h2>
+                    <h2 className="text-3xl font-medium uppercase mb-2">{product?.productName}</h2>
                     <div className="flex items-center mb-4">
                         <div className="flex gap-1 text-sm text-yellow-400">
                             <span><FaStar className="text-yellow-400" /></span>
@@ -115,49 +162,47 @@ const ProductDetail = () => {
                     <div className="space-y-2">
                         <p className="text-gray-800 font-semibold space-x-2">
                             <span className="dark:text-white">Tình trạng:</span>
-                            <span className="text-green-600">Còn hàng</span>
+                            <span className={available ? "text-green-600" : "text-red-600"}>
+                                {available ? "Còn hàng" : "Hết hàng"}
+                            </span>
                         </p>
                         <p className="text-gray-800 font-semibold space-x-2">
                             <span className="text-gray-800 font-semibold dark:text-white">Loại hàng:</span>
-                            <span className="text-gray-600 dark:text-white">Giày thể thao nam</span>
+                            <span className="text-gray-600 dark:text-white">{product?.type === 1
+                                ? "Giày thể thao nam"
+                                : product?.type === 2
+                                    ? "Sandal nam"
+                                    : product?.type === 3
+                                        ? "Giày cao gót"
+                                        : product?.type === 4
+                                            ? "Giày thể thao nữ"
+                                            : "Không xác định"}</span>
                         </p>
                     </div>
 
                     <div className="flex items-baseline mb-1 space-x-2 mt-4">
-                        <p className="text-2xl text-primary font-semibold">2,200,000₫</p>
+                        <p className="text-2xl text-primary font-semibold"> {formatCurrencyVND(product?.price || 0)}</p>
                     </div>
 
                     <p className="mt-4 text-gray-600 dark:text-white">
-                        Giày Sneaker Da Bò Nam MULGATI - Màu Trắng Kem, Phong Cách Thể Thao, Đế Cao Su Êm Ái
+                        {product?.mainDes}
                     </p>
 
                     {/* size filter */}
                     <div className="pt-4">
                         <h3 className="text-sm text-gray-800 uppercase mb-1 dark:text-white">KÍCH THƯỚC:</h3>
                         <div className="flex items-center gap-2">
+
                             {/* single size */}
-                            <div className="size-selector">
-                                <input type="radio" name="size" className="hidden" id="size-38" defaultChecked />
-                                <label htmlFor="size-38" className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600 dark:text-white">
-                                    38
-                                </label>
-                            </div>
-                            {/* single size end */}
-                            {/* single size */}
-                            <div className="size-selector">
-                                <input type="radio" name="size" className="hidden" id="size-39" />
-                                <label htmlFor="size-39" className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600 dark:text-white">
-                                    39
-                                </label>
-                            </div>
-                            {/* single size end */}
-                            {/* single size */}
-                            <div className="size-selector">
-                                <input type="radio" name="size" className="hidden" id="size-40" />
-                                <label htmlFor="size-40" className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600 dark:text-white">
-                                    40
-                                </label>
-                            </div>
+                            {product?.colors[colorIndex].sizeQuantities.map((sizeQuantity, i) => (
+                                <div className="size-selector">
+                                    <input onChange={() => setSizeIndex(i)}
+                                        type="radio" name="size" className="hidden" id={'size-' + i} defaultChecked={i === 0} />
+                                    <label htmlFor={'size-' + i} className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600 dark:text-white">
+                                        {sizeQuantity.size}
+                                    </label>
+                                </div>
+                            ))}
                             {/* single size end */}
                         </div>
                     </div>
@@ -168,29 +213,20 @@ const ProductDetail = () => {
                         <h3 className="text-sm text-gray-800 uppercase mb-1 dark:text-white">MÀU:</h3>
                         <div className="flex items-center gap-2">
                             {/* single color */}
-                            <div className="color-selector">
-                                <input type="radio" name="color" className="hidden" id="color-white" defaultChecked />
-                                {/* <label htmlFor="color-white" className="border border-gray-200 rounded-sm h-5 w-5 cursor-pointer shadow-sm bg-white block" onClick={() => setActiveImage(Img1)}></label> */}
-                                <label htmlFor="color-white" className="border border-gray-200 rounded-sm h-5 w-5 cursor-pointer shadow-sm bg-white block"
-                                    onClick={() => {
-                                        setCurrentImages(whiteImages);
-                                        setActiveImage(whiteImages.img0);
-                                    }}>
-                                </label>
-                            </div>
-                            {/* single color end*/}
-
-                            {/* single color */}
-                            <div className="color-selector">
-                                <input type="radio" name="color" className="hidden" id="color-blue" />
-                                {/* <label htmlFor="color-blue" className="text-xs border border-gray-200 rounded-sm h-5 w-5 flex items-center justify-center cursor-pointer shadow-sm bg-blue-950" onClick={() => setActiveImage(Img1Blue)}></label> */}
-                                <label htmlFor="color-blue" className="text-xs border border-gray-200 rounded-sm h-5 w-5 flex items-center justify-center cursor-pointer shadow-sm bg-blue-950"
-                                    onClick={() => {
-                                        setCurrentImages(blueImages);
-                                        setActiveImage(blueImages.img0);
-                                    }}>
-                                </label>
-                            </div>
+                            {product?.colors.map((color, i) => (
+                                <div className="color-selector">
+                                    <input type="radio" name="color" className="hidden" id={"color-" + i} defaultChecked={i === 0} />
+                                    {/* <label htmlFor="color-white" className="border border-gray-200 rounded-sm h-5 w-5 cursor-pointer shadow-sm bg-white block" onClick={() => setActiveImage(Img1)}></label> */}
+                                    <label htmlFor={"color-" + i} className="border border-gray-200 rounded-sm h-5 w-5 cursor-pointer shadow-sm block"
+                                        style={{ backgroundColor: color.colorHex }}
+                                        onClick={() => {
+                                            setCurrentImages(color.images);
+                                            setActiveImage(import.meta.env.VITE_API_URL + "/productImages/" + color.images[0].path);
+                                            setColorIndex(i);
+                                        }}>
+                                    </label>
+                                </div>
+                            ))}
                             {/* single color end*/}
                         </div>
                     </div>

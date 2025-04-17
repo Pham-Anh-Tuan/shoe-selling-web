@@ -1,7 +1,9 @@
 package com.example.backend.userService.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "sizeQuantity")
 public class SizeQuantity {
@@ -18,7 +20,5 @@ public class SizeQuantity {
     @ManyToOne
     @JoinColumn(name = "colorId", nullable = false)
     private Color color;
-
-
 
 }

@@ -1,8 +1,7 @@
 package com.example.backend.userService.service;
 
 import com.example.backend.core.dto.ColorWithImageDTO;
-import com.example.backend.core.dto.ProductDTO;
-import com.example.backend.userService.model.Image;
+import com.example.backend.core.dto.HomeProductDTO;
 import com.example.backend.userService.model.Product;
 import com.example.backend.userService.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +15,15 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<ProductDTO> getAllProducts() {
+    public Product getProductDetailById(String id) {
+        return productRepository.findById(id).orElse(null);
+    }
+
+    public List<HomeProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
         return products.stream().map(product -> {
-            ProductDTO dto = new ProductDTO();
+            HomeProductDTO dto = new HomeProductDTO();
             dto.setId(product.getId());
             dto.setProductName(product.getProductName());
             dto.setPrice(product.getPrice());
