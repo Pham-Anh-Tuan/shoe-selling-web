@@ -1,9 +1,9 @@
-package com.example.backend.userService.mapper;
+package com.example.backend.core.mapper;
 
-import com.example.backend.core.dto.ColorDTO;
-import com.example.backend.core.dto.ImageDTO;
-import com.example.backend.core.dto.ProductDetailDTO;
-import com.example.backend.core.dto.SizeQuantityDTO;
+import com.example.backend.core.response.ColorRes;
+import com.example.backend.core.response.ImageRes;
+import com.example.backend.core.response.ProductDetailRes;
+import com.example.backend.core.response.SizeQuantityRes;
 import com.example.backend.userService.model.Color;
 import com.example.backend.userService.model.Image;
 import com.example.backend.userService.model.Product;
@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 
 public class ProductDetailMapper {
 
-    public static ProductDetailDTO toProductDTO(Product product) {
-        ProductDetailDTO dto = new ProductDetailDTO();
+    public static ProductDetailRes toProductDetailRes(Product product) {
+        ProductDetailRes dto = new ProductDetailRes();
         dto.setId(product.getId());
         dto.setProductName(product.getProductName());
         dto.setPrice(product.getPrice());
@@ -25,42 +25,42 @@ public class ProductDetailMapper {
         // Map list Color
         if (product.getColors() != null) {
             dto.setColors(product.getColors().stream()
-                    .map(ProductDetailMapper::toColorDTO)
+                    .map(ProductDetailMapper::toColorRes)
                     .collect(Collectors.toList()));
         }
 
         return dto;
     }
 
-    public static ColorDTO toColorDTO(Color color) {
-        ColorDTO dto = new ColorDTO();
+    public static ColorRes toColorRes(Color color) {
+        ColorRes dto = new ColorRes();
         dto.setId(color.getId());
         dto.setColorHex(color.getColorHex());
 
         if (color.getImages() != null) {
             dto.setImages(color.getImages().stream()
-                    .map(ProductDetailMapper::toImageDTO)
+                    .map(ProductDetailMapper::toImageRes)
                     .collect(Collectors.toList()));
         }
 
         if (color.getSizeQuantities() != null) {
             dto.setSizeQuantities(color.getSizeQuantities().stream()
-                    .map(ProductDetailMapper::toSizeQuantityDTO)
+                    .map(ProductDetailMapper::toSizeQuantityRes)
                     .collect(Collectors.toList()));
         }
 
         return dto;
     }
 
-    public static ImageDTO toImageDTO(Image image) {
-        ImageDTO dto = new ImageDTO();
+    public static ImageRes toImageRes(Image image) {
+        ImageRes dto = new ImageRes();
         dto.setId(image.getId());
         dto.setPath(image.getPath());
         return dto;
     }
 
-    public static SizeQuantityDTO toSizeQuantityDTO(SizeQuantity sq) {
-        SizeQuantityDTO dto = new SizeQuantityDTO();
+    public static SizeQuantityRes toSizeQuantityRes(SizeQuantity sq) {
+        SizeQuantityRes dto = new SizeQuantityRes();
         dto.setId(sq.getId());
         dto.setSize(sq.getSize());
         dto.setQuantity(sq.getQuantity());

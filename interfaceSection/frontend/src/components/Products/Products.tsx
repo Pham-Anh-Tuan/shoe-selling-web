@@ -1,13 +1,5 @@
 import { useEffect, useState } from "react";
-import Img1 from "../../assets/male-sneaker/sneaker.png";
-import Img2 from "../../assets/male-sneaker/sneaker2.png";
-import Img3 from "../../assets/male-sneaker/sneaker3.png";
-import Img4 from "../../assets/male-sneaker/sneaker4.png";
-import Img5 from "../../assets/male-sneaker/sneaker5.png";
-import Img6 from "../../assets/male-sneaker/sneaker6.png";
-import Button from "../Shared/Button";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { homeProductsApi } from "../../api-client/api";
 import formatCurrencyVND from '../../hooks/FormatCurrency';
 
@@ -115,7 +107,7 @@ const Products = () => {
                 >
                   <div className="relative">
                     <img
-                      src={import.meta.env.VITE_API_URL + '/productImages/' + data.colors[selectedColors[index] ?? 0].mainImage}
+                      src={import.meta.env.VITE_API_URL_IMG + data.colors[selectedColors[index] ?? 0].mainImage}
                       alt=""
 
                       className="w-[380px] h-[300px] object-cover rounded-md"

@@ -1,11 +1,9 @@
-package com.example.backend.core.dto;
+package com.example.backend.core.response;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class ColorWithImageDTO {
+public class ColorWithImageRes {
     private String colorHex;
     private String mainImage; // chỉ lấy ảnh đầu tiên
 }

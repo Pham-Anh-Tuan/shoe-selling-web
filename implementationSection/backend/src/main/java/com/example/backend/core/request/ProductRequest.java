@@ -1,0 +1,17 @@
+package com.example.backend.core.request;
+
+import lombok.Data;
+
+import java.util.List;
+
+@Data
+public class ProductRequest {
+    private String id;
+    private String productName;
+    private double price;
+    private int type;
+    private String mainDes;
+    private String sideDes;
+    private List<ColorRequest> colors;
+
+}

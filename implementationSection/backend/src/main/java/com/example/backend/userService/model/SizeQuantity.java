@@ -3,6 +3,8 @@ package com.example.backend.userService.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @Table(name = "sizeQuantity")
@@ -16,6 +18,14 @@ public class SizeQuantity {
 
     @Column(name = "quantity")
     private int quantity;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     @ManyToOne
     @JoinColumn(name = "colorId", nullable = false)

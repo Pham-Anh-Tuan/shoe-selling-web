@@ -1,32 +1,33 @@
 import React, { useState } from "react";
+import { addProductApi } from "../../../api-client/api";
 
-interface ProductCreationProps {
+interface ProductAddProps {
     toggleAdd: () => void;
 }
 
-const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
-    // các biến của create
-    interface SizeAmount {
-        id: number;
+export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd }) => {
+    interface SizeQuantity {
+        id: string;
         size: number;
-        amount: number;
+        quantity: number;
     }
 
     interface Image {
-        id: number;
-        image: string | ArrayBuffer | null;
+        id: string;
+        path: string | ArrayBuffer | null;
+        imageFile: File | null; // Đây là file ảnh
     }
 
     interface Color {
-        id: number;
-        color: string;
+        id: string;
+        colorHex: string;
         images: Image[];
-        sizeAmounts: SizeAmount[];
+        sizeQuantities: SizeQuantity[];
     }
 
     interface Product {
         id: string;
-        name: string;
+        productName: string;
         price: number;
         type: string;
         mainDes: string;
@@ -36,24 +37,53 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
 
     const [product, setProduct] = useState<Product>({
         id: crypto.randomUUID(),
-        name: "",
+        productName: "",
         price: 0,
         type: "0",
         mainDes: "",
         sideDes: "",
         colors: [
             {
-                id: Date.now() % 100000,
-                color: "#ffffff",
-                images: [{ id: Date.now() % 100000, image: "" },
-
+                id: crypto.randomUUID(),
+                colorHex: "",
+                images: [
+                    // { id: crypto.randomUUID(), path: "", imageFile: null },
                 ],
-                sizeAmounts: [
-                    { id: Date.now() % 100000, size: 0, amount: 0 },
+                sizeQuantities: [
+                    // { id: crypto.randomUUID(), size: 0, quantity: 0 },
                 ],
             },
         ],
     });
+
+    const setImageFile = (
+        colorId: string,
+        imageId: string,
+        file: File | null
+    ) => {
+        setProduct((prev) => ({
+            ...prev,
+            colors: prev.colors.map((color) =>
+                color.id === colorId
+                    ? {
+                        ...color,
+                        images: color.images.map((img) =>
+                            img.id === imageId
+                                ? { ...img, imageFile: file }
+                                : img
+                        ),
+                    }
+                    : color
+            ),
+        }));
+    };
+
+    const setProductName = (newProductName: string) => {
+        setProduct((prev) => ({
+            ...prev,
+            productName: newProductName,
+        }));
+    };
 
     const setPrice = (newPrice: number) => {
         setProduct((prevProduct) => ({
@@ -62,13 +92,33 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
         }));
     };
 
+    const setType = (newType: string) => {
+        setProduct((prev) => ({
+            ...prev,
+            type: newType,
+        }));
+    };
+
+    const setMainDes = (newMainDes: string) => {
+        setProduct((prev) => ({
+            ...prev,
+            mainDes: newMainDes,
+        }));
+    };
+
+    const setSideDes = (newSideDes: string) => {
+        setProduct((prev) => ({
+            ...prev,
+            sideDes: newSideDes,
+        }));
+    };
+
     const addColor = () => {
-        const temp = Date.now() % 100000;
         const newColor: Color = {
-            id: temp,
-            color: "#ffffff",
+            id: crypto.randomUUID(),
+            colorHex: "#FFFFFF",
             images: [],
-            sizeAmounts: [{ id: temp + 101, size: 0, amount: 0 }],
+            sizeQuantities: [],
         };
 
         setProduct((prev) => ({
@@ -77,20 +127,34 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
         }));
     };
 
-    const deleteColor = (colorId: number) => {
+    const deleteColor = (colorId: string) => {
         setProduct((prev) => ({
             ...prev,
             colors: prev.colors.filter((color) => color.id !== colorId),
         }));
     };
 
+    const setColorHex = (colorId: string, newColorHex: string) => {
+        setProduct((prev) => ({
+            ...prev,
+            colors: prev.colors.map((color) =>
+                color.id === colorId
+                    ? { ...color, colorHex: newColorHex }
+                    : color
+            ),
+        }));
+    };
+
+    const formData = new FormData();
+
     const handleImageUpload = (
         event: React.ChangeEvent<HTMLInputElement>,
-        colorId: number,
-        imageId: number
+        colorId: string,
+        imageId: string
     ) => {
         const file = event.target.files?.[0];
         if (file) {
+
             const reader = new FileReader();
             reader.onload = () => {
                 const newImageValue = reader.result;
@@ -103,7 +167,7 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
                                 ...color,
                                 images: color.images.map((img) =>
                                     img.id === imageId
-                                        ? { ...img, image: newImageValue }
+                                        ? { ...img, path: newImageValue }
                                         : img
                                 ),
                             }
@@ -112,29 +176,28 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
                 }));
             };
             reader.readAsDataURL(file);
+            setImageFile(colorId, imageId, file);
         }
     };
 
-    const addImage = (colorId: number) => {
-        const newImage = {
-            id: Date.now() % 100000, // tạo id tạm thời
-            image: "", // giá trị mặc định
+    const addImage = (colorId: string) => {
+        const newImage: Image = {
+            id: crypto.randomUUID(),
+            path: "",
+            imageFile: null,
         };
 
         setProduct((prev) => ({
             ...prev,
             colors: prev.colors.map((color) =>
                 color.id === colorId
-                    ? {
-                        ...color,
-                        images: [...color.images, newImage],
-                    }
+                    ? { ...color, images: [...color.images, newImage] }
                     : color
             ),
         }));
     };
 
-    const deleteImage = (colorId: number, imageId: number) => {
+    const deleteImage = (colorId: string, imageId: string) => {
         setProduct((prev) => ({
             ...prev,
             colors: prev.colors.map((color) =>
@@ -147,41 +210,44 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
             ),
         }));
     };
-    const addSizeAmount = (colorId: number) => {
-        const newSizeAmount: SizeAmount = {
-            id: Date.now() % 10000,
+    const addSizeQuantity = (colorId: string) => {
+        const newSizeQuantity: SizeQuantity = {
+            id: crypto.randomUUID(),
             size: 0,
-            amount: 0,
+            quantity: 0,
         };
 
         setProduct((prev) => ({
             ...prev,
             colors: prev.colors.map((color) =>
                 color.id === colorId
-                    ? { ...color, sizeAmounts: [...color.sizeAmounts, newSizeAmount] }
-                    : color
-            ),
-        }));
-    };
-
-    const deleteSizeAmount = (colorId: number, sizeAmountId: number) => {
-        setProduct((prev) => ({
-            ...prev,
-            colors: prev.colors.map((color) =>
-                color.id === colorId
                     ? {
                         ...color,
-                        sizeAmounts: color.sizeAmounts.filter((sa) => sa.id !== sizeAmountId),
+                        sizeQuantities: [...color.sizeQuantities, newSizeQuantity],
                     }
                     : color
             ),
         }));
     };
 
-    const setSizeAmount = (
-        colorId: number,
-        sizeAmountId: number,
-        field: "size" | "amount",
+    const deleteSizeQuantity = (colorId: string, sizeQuantityId: string) => {
+        setProduct((prev) => ({
+            ...prev,
+            colors: prev.colors.map((color) =>
+                color.id === colorId
+                    ? {
+                        ...color,
+                        sizeQuantities: color.sizeQuantities.filter((sa) => sa.id !== sizeQuantityId),
+                    }
+                    : color
+            ),
+        }));
+    };
+
+    const setSizeQuantity = (
+        colorId: string,
+        sizeQuantityId: string,
+        field: "size" | "quantity",
         value: number
     ) => {
         setProduct((prev) => ({
@@ -190,8 +256,10 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
                 color.id === colorId
                     ? {
                         ...color,
-                        sizeAmounts: color.sizeAmounts.map((sa) =>
-                            sa.id === sizeAmountId ? { ...sa, [field]: value < 0 ? 0 : value } : sa
+                        sizeQuantities: color.sizeQuantities.map((sa) =>
+                            sa.id === sizeQuantityId
+                                ? { ...sa, [field]: value < 0 ? 0 : value }
+                                : sa
                         ),
                     }
                     : color
@@ -199,8 +267,67 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
         }));
     };
 
-    return (
 
+
+    const handleSubmit = async () => {
+        formData.append("id", product.id);
+        formData.append("productName", product.productName);
+        formData.append("price", product.price.toString());
+        formData.append("type", product.type.toString());
+        formData.append("mainDes", product.mainDes);
+        formData.append("sideDes", product.sideDes);
+
+        product.colors.forEach((color, colorIndex) => {
+            formData.append(`colors[${colorIndex}].id`, color.id);
+            formData.append(`colors[${colorIndex}].colorHex`, color.colorHex);
+
+            color.images.forEach((image) => {
+                if (image.imageFile) {
+                    formData.append(`colors[${colorIndex}].imageFiles`, image.imageFile);
+                    // Không cần chỉ rõ chỉ số [index] vì backend sẽ gom tất cả cùng key thành List
+                }
+            });
+
+            // SizeQuantities
+            color.sizeQuantities.forEach((sq, sqIndex) => {
+                formData.append(`colors[${colorIndex}].sizeQuantities[${sqIndex}].id`, sq.id);
+                formData.append(`colors[${colorIndex}].sizeQuantities[${sqIndex}].size`, sq.size.toString());
+                formData.append(`colors[${colorIndex}].sizeQuantities[${sqIndex}].quantity`, sq.quantity.toString());
+            });
+        });
+
+        // for (const [key, value] of formData.entries()) {
+        //     if (value instanceof File) {
+        //         console.log(`${key}: File name = ${value.name}, type = ${value.type}, size = ${value.size} bytes`);
+        //     } else {
+        //         console.log(`${key}: ${value}`);
+        //     }
+        // }
+        try {
+            const response = await addProductApi.addProduct(formData);
+            console.log("Product saved:", response.data);
+        } catch (error) {
+            console.error("Error saving product:", error);
+        }
+
+        // try {
+        //     const response = await fetch("http://localhost:8080/api/addProduct", {
+        //         method: "POST",
+        //         body: formData // KHÔNG set Content-Type ở đây
+        //     });
+
+        //     if (response.ok) {
+        //         const result = await response.text(); // vì bạn return string chứ không phải JSON
+        //         console.log("Product saved:", result);
+        //     } else {
+        //         console.error("Failed to save product");
+        //     }
+        // } catch (error) {
+        //     console.error("Error submitting product:", error);
+        // }
+    }
+
+    return (
         <div className="relative p-4 w-full max-w-2xl max-h-full">
             <div className="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
                 <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
@@ -214,11 +341,12 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
                     </button>
                 </div>
 
-                <form action="#">
+                <form onSubmit={handleSubmit}>
                     <div className="grid gap-4 mb-4 sm:grid-cols-2">
                         <div>
                             <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tên</label>
-                            <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Tên sản phẩm" required />
+                            <input onChange={(e) => setProductName(e.target.value)}
+                                type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Tên sản phẩm" required />
                         </div>
                         <div>
                             <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giá</label>
@@ -233,20 +361,29 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
                                         e.preventDefault();
                                     }
                                 }}
-                                name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="" required />₫</p>
+                                name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />₫</p>
                         </div>
                         <div>
                             <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Loại</label>
-                            <select id="category" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500">
+                            <select onChange={(e) => setType(e.target.value)}
+                                id="category" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required>
                                 <option selected>Chọn loại giày</option>
-                                <option value="TV">Giày thể thao nam</option>
-                                <option value="PC">Sandal nam</option>
-                                <option value="GA">Giày cao gót</option>
-                                <option value="PH">Giày thể thao nữ</option>
+                                <option value={1}>Giày thể thao nam</option>
+                                <option value={2}>Sandal nam</option>
+                                <option value={3}>Giày cao gót</option>
+                                <option value={4}>Giày thể thao nữ</option>
                             </select>
                         </div>
-                        <div className="sm:col-span-2"><label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả tóm tắt</label><textarea id="description" rows={1} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết phần mô tả sản phẩm ngắn gọn"></textarea></div>
-                        <div className="sm:col-span-2"><label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả chi tiết</label><textarea id="description" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết chi tiết cho phần mô tả sản phẩm"></textarea></div>
+                        <div className="sm:col-span-2">
+                            <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả tóm tắt</label>
+                            <textarea onChange={(e) => setMainDes(e.target.value)}
+                                id="description" rows={1} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết phần mô tả sản phẩm ngắn gọn" required></textarea>
+                        </div>
+                        <div className="sm:col-span-2">
+                            <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả chi tiết</label>
+                            <textarea onChange={(e) => setSideDes(e.target.value)}
+                                id="description" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết chi tiết cho phần mô tả sản phẩm" required></textarea>
+                        </div>
                     </div>
 
                     <div className="flex items-center justify-end space-x-4 mb-1">
@@ -275,7 +412,8 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
                                     <tr key={color.id} className="border-b dark:border-gray-700">
                                         <th scope="row" className="px-4 py-3">
                                             <div className="flex flex-col items-center justify-center space-y-1">
-                                                <input type="color" defaultValue={color.color} className="p-1 h-10 w-14 block bg-white cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700" id="hs-color-input" title="Choose your color" />
+                                                <input onChange={(e) => setColorHex(color.id, e.target.value)}
+                                                    type="color" defaultValue={color.colorHex} className="p-1 h-10 w-14 block bg-white cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700" id="hs-color-input" title="Choose your color" />
                                             </div>
                                         </th>
                                         <td className="px-4 py-3">
@@ -301,10 +439,10 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
                                                             </div>
 
                                                             <div className="mt-1 w-fit">
-                                                                <img src={typeof image.image === 'string'
-                                                                    ? image.image // Nếu image là string, dùng luôn
-                                                                    : image.image instanceof ArrayBuffer
-                                                                        ? URL.createObjectURL(new Blob([image.image])) // Nếu image là ArrayBuffer, tạo URL từ nó
+                                                                <img src={typeof image.path === 'string'
+                                                                    ? image.path // Nếu image là string, dùng luôn
+                                                                    : image.path instanceof ArrayBuffer
+                                                                        ? URL.createObjectURL(new Blob([image.path])) // Nếu image là ArrayBuffer, tạo URL từ nó
                                                                         : '/path/to/default-image.jpg'}
                                                                     key={image.id}
                                                                     className="w-20 h-20 object-cover rounded-lg shadow border" />
@@ -319,7 +457,7 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
                                             <div className="flex flex-col items-center justify-center space-y-1">
                                                 <button
                                                     type='button'
-                                                    onClick={() => addSizeAmount(color.id)}
+                                                    onClick={() => addSizeQuantity(color.id)}
                                                     className="bg-orange-300 hover:bg-orange-400 w-23 rounded-md block px-1 py-1 text-sm text-white"
                                                 >
                                                     Thêm KT-SL
@@ -333,19 +471,19 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {color.sizeAmounts.map((sizeAmount) => (
+                                                        {color.sizeQuantities.map((sizeQuantity) => (
                                                             <tr>
                                                                 <td>
-                                                                    <input type="number" value={sizeAmount.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
-                                                                        onChange={(e) => setSizeAmount(color.id, sizeAmount.id, "size", parseInt(e.target.value, 10) || 0)} />
+                                                                    <input type="number" value={sizeQuantity.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
+                                                                        onChange={(e) => setSizeQuantity(color.id, sizeQuantity.id, "size", parseInt(e.target.value, 10) || 0)} />
                                                                     -
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" value={sizeAmount.amount} name="amount" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
-                                                                        onChange={(e) => setSizeAmount(color.id, sizeAmount.id, "amount", parseInt(e.target.value, 10) || 0)} />
+                                                                    <input type="number" value={sizeQuantity.quantity} name="quantity" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
+                                                                        onChange={(e) => setSizeQuantity(color.id, sizeQuantity.id, "quantity", parseInt(e.target.value, 10) || 0)} />
                                                                 </td>
                                                                 <td>
-                                                                    <button onClick={() => deleteSizeAmount(color.id, sizeAmount.id)} type="button" className="text-gray-400 bg-transparent hover:text-red-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:text-red-600">
+                                                                    <button onClick={() => deleteSizeQuantity(color.id, sizeQuantity.id)} type="button" className="text-gray-400 bg-transparent hover:text-red-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:text-red-600">
                                                                         <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                                         </svg>
@@ -391,8 +529,6 @@ const ProductCreation: React.FC<ProductCreationProps> = ({ toggleAdd }) => {
 
         </div>
 
-    );
-
+    )
 }
-
-export default ProductCreation;
+export default ProductAdd;

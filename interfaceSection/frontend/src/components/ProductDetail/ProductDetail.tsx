@@ -1,26 +1,12 @@
-import Img1 from "../../assets/male-sneaker/sneaker.png";
-import ImgWhite1 from "../../assets/male-sneaker/sneakerWhite1.png";
-import ImgWhite2 from "../../assets/male-sneaker/sneakerWhite2.png";
-import ImgWhite3 from "../../assets/male-sneaker/sneakerWhite3.png";
-
-import Img1Blue from "../../assets/male-sneaker/sneaker-blue.png";
-import Img1Blue1 from "../../assets/male-sneaker/sneakerBlue1.png";
-import Img1Blue2 from "../../assets/male-sneaker/sneakerBlue2.png";
-import Img1Blue3 from "../../assets/male-sneaker/sneakerBlue3.png";
-
 import { FaStar, FaBagShopping } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import RelatedProducts from "./RelatedProducts";
 import React, { useRef } from 'react';
-
-import { GrSecure } from "react-icons/gr";
-import { IoFastFood } from "react-icons/io5";
 import { GiFoodTruck } from "react-icons/gi";
 import { TbTruckDelivery } from "react-icons/tb";
 import { FaExchangeAlt } from "react-icons/fa";
 import { FiPhone } from "react-icons/fi";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { productDetailApi } from "../../api-client/api";
 import formatCurrencyVND from '../../hooks/FormatCurrency';
 
@@ -105,7 +91,7 @@ const ProductDetail = () => {
                 const { data } = await productDetailApi.getById(id);
                 setProduct(data);
                 setCurrentImages(data.colors[0].images);
-                setActiveImage(import.meta.env.VITE_API_URL + "/productImages/" + data.colors[0].images[0].path); // hoặc: setActiveImg(data.images[0])
+                setActiveImage(import.meta.env.VITE_API_URL_IMG + data.colors[0].images[0].path); // hoặc: setActiveImg(data.images[0])
             } catch (error) {
                 console.error("Lỗi khi gọi API sản phẩm:", error);
             }
@@ -135,10 +121,10 @@ const ProductDetail = () => {
                         {currentImages && currentImages.map((image, i) => (
                             <img
                                 key={i}
-                                src={import.meta.env.VITE_API_URL + '/productImages/' + image.path}
+                                src={import.meta.env.VITE_API_URL_IMG + image.path}
                                 alt=""
                                 className='w-20 h-20 sm:w-28 sm:h-28 aspect-square object-cover rounded-md cursor-pointer'
-                                onClick={() => setActiveImage(import.meta.env.VITE_API_URL + "/productImages/" + image.path)}
+                                onClick={() => setActiveImage(import.meta.env.VITE_API_URL + "/api/productImages/" + image.path)}
                             />
                         ))}
                     </div>
@@ -221,7 +207,7 @@ const ProductDetail = () => {
                                         style={{ backgroundColor: color.colorHex }}
                                         onClick={() => {
                                             setCurrentImages(color.images);
-                                            setActiveImage(import.meta.env.VITE_API_URL + "/productImages/" + color.images[0].path);
+                                            setActiveImage(import.meta.env.VITE_API_URL_IMG + color.images[0].path);
                                             setColorIndex(i);
                                         }}>
                                     </label>
@@ -278,15 +264,10 @@ const ProductDetail = () => {
                 <h3 className="border-b border-gray-200 text-gray-800 pb-3 font-medium dark:text-white">Mô tả sản phẩm</h3>
                 <div className="lg:w-3/5 md:w-full pt-6">
                     <div className="text-gray-600 space-y-3 dark:text-white">
-                        <p>Chất liệu cao cấp: Giày được làm từ da bò thật, mềm mại, bền bỉ, giúp ôm chân thoải mái và thoáng khí.</p>
-
-                        <p>Thiết kế năng động: Phối màu trắng kem sang trọng với điểm nhấn sọc đen tạo phong cách trẻ trung, dễ dàng phối đồ.</p>
-
-                        <p>Đế cao su đúc nguyên khối: Nhẹ, êm chân, hỗ trợ di chuyển linh hoạt và chống trơn trượt hiệu quả.</p>
-
-                        <p>Gia công tỉ mỉ: Đường may chắc chắn, hoàn thiện tinh tế, đảm bảo độ bền lâu dài.</p>
-
-                        <p>Ứng dụng linh hoạt: Phù hợp cho nhiều dịp: đi chơi, dạo phố, đi làm, du lịch,...</p>
+                        {/* <p>{product?.sideDes}</p> */}
+                        {product?.sideDes?.replace(/\\n/g, '\n').split('\n').map((line, idx) => (
+                            <p key={idx}>{line.trim()}</p>
+                        ))}
                     </div>
                 </div>
             </div>

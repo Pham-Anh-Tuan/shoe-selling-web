@@ -8,20 +8,30 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/images")
+@RequestMapping("/api/productImages")
 public class ImageController {
     @GetMapping("/{imageName}")
     public ResponseEntity<byte[]> getImage(@PathVariable String imageName) throws IOException {
-        // Đường dẫn ảnh trong resource
-        ClassPathResource imgFile = new ClassPathResource("static/productImages/" + imageName);
+        // Lấy đường dẫn thư mục gốc của project
+        String projectDir = System.getProperty("user.dir");
 
-        byte[] imageBytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
+        // Tạo đường dẫn đến file ảnh
+        Path imagePath = Paths.get(projectDir, "user/uploads", imageName);
+
+        if (!Files.exists(imagePath)) {
+            return ResponseEntity.notFound().build(); // Trả về 404 nếu ảnh không tồn tại
+        }
+
+        // Đọc dữ liệu ảnh
+        byte[] imageBytes = Files.readAllBytes(imagePath);
 
         // Xác định kiểu nội dung dựa vào phần mở rộng của ảnh
-        String contentType = Files.probeContentType(imgFile.getFile().toPath());
+        String contentType = Files.probeContentType(imagePath);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))

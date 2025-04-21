@@ -1,9 +1,9 @@
-package com.example.backend.core.dto;
+package com.example.backend.core.response;
 
 import lombok.Data;
 
 @Data
-public class ImageDTO {
+public class ImageRes {
     private String id;
     private String path;
 }

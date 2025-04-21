@@ -3,6 +3,7 @@ package com.example.backend.userService.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -29,7 +30,16 @@ public class Product {
     @Column(columnDefinition = "TEXT")
     private String mainDes;
 
-    @OneToMany(mappedBy = "product")
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("createdAt ASC")
     private List<Color> colors;
 
 }

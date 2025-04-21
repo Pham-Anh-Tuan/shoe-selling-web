@@ -161,7 +161,7 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                                     {/* </Link> */}
                                     {/* <Link to="/AdNavbar"> */}
                                         <li>
-                                            <a href="Admin"
+                                            <a href="/Admin"
                                                 className="inline-block w-full rounded-md p-2
                                         hover:bg-primary/20">
                                                 Quản lý cửa hàng
