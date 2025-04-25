@@ -2,14 +2,31 @@ import ProductUpdation from "./ProductUpdation";
 import ProductRead from "./ProductRead";
 import { useEffect, useState } from "react";
 import ProductAdd from "./ProductAdd";
-import { managerProductsApi } from "../../../api-client/api";
+import { deleteProductApi, managerProductsApi } from "../../../api-client/api";
 import formatCurrencyVND from '../../../hooks/FormatCurrency';
+import { set } from "lodash";
 
 const ProductList = () => {
     const [showAdd, setShowAdd] = useState(false);
+    const [showRead, setShowRead] = useState(false);
+    const [showUpdate, setShowUpdate] = useState(false);
+    const [deleteId, setDeleteId] = useState<string>("");
+    const [updateId, setUpdateId] = useState<string>("");
+    const [refresh, setRefresh] = useState(false);
+    const [readId, setReadId] = useState<string>("");
 
     const toggleAdd = () => {
         setShowAdd(!showAdd);
+    };
+    const toggleRead = () => {
+        setShowRead(!showRead);
+    };
+    const toggleUpdate = () => {
+        setShowUpdate(!showUpdate);
+    };
+
+    const toggleRefresh = () => {
+        setRefresh(!refresh);
     };
 
     interface Product {
@@ -27,34 +44,44 @@ const ProductList = () => {
             setProductsData(data);
         };
         fetchApi();
-    }, []);
+    }, [refresh]);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-          productsData.forEach((_, index) => {
-            const dropdown = document.getElementById(index + "giay-the-thao-1-dropdown");
-            const button = document.getElementById(index + "giay-the-thao-1-dropdown-button");
-      
-            if (
-              dropdown &&
-              !dropdown.contains(event.target as Node) &&
-              button &&
-              !button.contains(event.target as Node)
-            ) {
-              dropdown.classList.add("hidden");
-            }
-          });
+            productsData.forEach((_, index) => {
+                const dropdown = document.getElementById(index + "giay-the-thao-1-dropdown");
+                const button = document.getElementById(index + "giay-the-thao-1-dropdown-button");
+
+                if (
+                    dropdown &&
+                    !dropdown.contains(event.target as Node) &&
+                    button &&
+                    !button.contains(event.target as Node)
+                ) {
+                    dropdown.classList.add("hidden");
+                }
+            });
         }
-      
+
         document.addEventListener("click", handleClickOutside);
-      
+
         return () => {
-          document.removeEventListener("click", handleClickOutside);
+            document.removeEventListener("click", handleClickOutside);
         };
-      }, [productsData]);
+    }, [productsData]);
+
+    const deleteProduct = async () => {
+        try {
+            await deleteProductApi.deleteById(deleteId);
+            setRefresh(prev => !prev);
+            document.getElementById("deleteModal")?.classList.add("hidden");
+        } catch (error) {
+            console.error("Xóa sản phẩm không thành công!", error);
+        }
+    };
 
     return (
-        <div className="p-4 w-full h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="p-4 w-full h-screen overflow-auto bg-gray-100 dark:bg-gray-900">
             <section className="antialiased mt-16">
                 <div className="mx-auto w-full">
                     <div className="bg-white dark:bg-gray-800 relative shadow-md overflow-hidden rounded-2xl">
@@ -131,7 +158,11 @@ const ProductList = () => {
                                                     className="hidden absolute right-0 top-full z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
                                                     <ul className="py-1 text-sm" aria-labelledby={index + "giay-the-thao-1-dropdown-button"}>
                                                         <li>
-                                                            <button type="button" data-modal-target="updateProductModal" data-modal-toggle="updateProductModal" className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
+                                                            <button onClick={() => {
+                                                                setUpdateId(data.id);
+                                                                toggleUpdate();
+                                                            }}
+                                                                type="button" className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
                                                                 <svg className="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                                     <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
@@ -140,7 +171,11 @@ const ProductList = () => {
                                                             </button>
                                                         </li>
                                                         <li>
-                                                            <button type="button" data-modal-target="readProductModal" data-modal-toggle="readProductModal" className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
+                                                            <button onClick={() => {
+                                                                setReadId(data.id);
+                                                                toggleRead();
+                                                            }}
+                                                                type="button" className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
                                                                 <svg className="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                                                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -150,6 +185,7 @@ const ProductList = () => {
                                                         </li>
                                                         <li>
                                                             <button onClick={() => {
+                                                                setDeleteId(data.id);
                                                                 const dropdown = document.getElementById("deleteModal");
                                                                 dropdown?.classList.toggle("hidden");
                                                             }}
@@ -215,19 +251,22 @@ const ProductList = () => {
 
             {showAdd && (
                 <div tabIndex={-1} aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full bg-black bg-opacity-50">
-                    <ProductAdd toggleAdd={toggleAdd} />
+                    <ProductAdd toggleAdd={toggleAdd} toggleRefresh={toggleRefresh} />
                 </div>
             )}
 
-            <div id="updateProductModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <ProductUpdation />
-            </div>
+            {showUpdate && (
+                <div tabIndex={-1} aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full bg-black bg-opacity-50">
+                    <ProductUpdation updateId={updateId} toggleUpdate={toggleUpdate} toggleRefresh={toggleRefresh} />
+                </div>
+            )}
 
-            <div id="readProductModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <ProductRead />
-            </div>
+            {showRead && (
+                <div tabIndex={-1} aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full bg-black bg-opacity-50">
+                    <ProductRead readId={readId} toggleRead={toggleRead} />
+                </div>
+            )}
 
-            {/* <div id="deleteModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"> */}
             <div id="deleteModal" tabIndex={-1} aria-hidden="true"
                 className="hidden fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50">
                 <div className="relative p-4 w-full max-w-md max-h-full">
@@ -250,7 +289,14 @@ const ProductList = () => {
                                 document.getElementById("deleteModal")?.classList.add("hidden");
                             }}
                                 type="button" className="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-orange-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Không</button>
-                            <button type="submit" className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">Có</button>
+                            {/* <button onClick={() => {
+                                deleteProduct;
+                            }}
+                                type="button" className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">Có</button> */}
+                            <button onClick={() => {
+                                deleteProduct();
+                            }}
+                                type="button" className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700">Có</button>
                         </div>
                     </div>
                 </div>

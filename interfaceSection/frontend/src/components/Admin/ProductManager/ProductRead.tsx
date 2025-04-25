@@ -1,30 +1,34 @@
-import React, { useState } from "react";
-import Img1 from "../../../assets/male-sneaker/sneaker.png";
-import ImgWhite1 from "../../../assets/male-sneaker/sneakerWhite1.png";
-import ImgWhite2 from "../../../assets/male-sneaker/sneakerWhite2.png";
-import ImgWhite3 from "../../../assets/male-sneaker/sneakerWhite3.png";
-const ProductRead = () => {
-    // các biến của read
-    interface SizeAmount {
-        id: number;
+import React, { useEffect, useState } from "react";
+import { productDetailApi } from "../../../api-client/api";
+
+interface ProductReadProps {
+    readId: string;
+    toggleRead: () => void;
+};
+
+const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
+    interface SizeQuantity {
+        id: string;
         size: number;
-        amount: number;
+        quantity: number;
     }
+
     interface Image {
-        id: number;
-        image: string | ArrayBuffer | null;
+        id: string;
+        path: string | ArrayBuffer | null;
+        imageFile: File | null; // Đây là file ảnh
     }
 
     interface Color {
-        id: number;
-        color: string;
+        id: string;
+        colorHex: string;
         images: Image[];
-        sizeAmounts: SizeAmount[];
+        sizeQuantities: SizeQuantity[];
     }
 
     interface Product {
         id: string;
-        name: string;
+        productName: string;
         price: number;
         type: string;
         mainDes: string;
@@ -32,35 +36,56 @@ const ProductRead = () => {
         colors: Color[];
     }
 
+    // const [product, setProduct] = useState<Product | null>(null);
     const [product, setProduct] = useState<Product>({
-        id: "YC25051P",
-        name: "Giày Thể Thao Sneaker MULGATI YC25051P",
-        price: 2200000,
-        type: "1",
-        mainDes: "Giày Sneaker Da Bò Nam MULGATI - Màu Trắng Kem, Phong Cách Thể Thao, Đế Cao Su Êm Ái.",
-        sideDes: "Chất liệu cao cấp: Giày được làm từ da bò thật, mềm mại, bền bỉ, giúp ôm chân thoải mái và thoáng khí. \nThiết kế năng động: Phối màu trắng kem sang trọng với điểm nhấn sọc đen tạo phong cách trẻ trung, dễ dàng phối đồ.\nĐế cao su đúc nguyên khối: Nhẹ, êm chân, hỗ trợ di chuyển linh hoạt và chống trơn trượt hiệu quả.\nGia công tỉ mỉ: Đường may chắc chắn, hoàn thiện tinh tế, đảm bảo độ bền lâu dài.\nỨng dụng linh hoạt: Phù hợp cho nhiều dịp: đi chơi, dạo phố, đi làm, du lịch,...",
-        colors: [
-            {
-                id: 1,
-                color: "#1e3a8a",
-                images: [{ id: 1, image: Img1 },
-                { id: 2, image: ImgWhite1 },
-                { id: 3, image: ImgWhite2 },
-                { id: 4, image: ImgWhite3 }],
-                sizeAmounts: [
-                    { id: 1, size: 38, amount: 13 },
-                    { id: 2, size: 39, amount: 20 },
-                ],
-            },
-        ],
-    });
+            id: "",
+            productName: "",
+            price: 0,
+            type: "0",
+            mainDes: "",
+            sideDes: "",
+            colors: [
+                {
+                    id: crypto.randomUUID(),
+                    colorHex: "",
+                    images: [
+                        // { id: crypto.randomUUID(), path: "", imageFile: null },
+                    ],
+                    sizeQuantities: [
+                        // { id: crypto.randomUUID(), size: 0, quantity: 0 },
+                    ],
+                },
+            ],
+        });
+
+    useEffect(() => {
+        if (!readId) return;  // Chặn gọi API nếu id là undefined
+        const fetchApi = async () => {
+            try {
+                const { data } = await productDetailApi.getById(readId);
+                setProduct(data);
+            } catch (error) {
+                console.error("Lỗi khi gọi API sản phẩm:", error);
+            }
+        };
+        fetchApi();
+    }, [readId]);
+
+    const setPrice = (newPrice: number) => {
+        setProduct((prevProduct) => ({
+            ...prevProduct,
+            price: newPrice < 0 ? 0 : newPrice, // Đảm bảo giá không âm
+        }));
+    };
+
 
     return (
         <div className="relative p-4 w-full max-w-2xl max-h-full">
             <div className="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
                 <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Xem chi tiết sản phẩm</h3>
-                    <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="readProductModal">
+                    <button onClick={toggleRead}
+                        type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="readProductModal">
                         <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
@@ -71,17 +96,27 @@ const ProductRead = () => {
                     <div className="grid gap-4 mb-4 sm:grid-cols-2">
                         <div>
                             <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tên</label>
-                            <input disabled type="text" name="name" id="name" value={product.name} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Ex. Apple iMac 27&ldquo;" />
+                            <input disabled type="text" name="name" id="name" value={product?.productName} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Ex. Apple iMac 27&ldquo;" />
                         </div>
                         <div>
                             <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giá</label>
-                            <p className="block w-full"><input disabled type="number" value={product.price.toLocaleString("en-US")} name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="2,200,000" required />₫</p>
+                            <p className="block w-full">
+                                <input onChange={(e) => {
+                                    // let value = parseFloat(e.target.value);
+                                    // if (value < 0) value = 0;
+                                    // setPrice(value);
+                                    let value = e.target.value.replace(/,/g, '');
+                                    const number = parseFloat(value);
+                                    if (!isNaN(number)) setPrice(number);
+                                }}
+                                disabled type="text" value={product?.price.toLocaleString("en-US")} name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
+                                ₫</p>
                         </div>
                         <div>
                             <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Loại</label>
                             <select
                                 disabled
-                                value={product.type}
+                                value={product?.type}
                                 id="category" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500">
                                 <option>Chọn loại giày</option>
                                 <option value="1">Giày thể thao nam</option>
@@ -92,14 +127,14 @@ const ProductRead = () => {
                         </div>
                         <div className="sm:col-span-2">
                             <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả tóm tắt</label>
-                            <textarea disabled id="description" rows={2} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết phần mô tả sản phẩm ngắn gọn">
-                                {product.mainDes}
+                            <textarea disabled id="description" rows={2} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết phần mô tả sản phẩm ngắn gọn"
+                                defaultValue={product?.mainDes}>
                             </textarea>
                         </div>
                         <div className="sm:col-span-2">
                             <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả chi tiết</label>
                             <textarea disabled id="description" rows={5} className="overflow-auto whitespace-pre-wrap block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết chi tiết cho phần mô tả sản phẩm"
-                                defaultValue={product.sideDes}>
+                                defaultValue={product?.sideDes}>
                             </textarea>
                         </div>
                     </div>
@@ -117,11 +152,11 @@ const ProductRead = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {product.colors.map((color) => (
+                                {product?.colors.map((color) => (
                                     <tr key={color.id} className="border-b dark:border-gray-700">
                                         <th scope="row" className="px-4 py-3">
                                             <div className="flex flex-col items-center justify-center space-y-1">
-                                                <input type="color" defaultValue={color.color} className="p-1 h-10 w-14 block bg-white cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700" id="hs-color-input" title="Choose your color" />
+                                                <input type="color" defaultValue={color?.colorHex} className="p-1 h-10 w-14 block bg-white cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700" id="hs-color-input" title="Choose your color" />
                                             </div>
                                         </th>
                                         <td className="px-4 py-3">
@@ -130,11 +165,7 @@ const ProductRead = () => {
                                                     {color.images.map((image) => (
                                                         <div className="flex flex-col items-center justify-center space-y-1">
                                                             <div className="mt-1 w-fit">
-                                                                <img src={typeof image.image === 'string'
-                                                                    ? image.image // Nếu image là string, dùng luôn
-                                                                    : image.image instanceof ArrayBuffer
-                                                                        ? URL.createObjectURL(new Blob([image.image])) // Nếu image là ArrayBuffer, tạo URL từ nó
-                                                                        : '/path/to/default-image.jpg'}
+                                                                <img src={import.meta.env.VITE_API_URL_IMG + image.path}
                                                                     key={image.id}
                                                                     className="w-20 h-20 object-cover rounded-lg shadow border" />
                                                             </div>
@@ -155,14 +186,14 @@ const ProductRead = () => {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {color.sizeAmounts.map((sizeAmount) => (
+                                                        {color.sizeQuantities.map((sizeQuantity) => (
                                                             <tr>
                                                                 <td>
-                                                                    <input type="number" disabled value={sizeAmount.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
+                                                                    <input type="number" disabled value={sizeQuantity.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
                                                                     -
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" disabled value={sizeAmount.amount} name="amount" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
+                                                                    <input type="number" disabled value={sizeQuantity.quantity} name="amount" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
                                                                 </td>
                                                             </tr>
                                                         ))}

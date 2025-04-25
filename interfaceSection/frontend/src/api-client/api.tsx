@@ -24,8 +24,14 @@ export const addProductApi = {
     },
 }
 
+export const updateProductApi = {
+    updateProduct(formData: FormData) {
+        return axiosServer.put('/api/updateProduct', formData);
+    },
+}
+
 export const deleteProductApi = {
-    getById(id: String) {
-        return axiosClient.get('/api/productDetail/' + id);
+    deleteById(id: String) {
+        return axiosClient.delete(`/api/deleteProduct/${id}`);
     },
 }

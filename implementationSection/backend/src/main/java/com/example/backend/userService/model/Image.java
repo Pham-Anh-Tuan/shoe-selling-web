@@ -2,10 +2,15 @@ package com.example.backend.userService.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "image")
 public class Image {
@@ -24,7 +29,7 @@ public class Image {
         this.createdAt = LocalDateTime.now();
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "colorId", nullable = false)
     private Color color;
 }

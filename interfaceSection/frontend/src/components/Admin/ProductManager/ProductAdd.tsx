@@ -3,9 +3,10 @@ import { addProductApi } from "../../../api-client/api";
 
 interface ProductAddProps {
     toggleAdd: () => void;
+    toggleRefresh: () => void;
 }
 
-export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd }) => {
+export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh }) => {
     interface SizeQuantity {
         id: string;
         size: number;
@@ -269,7 +270,9 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd }) => {
 
 
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
         formData.append("id", product.id);
         formData.append("productName", product.productName);
         formData.append("price", product.price.toString());
@@ -296,35 +299,14 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd }) => {
             });
         });
 
-        // for (const [key, value] of formData.entries()) {
-        //     if (value instanceof File) {
-        //         console.log(`${key}: File name = ${value.name}, type = ${value.type}, size = ${value.size} bytes`);
-        //     } else {
-        //         console.log(`${key}: ${value}`);
-        //     }
-        // }
         try {
             const response = await addProductApi.addProduct(formData);
             console.log("Product saved:", response.data);
         } catch (error) {
             console.error("Error saving product:", error);
         }
-
-        // try {
-        //     const response = await fetch("http://localhost:8080/api/addProduct", {
-        //         method: "POST",
-        //         body: formData // KHÔNG set Content-Type ở đây
-        //     });
-
-        //     if (response.ok) {
-        //         const result = await response.text(); // vì bạn return string chứ không phải JSON
-        //         console.log("Product saved:", result);
-        //     } else {
-        //         console.error("Failed to save product");
-        //     }
-        // } catch (error) {
-        //     console.error("Error submitting product:", error);
-        // }
+        toggleRefresh();
+        toggleAdd();
     }
 
     return (
@@ -439,7 +421,8 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd }) => {
                                                             </div>
 
                                                             <div className="mt-1 w-fit">
-                                                                <img src={typeof image.path === 'string'
+                                                                <img 
+                                                                src={typeof image.path === 'string'
                                                                     ? image.path // Nếu image là string, dùng luôn
                                                                     : image.path instanceof ArrayBuffer
                                                                         ? URL.createObjectURL(new Blob([image.path])) // Nếu image là ArrayBuffer, tạo URL từ nó

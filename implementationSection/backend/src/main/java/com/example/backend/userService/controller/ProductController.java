@@ -1,5 +1,6 @@
 package com.example.backend.userService.controller;
 
+import com.example.backend.core.request.ProductUpdateRequest;
 import com.example.backend.core.response.HomeProductRes;
 import com.example.backend.core.response.ManagerProductRes;
 import com.example.backend.core.response.ProductDetailRes;
@@ -24,7 +25,7 @@ public class ProductController {
 
     @GetMapping(path = "/homeProducts")
     public ResponseEntity<List<HomeProductRes>> getProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+        return ResponseEntity.ok(productService.getAllProductsOrdered());
     }
 
     @GetMapping(path = "/productDetail/{id}")
@@ -43,6 +44,11 @@ public class ProductController {
     public ResponseEntity<String> addProduct(@ModelAttribute ProductRequest productRequest) {
         productService.addProduct(productRequest);
         return ResponseEntity.ok("Product added successfully.");
+    }
+    @PutMapping(value ="/updateProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateProduct(@ModelAttribute ProductUpdateRequest productUpdateRequest) {
+        productService.updateProduct(productUpdateRequest);
+        return ResponseEntity.ok("Product updated successfully");
     }
 
     @DeleteMapping("/deleteProduct/{id}")
