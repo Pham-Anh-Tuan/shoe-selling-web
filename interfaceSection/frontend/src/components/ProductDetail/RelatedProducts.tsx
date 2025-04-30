@@ -66,7 +66,7 @@ const ProductsData = [
 
 const RelatedProducts = () => {
   return (
-    <div className="mb-12">
+    <div className="mb-2">
       <div className="border-t border-gray-200 pt-8">
         {/* Header section */}
         <div className="text-center mb-10 max-w-[600px] mx-auto">

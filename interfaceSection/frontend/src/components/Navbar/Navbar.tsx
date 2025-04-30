@@ -2,7 +2,7 @@ import Logo from "../../assets/logo.png";
 import { IoMdSearch } from "react-icons/io";
 import { FaCaretDown, FaCartShopping, FaUser } from "react-icons/fa6";
 import DarkMode from "./DarkMode";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
 import { Link } from "react-router-dom";
@@ -63,6 +63,37 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
     const toggleMenu = () => {
         setShowMenu(!showMenu);
     };
+
+    const [cartLength, setCartLength] = useState(0);
+
+    // Hàm cập nhật số lượng giỏ hàng
+    const updateCartLength = () => {
+        const storedCart = localStorage.getItem('cart');
+        if (storedCart) {
+            try {
+                const cart = JSON.parse(storedCart) || [];
+                setCartLength(cart.length);
+            } catch (error) {
+                setCartLength(0);
+            }
+        }
+    };
+
+    // Lắng nghe sự thay đổi khi component mount
+    useEffect(() => {
+        updateCartLength();
+
+        // Tạo một sự kiện tuỳ chỉnh khi cart thay đổi
+        const handleStorageChange = () => {
+            updateCartLength();
+        };
+
+        window.addEventListener('cartUpdated', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('cartUpdated', handleStorageChange);
+        };
+    }, []);
 
     return (
         <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
@@ -125,6 +156,14 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                                 </span> */}
                                 <FaCartShopping
                                     className="text-xl text-white drop-shadow-sm cursor-pointer" />
+                                <>
+                                    {cartLength > 0 && (
+                                        <span className="absolute mb-5 ml-6 bg-white text-secondary text-xs px-1 min-h-3 flex items-center justify-center rounded-full shadow">
+                                            {cartLength}
+                                        </span>
+                                    )}
+                                </>
+
                             </button>
                         </Link>
                         {/* Darkmode Switch */}
@@ -148,25 +187,25 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
 
                             <div className="absolute z-[9999] hidden
                         group-hover:block w-[200px] rounded-md
-                        bg-white p-2 text-black shadow-md right-0">
+                        bg-white p-2 text-black shadow-md right-0 dark:bg-gray-900 dark:text-white">
                                 <ul>
                                     {/* <Link to="/Orders"> */}
-                                        <li>
-                                            <a href="Orders"
-                                                className="inline-block w-full rounded-md p-2
+                                    <li>
+                                        <a href="Orders"
+                                            className="inline-block w-full rounded-md p-2
                                         hover:bg-primary/20">
-                                                Đơn hàng của tôi
-                                            </a>
-                                        </li>
+                                            Đơn hàng của tôi
+                                        </a>
+                                    </li>
                                     {/* </Link> */}
                                     {/* <Link to="/AdNavbar"> */}
-                                        <li>
-                                            <a href="/Admin"
-                                                className="inline-block w-full rounded-md p-2
+                                    <li>
+                                        <a href="/Admin"
+                                            className="inline-block w-full rounded-md p-2
                                         hover:bg-primary/20">
-                                                Quản lý cửa hàng
-                                            </a>
-                                        </li>
+                                            Quản lý cửa hàng
+                                        </a>
+                                    </li>
                                     {/* </Link> */}
                                     <form action="#" method="POST">
                                         <li>
@@ -235,8 +274,8 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                                 </span>
                             </a>
                             <div className="absolute z-[9999] hidden
-                        group-hover:block w-[200px] rounded-md
-                        bg-white p-2 text-black shadow-md">
+                        group-hover:block w-[200px]
+                        bg-white p-2 text-black shadow-md dark:bg-gray-900 dark:text-white">
                                 <ul>
                                     {data.cate.map((cateData) => (
                                         <li key={cateData.id}>

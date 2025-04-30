@@ -2,29 +2,38 @@ import Logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 import { AiFillDashboard, AiFillProduct } from "react-icons/ai";
 import { FaHistory, FaSignOutAlt } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiMenu, HiMenuAlt2 } from "react-icons/hi";
 import DarkMode from "../Navbar/DarkMode";
 
 const AdNavbar = () => {
-  const [showMenu, setShowMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(window.innerWidth <= 900);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 900) {
+        setShowMenu(false);
+      } else {
+        setShowMenu(true);
+      }
+    };
+
+    // Lắng nghe sự kiện resize
+    window.addEventListener("resize", handleResize);
+
+    // Gọi 1 lần khi component mount để set đúng ban đầu
+    handleResize();
+
+    // Clear event khi component unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="relative">
-      {/* Nút toggle menu luôn hiển thị */}
-      {/* <div className="absolute top-4 left-4 z-50">
-        {showMenu ? (
-          <HiMenuAlt2
-            onClick={toggleMenu}
-            className="cursor-pointer transition-all"
-            size={30}
-          />
-        ) : null}
-      </div> */}
       <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200 z-40 fixed w-full">
         {/* upper bar */}
         <div className="bg-primary/40 py-2">
@@ -87,19 +96,6 @@ const AdNavbar = () => {
               <ul className="space-y-2 font-medium">
                 <li>
                   <div className="flex items-center gap-4 p-2">
-                    {/* <HiMenu
-                      onClick={toggleMenu}
-                      className="cursor-pointer transition-all"
-                      size={30}
-                    />
-                    <Link to="/">
-                      <a href="#" className="font-bold 
-                                    text-xl sm:text-xl flex gap-2 items-center">
-                        <img src={Logo} alt="Logo"
-                          className="w-12" />
-                        KuShoe
-                      </a>
-                    </Link> */}
                   </div>
                 </li>
                 <li>

@@ -65,7 +65,7 @@ const ResponsiveMenu: React.FC<ResponsiveMenuProps> = ({ showMenu, toggleMenu })
                                 </a>
                                 <div className="absolute z-[9999] hidden
                                     group-hover:block w-[200px] rounded-md
-                                    bg-white p-2 text-black shadow-md">
+                                    bg-white p-2 text-black shadow-md dark:bg-gray-900 dark:text-white">
                                     <ul>
                                         {data.cate.map((cateData) => (
                                             <li key={cateData.id}>

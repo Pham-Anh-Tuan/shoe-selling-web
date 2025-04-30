@@ -21,7 +21,7 @@ public class Image {
     @Column(nullable = false, length = 200)
     private String path;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist

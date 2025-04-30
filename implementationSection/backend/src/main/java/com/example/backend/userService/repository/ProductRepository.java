@@ -10,4 +10,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     // Sắp xếp toàn bộ danh sách Product theo createdAt
     List<Product> findAllByOrderByCreatedAtAsc();
+
+    // Sắp xếp toàn bộ danh sách Product theo createdAt
+    List<Product> findAllByOrderByCreatedAtDesc();
 }

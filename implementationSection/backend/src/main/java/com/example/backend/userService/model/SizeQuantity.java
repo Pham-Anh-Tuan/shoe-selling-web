@@ -24,7 +24,7 @@ public class SizeQuantity {
     @Column(name = "quantity")
     private int quantity;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist

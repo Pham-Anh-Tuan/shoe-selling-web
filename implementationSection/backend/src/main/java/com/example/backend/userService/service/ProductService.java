@@ -59,7 +59,7 @@ public class ProductService {
     }
 
     public List<HomeProductRes> getAllProductsOrdered() {
-        List<Product> products = productRepository.findAllByOrderByCreatedAtAsc();
+        List<Product> products = productRepository.findAllByOrderByCreatedAtDesc();
 
         return products.stream().map(product -> {
             HomeProductRes res = new HomeProductRes();
@@ -150,249 +150,118 @@ public class ProductService {
         productRepository.save(product);
     }
 
-//    public void updateProduct(ProductUpdateRequest productUpdateRequest) {
-//        Product product = productRepository.findById(productUpdateRequest.getId())
-//                .orElseThrow(() -> new RuntimeException("Product not found"));
-//        product.setProductName(productUpdateRequest.getProductName());
-//        product.setPrice(productUpdateRequest.getPrice());
-//        product.setType(productUpdateRequest.getType());
-//        product.setSideDes(productUpdateRequest.getSideDes());
-//        product.setMainDes(productUpdateRequest.getMainDes());
-//
-//        // Xóa những file ảnh mà id màu trong database không có trong danh sách màu gửi về
-//        List<Color> deleteColors = UpdateProductUtil.deleteColorList(product.getColors(), productUpdateRequest.getColors());
-//        UpdateProductUtil.deleteImageByColor(deleteColors);
-//
-//        String projectDir = System.getProperty("user.dir");
-//
-//        // Danh sách color cũ
-//        List<Color> colorList = product.getColors();
-//        List<String> colorIds = new ArrayList<>();
-//        for (Color color : colorList) {
-//            colorIds.add(color.getId());
-//        }
-//
-//        // Danh sách color mới để cập nhật
-//        List<Color> newColorList = new ArrayList<>();
-//
-//        // Xóa ảnh với điều kiện:
-//        // Những image có path mà không có trong danh sách ảnh gửi về (Xong)
-//        // Hoặc những path có nhưng imageFile lại không null (Xong)
-//        List<ColorUpdateRequest> colorUpdateRequestList = productUpdateRequest.getColors();
-//        for (int i = 0; i < colorUpdateRequestList.size(); i++) {
-//            Color color = new Color();
-//            color.setId(colorUpdateRequestList.get(i).getId());
-//            color.setColorHex(colorUpdateRequestList.get(i).getColorHex());
-//            color.setProduct(product);
-//
-//            List<Image> imageList = new ArrayList<>();
-//            // Trường hợp giữ nguyên color
-//            if (colorIds.contains(colorUpdateRequestList.get(i).getId())) {
-//                // Danh sách image cũ của color đó
-//                List<Image> oldImageList = colorList.get(i).getImages();
-////                List<String> imagePaths = new ArrayList<>();
-////                for (Image image : oldImageList) {
-////                    imagePaths.add(image.getPath());
-////                }
-//
-//                List<ImageRequest> imageRequestList = colorUpdateRequestList.get(i).getImages();
-//
-//                // Xóa những file ảnh mà path của nó có trong danh sách color cũ nhưng không có trong danh sách gửi về
-//                List<Image> deleteImages = UpdateProductUtil.deleteImageList(oldImageList, imageRequestList);
-//                UpdateProductUtil.deleteImages(deleteImages);
-//
-//                for (ImageRequest imageRequest : imageRequestList) {
-//                    Image image = new Image();
-//                    // Thay thế ảnh với điều kiện: image có path trong danh sách ảnh gửi về nhưng kèm với imageFile không null
-////                    if (imagePaths.contains(imageRequest.getPath()) &&
-////                            imageRequest.getImageFile() != null) {
-////                        String fileName = imageRequest.getPath();
-////                        Path uploadPath = Paths.get(projectDir, "user/uploads", fileName);
-////
-////                        try {
-////                            Files.createDirectories(uploadPath.getParent()); // tạo thư mục nếu chưa có
-////                            Files.copy(imageRequest.getImageFile().getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
-////                        } catch (IOException e) {
-////                            throw new RuntimeException("Failed to store image: " + fileName, e);
-////                        }
-////                    }
-//
-//                    image.setId(imageRequest.getId());
-//                    image.setPath(imageRequest.getPath());
-//
-//                    MultipartFile file = imageRequest.getImageFile();
-//
-//                    // Trường hợp update ảnh hoặc thêm ảnh
-//                    if (file != null) {
-//                        String fileName = file.getOriginalFilename();
-//                        Path uploadPath = Paths.get(projectDir, "user/uploads", fileName);
-//
-//                        try {
-//                            Files.createDirectories(uploadPath.getParent()); // tạo thư mục nếu chưa có
-//                            Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
-//                        } catch (IOException e) {
-//                            throw new RuntimeException("Failed to store image: " + fileName, e);
-//                        }
-//                    }
-//                    image.setColor(color);
-//                    imageList.add(image);
-//                }
-//            } else {
-//                // Trường hợp color mới
-//                // Không cần xóa file ảnh
-//                for (ImageRequest imageRequest : colorUpdateRequestList.get(i).getImages()) {
-//                    Image image = new Image();
-//                    image.setId(imageRequest.getId());
-//                    image.setPath(imageRequest.getPath());
-//                    MultipartFile file = imageRequest.getImageFile();
-//                    if (file != null) {
-//                        String fileName = file.getOriginalFilename();
-//                        Path uploadPath = Paths.get(projectDir, "user/uploads", fileName);
-//
-//                        try {
-//                            Files.createDirectories(uploadPath.getParent()); // tạo thư mục nếu chưa có
-//                            Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
-//                        } catch (IOException e) {
-//                            throw new RuntimeException("Failed to store image: " + fileName, e);
-//                        }
-//                    }
-//                    image.setColor(color);
-//                    imageList.add(image);
-//                }
-//            }
-//            color.setImages(imageList);
-//
-//            List<SizeQuantity> sizeList = new ArrayList<>();
-//            for (SizeQuantityRequest sizeQuantity : colorUpdateRequestList.get(i).getSizeQuantities()) {
-//                SizeQuantity size = new SizeQuantity();
-//                size.setId(UUID.randomUUID().toString());
-//                size.setSize(sizeQuantity.getSize());
-//                size.setQuantity(sizeQuantity.getQuantity());
-//                size.setColor(color);
-//                sizeList.add(size);
-//            }
-//            color.setSizeQuantities(sizeList);
-//
-//            newColorList.add(color);
-//        }
-//
-//        product.setColors(newColorList);
-//        productRepository.save(product);
-//    }
+    public void updateProduct(ProductUpdateRequest productUpdateRequest) {
+        Product product = productRepository.findById(productUpdateRequest.getId())
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        product.setProductName(productUpdateRequest.getProductName());
+        product.setPrice(productUpdateRequest.getPrice());
+        product.setType(productUpdateRequest.getType());
+        product.setSideDes(productUpdateRequest.getSideDes());
+        product.setMainDes(productUpdateRequest.getMainDes());
 
-public void updateProduct(ProductUpdateRequest productUpdateRequest) {
-    Product product = productRepository.findById(productUpdateRequest.getId())
-            .orElseThrow(() -> new RuntimeException("Product not found"));
-    product.setProductName(productUpdateRequest.getProductName());
-    product.setPrice(productUpdateRequest.getPrice());
-    product.setType(productUpdateRequest.getType());
-    product.setSideDes(productUpdateRequest.getSideDes());
-    product.setMainDes(productUpdateRequest.getMainDes());
+        // Xóa những file ảnh mà id màu trong database không có trong danh sách màu gửi về
+        List<Color> deleteColors = UpdateProductUtil.deleteColorList(product.getColors(), productUpdateRequest.getColors());
+        UpdateProductUtil.deleteImageByColor(deleteColors);
 
-    // Xóa những file ảnh mà id màu trong database không có trong danh sách màu gửi về
-    List<Color> deleteColors = UpdateProductUtil.deleteColorList(product.getColors(), productUpdateRequest.getColors());
-    UpdateProductUtil.deleteImageByColor(deleteColors);
+        String projectDir = System.getProperty("user.dir");
 
-    String projectDir = System.getProperty("user.dir");
-
-    // Danh sách color cũ
-    List<Color> colorList = product.getColors();
-    List<String> colorIds = new ArrayList<>();
-    for (Color color : colorList) {
-        colorIds.add(color.getId());
-    }
-
-    // Danh sách color mới để cập nhật
-    List<Color> newColorList = new ArrayList<>();
-
-    // Xóa ảnh với điều kiện:
-    // Những image có path mà không có trong danh sách ảnh gửi về (Xong)
-    // Hoặc những path có nhưng imageFile lại không null (Xong)
-    List<ColorUpdateRequest> colorUpdateRequestList = productUpdateRequest.getColors();
-    for (int i = 0; i < colorUpdateRequestList.size(); i++) {
-        Color color = new Color();
-        color.setId(colorUpdateRequestList.get(i).getId());
-        color.setColorHex(colorUpdateRequestList.get(i).getColorHex());
-        color.setProduct(product);
-
-        List<Image> imageList = new ArrayList<>();
-        // Trường hợp giữ nguyên color
-        if (colorIds.contains(colorUpdateRequestList.get(i).getId())) {
-            // Danh sách image cũ của color đó
-            List<Image> oldImageList = colorList.get(i).getImages();
-
-            List<ImageRequest> imageRequestList = colorUpdateRequestList.get(i).getImages();
-
-            // Xóa những file ảnh mà path của nó có trong danh sách color cũ nhưng không có trong danh sách gửi về
-            List<Image> deleteImages = UpdateProductUtil.deleteImageList(oldImageList, imageRequestList);
-            UpdateProductUtil.deleteImages(deleteImages);
-
-            for (ImageRequest imageRequest : imageRequestList) {
-                Image image = new Image();
-
-                image.setId(imageRequest.getId());
-                image.setPath(imageRequest.getPath());
-
-                MultipartFile file = imageRequest.getImageFile();
-
-                // Trường hợp update ảnh hoặc thêm ảnh
-                if (file != null) {
-                    String fileName = file.getOriginalFilename();
-                    Path uploadPath = Paths.get(projectDir, "user/uploads", fileName);
-
-                    try {
-                        Files.createDirectories(uploadPath.getParent()); // tạo thư mục nếu chưa có
-                        Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
-                    } catch (IOException e) {
-                        throw new RuntimeException("Failed to store image: " + fileName, e);
-                    }
-                }
-                image.setColor(color);
-                imageList.add(image);
-            }
-        } else {
-            // Trường hợp color mới
-            // Không cần xóa file ảnh
-            for (ImageRequest imageRequest : colorUpdateRequestList.get(i).getImages()) {
-                Image image = new Image();
-                image.setId(imageRequest.getId());
-                image.setPath(imageRequest.getPath());
-                MultipartFile file = imageRequest.getImageFile();
-                if (file != null) {
-                    String fileName = file.getOriginalFilename();
-                    Path uploadPath = Paths.get(projectDir, "user/uploads", fileName);
-
-                    try {
-                        Files.createDirectories(uploadPath.getParent()); // tạo thư mục nếu chưa có
-                        Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
-                    } catch (IOException e) {
-                        throw new RuntimeException("Failed to store image: " + fileName, e);
-                    }
-                }
-                image.setColor(color);
-                imageList.add(image);
-            }
+        // Danh sách color cũ
+        List<Color> colorList = product.getColors();
+        List<String> colorIds = new ArrayList<>();
+        for (Color color : colorList) {
+            colorIds.add(color.getId());
         }
-        color.setImages(imageList);
 
-        List<SizeQuantity> sizeList = new ArrayList<>();
-        for (SizeQuantityRequest sizeQuantity : colorUpdateRequestList.get(i).getSizeQuantities()) {
-            SizeQuantity size = new SizeQuantity();
-            size.setId(UUID.randomUUID().toString());
-            size.setSize(sizeQuantity.getSize());
-            size.setQuantity(sizeQuantity.getQuantity());
-            size.setColor(color);
-            sizeList.add(size);
+        // Danh sách color mới để cập nhật
+        List<Color> newColorList = new ArrayList<>();
+
+        // Xóa ảnh với điều kiện:
+        // Những image có path mà không có trong danh sách ảnh gửi về (Xong)
+        // Hoặc những path có nhưng imageFile lại không null (Xong)
+        List<ColorUpdateRequest> colorUpdateRequestList = productUpdateRequest.getColors();
+        for (int i = 0; i < colorUpdateRequestList.size(); i++) {
+            Color color = new Color();
+            color.setId(colorUpdateRequestList.get(i).getId());
+            color.setColorHex(colorUpdateRequestList.get(i).getColorHex());
+            color.setProduct(product);
+
+            List<Image> imageList = new ArrayList<>();
+            // Trường hợp giữ nguyên color
+            if (colorIds.contains(colorUpdateRequestList.get(i).getId())) {
+                // Danh sách image cũ của color đó
+                List<Image> oldImageList = colorList.get(i).getImages();
+
+                List<ImageRequest> imageRequestList = colorUpdateRequestList.get(i).getImages();
+
+                // Xóa những file ảnh mà path của nó có trong danh sách color cũ nhưng không có trong danh sách gửi về
+                List<Image> deleteImages = UpdateProductUtil.deleteImageList(oldImageList, imageRequestList);
+                UpdateProductUtil.deleteImages(deleteImages);
+
+                for (ImageRequest imageRequest : imageRequestList) {
+                    Image image = new Image();
+
+                    image.setId(imageRequest.getId());
+                    image.setPath(imageRequest.getPath());
+
+                    MultipartFile file = imageRequest.getImageFile();
+
+                    // Trường hợp update ảnh hoặc thêm ảnh
+                    if (file != null) {
+                        String fileName = file.getOriginalFilename();
+                        Path uploadPath = Paths.get(projectDir, "user/uploads", fileName);
+
+                        try {
+                            Files.createDirectories(uploadPath.getParent()); // tạo thư mục nếu chưa có
+                            Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
+                        } catch (IOException e) {
+                            throw new RuntimeException("Failed to store image: " + fileName, e);
+                        }
+                    }
+                    image.setColor(color);
+                    imageList.add(image);
+                }
+            } else {
+                // Trường hợp color mới
+                // Không cần xóa file ảnh
+                for (ImageRequest imageRequest : colorUpdateRequestList.get(i).getImages()) {
+                    Image image = new Image();
+                    image.setId(imageRequest.getId());
+                    image.setPath(imageRequest.getPath());
+                    MultipartFile file = imageRequest.getImageFile();
+                    if (file != null) {
+                        String fileName = file.getOriginalFilename();
+                        Path uploadPath = Paths.get(projectDir, "user/uploads", fileName);
+
+                        try {
+                            Files.createDirectories(uploadPath.getParent()); // tạo thư mục nếu chưa có
+                            Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
+                        } catch (IOException e) {
+                            throw new RuntimeException("Failed to store image: " + fileName, e);
+                        }
+                    }
+                    image.setColor(color);
+                    imageList.add(image);
+                }
+            }
+            color.setImages(imageList);
+
+            List<SizeQuantity> sizeList = new ArrayList<>();
+            for (SizeQuantityRequest sizeQuantity : colorUpdateRequestList.get(i).getSizeQuantities()) {
+                SizeQuantity size = new SizeQuantity();
+                size.setId(UUID.randomUUID().toString());
+                size.setSize(sizeQuantity.getSize());
+                size.setQuantity(sizeQuantity.getQuantity());
+                size.setColor(color);
+                sizeList.add(size);
+            }
+            color.setSizeQuantities(sizeList);
+
+            newColorList.add(color);
         }
-        color.setSizeQuantities(sizeList);
-
-        newColorList.add(color);
+        product.getColors().clear();
+        product.getColors().addAll(newColorList);
+        productRepository.save(product);
     }
-    product.getColors().clear();
-    product.getColors().addAll(newColorList);
-//    product.setColors(newColorList);
-    productRepository.save(product);
-}
 
     public boolean deleteProductById(String id) {
         if (productRepository.existsById(id)) {

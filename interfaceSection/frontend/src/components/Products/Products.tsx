@@ -91,7 +91,7 @@ const Products = () => {
         {/* Header section */}
         <div className="text-center mb-10 max-w-[600px] mx-auto">
           <h1 data-aos="fade-up" className="text-3xl font-bold">
-            SẢN PHẨM NỔI BẬT
+            SẢN PHẨM MỚI NHẤT
           </h1>
         </div>
         {/* Body section */}

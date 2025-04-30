@@ -9,10 +9,12 @@ import { FiPhone } from "react-icons/fi";
 import { useParams } from "react-router-dom";
 import { productDetailApi } from "../../api-client/api";
 import formatCurrencyVND from '../../hooks/FormatCurrency';
+import { CartItem } from "../Cart/CartContext";
+import { toast, ToastContainer } from "react-toastify";
 
 const ProductDetail = () => {
     const [count, setCount] = useState<number>(1);
-    const increase = () => setCount(count + 1);
+    const increase = () => setCount(count < availableQuantity ? count + 1 : count);
     const decrease = () => setCount(count > 1 ? count - 1 : 1);
 
     const imgRef = useRef<HTMLImageElement | null>(null);
@@ -77,12 +79,12 @@ const ProductDetail = () => {
     const [sizeIndex, setSizeIndex] = useState<number>(0);
     const [available, setAvailable] = useState<Boolean>(false);
 
-    function checkQuantity(colorIndex: number, sizeQuantityIndex: number) {
-        if (product !== null) {
-            const isAvailable = product?.colors[colorIndex]?.sizeQuantities[sizeQuantityIndex].quantity > 0;
-            setAvailable(isAvailable);
-        }
-    }
+    // function checkQuantity(colorIndex: number, sizeQuantityIndex: number) {
+    //     if (product !== null) {
+    //         const isAvailable = product?.colors[colorIndex]?.sizeQuantities[sizeQuantityIndex].quantity > 0;
+    //         setAvailable(isAvailable);
+    //     }
+    // }
 
     useEffect(() => {
         if (!id) return;  // Chặn gọi API nếu id là undefined
@@ -99,15 +101,79 @@ const ProductDetail = () => {
         fetchApi();
     }, [id]);
 
+    const [availableQuantity, setAvailableQuantity] = useState<number>(0);
     useEffect(() => {
         const quantity = product?.colors?.[colorIndex]?.sizeQuantities?.[sizeIndex]?.quantity;
-        setAvailable(typeof quantity === 'number' && quantity > 0);
+        if (typeof quantity === 'number') {
+            setAvailable(quantity > 0);
+            setAvailableQuantity(quantity);
+        }
     }, [colorIndex, sizeIndex, product]);
 
-    return (
+    // const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+    const handleAddToCart = () => {
+        if (!product) return;
+
+        const cartFromStorage = localStorage.getItem('cart');
+        const cart: CartItem[] = cartFromStorage ? JSON.parse(cartFromStorage) : [];
+
+        const newCartItem: CartItem = {
+            id: product?.id,
+            productName: product?.productName,
+            price: product.price,
+            path: product.colors[colorIndex].images[0].path,
+            colorHex: product.colors[colorIndex].colorHex,
+            size: product.colors[colorIndex].sizeQuantities[sizeIndex].size,
+            quantity: count,
+            availableQuantity: availableQuantity,
+        };
+
+        const index = cart.findIndex(
+            (item) =>
+                item.id === product?.id &&
+                item.colorHex === product.colors[colorIndex].colorHex &&
+                item.size === product.colors[colorIndex].sizeQuantities[sizeIndex].size
+        );
+
+        
+        if (index !== -1) {
+            if (count > cart[index].availableQuantity) {
+                toast.error(`Chỉ còn ${cart[index].availableQuantity} sản phẩm`, {
+                    position: "top-center",
+                    autoClose: 6000, // tự tắt sau 6s
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+                return;
+            }
+            cart[index].quantity += count;
+            cart[index].availableQuantity -= count;
+        } else {
+            newCartItem.availableQuantity -= count;
+            cart.push(newCartItem);
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        // Gửi sự kiện custom
+        window.dispatchEvent(new Event('cartUpdated'));
+        toast.success("Thêm vào giỏ hàng thành công.", {
+            position: "top-center",
+            autoClose: 6000, // tự tắt sau 6s
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+        });
+    };
+
+    return (<div className="py-14 dark:bg-gray-950">
         <div className="container">
             {/* product properties */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-14 mb-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* product image */}
                 <div className="">
                     <div className="overflow-hidden aspect-square group relative rounded-xl"
@@ -142,7 +208,7 @@ const ProductDetail = () => {
                             <span><FaStar className="text-yellow-400" /></span>
                             <span><FaStar className="text-yellow-400" /></span>
                         </div>
-                        <div className="text-xs text-gray-500 ml-3 dark:text-white">(150 Reviews)</div>
+                        <div className="text-xs text-gray-500 ml-3 dark:text-white">(Reviews)</div>
                     </div>
 
                     <div className="space-y-2">
@@ -231,9 +297,9 @@ const ProductDetail = () => {
 
                     {/* cart button */}
                     <div className="flex gap-3 border-b border-gray-200 pb-7 mt-6">
-                        <a href="#" className="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
+                        <button onClick={handleAddToCart} className="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
                             <FaBagShopping /> Thêm vào giỏ hàng
-                        </a>
+                        </button>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
                         <div data-aos="fade-up" className="flex items-center gap-4">
@@ -276,7 +342,10 @@ const ProductDetail = () => {
             {/* related products */}
             <RelatedProducts />
             {/* related products end*/}
+
+            <ToastContainer />
         </div>
+    </div>
     )
 }
 export default ProductDetail;

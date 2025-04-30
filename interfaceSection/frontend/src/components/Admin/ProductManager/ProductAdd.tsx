@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { addProductApi } from "../../../api-client/api";
+import { ToastContainer } from 'react-toastify';
+import { alertError } from "../AlertWindow/alertError";
 
 interface ProductAddProps {
     toggleAdd: () => void;
@@ -44,16 +46,16 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
         mainDes: "",
         sideDes: "",
         colors: [
-            {
-                id: crypto.randomUUID(),
-                colorHex: "",
-                images: [
-                    // { id: crypto.randomUUID(), path: "", imageFile: null },
-                ],
-                sizeQuantities: [
-                    // { id: crypto.randomUUID(), size: 0, quantity: 0 },
-                ],
-            },
+            // {
+            //     id: crypto.randomUUID(),
+            //     colorHex: "",
+            //     images: [
+            //         // { id: crypto.randomUUID(), path: "", imageFile: null },
+            //     ],
+            //     sizeQuantities: [
+            //         // { id: crypto.randomUUID(), size: 0, quantity: 0 },
+            //     ],
+            // },
         ],
     });
 
@@ -269,9 +271,26 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
     };
 
 
-
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        // 1. Validate toàn bộ dữ liệu trước
+        if (!product.colors || product.colors.length === 0) {
+            alertError("Sản phẩm phải có ít nhất một màu!");
+            return;
+        }
+
+        for (const [colorIndex, color] of product.colors.entries()) {
+            if (!color.images || color.images.length === 0) {
+                alertError(`Màu thứ ${colorIndex + 1} phải có ít nhất một ảnh!`);
+                return;
+            }
+
+            if (!color.sizeQuantities || color.sizeQuantities.length === 0) {
+                alertError(`Màu thứ ${colorIndex + 1} cần nhập kích thước và số lượng!`);
+                return;
+            }
+        }
 
         formData.append("id", product.id);
         formData.append("productName", product.productName);
@@ -285,13 +304,15 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
             formData.append(`colors[${colorIndex}].colorHex`, color.colorHex);
 
             color.images.forEach((image) => {
-                if (image.imageFile) {
-                    formData.append(`colors[${colorIndex}].imageFiles`, image.imageFile);
-                    // Không cần chỉ rõ chỉ số [index] vì backend sẽ gom tất cả cùng key thành List
+                if (!image.imageFile) {
+                    alertError("Bạn cần tải ảnh lên!");
+                    throw new Error("Missing image file."); // Dừng hẳn hàm luôn
                 }
+                // if (image.imageFile) {
+                formData.append(`colors[${colorIndex}].imageFiles`, image.imageFile);
+                // }
             });
 
-            // SizeQuantities
             color.sizeQuantities.forEach((sq, sqIndex) => {
                 formData.append(`colors[${colorIndex}].sizeQuantities[${sqIndex}].id`, sq.id);
                 formData.append(`colors[${colorIndex}].sizeQuantities[${sqIndex}].size`, sq.size.toString());
@@ -328,15 +349,15 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                         <div>
                             <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tên</label>
                             <input onChange={(e) => setProductName(e.target.value)}
-                                type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Tên sản phẩm" required />
+                                type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500 placeholder-gray-600 placeholder-opacity-40" placeholder="Tên sản phẩm" required />
                         </div>
                         <div>
                             <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giá</label>
-                            <p className="block w-full"><input type="number" min="0" value={product.price}
+                            <p className="block w-full"><input type="text" min="0" value={product?.price.toLocaleString("en-US")}
                                 onChange={(e) => {
-                                    let value = parseFloat(e.target.value);
-                                    if (value < 0) value = 0;
-                                    setPrice(value);
+                                    let value = e.target.value.replace(/,/g, '');
+                                    const number = parseFloat(value);
+                                    if (!isNaN(number)) setPrice(number);
                                 }}
                                 onKeyDown={(e) => {
                                     if (e.key === '-' || e.key === 'e') {  // Ngăn "-" và "e" (tránh nhập số mũ)
@@ -359,12 +380,12 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                         <div className="sm:col-span-2">
                             <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả tóm tắt</label>
                             <textarea onChange={(e) => setMainDes(e.target.value)}
-                                id="description" rows={1} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết phần mô tả sản phẩm ngắn gọn" required></textarea>
+                                id="description" rows={1} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500 placeholder-gray-600 placeholder-opacity-40" placeholder="Viết phần mô tả sản phẩm ngắn gọn" required></textarea>
                         </div>
                         <div className="sm:col-span-2">
                             <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả chi tiết</label>
                             <textarea onChange={(e) => setSideDes(e.target.value)}
-                                id="description" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết chi tiết cho phần mô tả sản phẩm" required></textarea>
+                                id="description" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500 placeholder-gray-600 placeholder-opacity-40" placeholder="Viết chi tiết cho phần mô tả sản phẩm" required></textarea>
                         </div>
                     </div>
 
@@ -421,12 +442,12 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                                                             </div>
 
                                                             <div className="mt-1 w-fit">
-                                                                <img 
-                                                                src={typeof image.path === 'string'
-                                                                    ? image.path // Nếu image là string, dùng luôn
-                                                                    : image.path instanceof ArrayBuffer
-                                                                        ? URL.createObjectURL(new Blob([image.path])) // Nếu image là ArrayBuffer, tạo URL từ nó
-                                                                        : '/path/to/default-image.jpg'}
+                                                                <img
+                                                                    src={typeof image.path === 'string'
+                                                                        ? image.path // Nếu image là string, dùng luôn
+                                                                        : image.path instanceof ArrayBuffer
+                                                                            ? URL.createObjectURL(new Blob([image.path])) // Nếu image là ArrayBuffer, tạo URL từ nó
+                                                                            : '/path/to/default-image.jpg'}
                                                                     key={image.id}
                                                                     className="w-20 h-20 object-cover rounded-lg shadow border" />
                                                             </div>
@@ -498,8 +519,8 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                         </table>
                     </div>
 
-                    <button type="submit" className="text-white inline-flex items-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-orange-800">
-                        <svg className="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <button type="submit" className="text-white inline-flex items-center bg-orange-400 hover:bg-orange-500 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center dark:bg-orange-400 dark:hover:bg-orange-500 dark:focus:ring-orange-600">
+                        <svg className="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                         </svg>
                         Thêm sản phẩm
@@ -507,9 +528,7 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
 
                 </form>
             </div>
-
-
-
+            <ToastContainer />
         </div>
 
     )
