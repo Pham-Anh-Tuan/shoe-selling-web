@@ -190,7 +190,7 @@ const ProductDetail = () => {
                                 src={import.meta.env.VITE_API_URL_IMG + image.path}
                                 alt=""
                                 className='w-20 h-20 sm:w-28 sm:h-28 aspect-square object-cover rounded-md cursor-pointer'
-                                onClick={() => setActiveImage(import.meta.env.VITE_API_URL + "/api/productImages/" + image.path)}
+                                onClick={() => setActiveImage(import.meta.env.VITE_API_URL_IMG + image.path)}
                             />
                         ))}
                     </div>

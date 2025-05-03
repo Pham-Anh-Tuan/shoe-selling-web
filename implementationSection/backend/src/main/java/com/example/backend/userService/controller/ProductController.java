@@ -23,35 +23,35 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping(path = "/homeProducts")
+    @GetMapping(path = "/public/homeProducts")
     public ResponseEntity<List<HomeProductRes>> getProducts() {
         return ResponseEntity.ok(productService.getAllProductsOrdered());
     }
 
-    @GetMapping(path = "/productDetail/{id}")
+    @GetMapping(path = "/public/productDetail/{id}")
     public ResponseEntity<ProductDetailRes> getProductById(@PathVariable("id") String id) {
         Product product = productService.getProductDetailById(id);
         ProductDetailRes dto = ProductDetailMapper.toProductDetailRes(product);
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping(path = "/managerProducts")
+    @GetMapping(path = "/admin/managerProducts")
     public ResponseEntity<List<ManagerProductRes>> getManagerProducts() {
         return ResponseEntity.ok(productService.getManagerProducts());
     }
 
-    @PostMapping(value = "/addProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/admin/addProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> addProduct(@ModelAttribute ProductRequest productRequest) {
         productService.addProduct(productRequest);
         return ResponseEntity.ok("Product added successfully.");
     }
-    @PutMapping(value ="/updateProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value ="/admin/updateProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateProduct(@ModelAttribute ProductUpdateRequest productUpdateRequest) {
         productService.updateProduct(productUpdateRequest);
         return ResponseEntity.ok("Product updated successfully");
     }
 
-    @DeleteMapping("/deleteProduct/{id}")
+    @DeleteMapping("/admin/deleteProduct/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable String id) {
         boolean deleted = productService.deleteProductById(id);
         if (deleted) {

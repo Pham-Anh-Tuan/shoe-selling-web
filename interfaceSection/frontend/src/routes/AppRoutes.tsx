@@ -23,9 +23,9 @@ const AppRoutes = () => {
         setSignInPopup(!signInPopup);
     };
 
-    const [signOutPopup, setSignOutPopup] = useState(false);
-    const handleSignOutPopup = () => {
-        setSignOutPopup(!signOutPopup);
+    const [registerPopup, setRegisterPopup] = useState(false);
+    const handleRegisterPopup = () => {
+        setRegisterPopup(!registerPopup);
     };
 
     const [forgotPWPopup, setForgotPWPopup] = useState(false);
@@ -45,12 +45,12 @@ const AppRoutes = () => {
                     handleSignInPopup={handleSignInPopup}
                     signInPopup={signInPopup}
                     setSignInPopup={setSignInPopup}
-                    signOutPopup={signOutPopup}
-                    setSignOutPopup={setSignOutPopup}
+                    registerPopup={registerPopup}
+                    setRegisterPopup={setRegisterPopup}
                     forgotPWPopup={forgotPWPopup}
                     setForgotPWPopup={setForgotPWPopup}
                     handleForgotPWPopup={handleForgotPWPopup}
-                    handleSignOutPopup={handleSignOutPopup}
+                    handleRegisterPopup={handleRegisterPopup}
                 />}>
                     <Route index element={<>
                         <Hero />

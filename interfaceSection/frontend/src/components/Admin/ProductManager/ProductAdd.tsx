@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { addProductApi } from "../../../api-client/api";
 import { ToastContainer } from 'react-toastify';
-import { alertError } from "../AlertWindow/alertError";
+import { alertError } from "../../Shared/AlertError";
 
 interface ProductAddProps {
     toggleAdd: () => void;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { productDetailApi, updateProductApi } from "../../../api-client/api";
-import { alertError } from "../AlertWindow/alertError";
+import { alertError } from "../../Shared/AlertError";
 import { ToastContainer } from "react-toastify";
 
 interface ProductUpdationProps {

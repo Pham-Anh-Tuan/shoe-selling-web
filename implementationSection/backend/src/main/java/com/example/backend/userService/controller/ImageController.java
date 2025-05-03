@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/productImages")
+@RequestMapping("/api/public/productImages")
 public class ImageController {
     @GetMapping("/{imageName}")
     public ResponseEntity<byte[]> getImage(@PathVariable String imageName) throws IOException {
