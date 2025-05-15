@@ -79,11 +79,10 @@ const RelatedProducts = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center gap-5">
             {/* card section */}
             {ProductsData.map((data) => (
-              <div>
+              <div key={data.id}>
                 <div
                   data-aos="fade-up"
                   data-aos-delay={data.aosDelay}
-                  key={data.id}
                   className="group space-y-3"
                 >
                   <div className="relative">

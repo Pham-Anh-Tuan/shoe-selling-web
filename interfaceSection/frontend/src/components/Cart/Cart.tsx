@@ -1,6 +1,4 @@
-import Img1 from "../../assets/male-sneaker/sneaker.png";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { CartItem } from "./CartContext";
 import formatCurrencyVND from "../../hooks/FormatCurrency";
 

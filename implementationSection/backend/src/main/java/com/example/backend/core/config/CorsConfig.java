@@ -18,20 +18,20 @@ public class CorsConfig {
 //            @Override
 //            public void addCorsMappings(CorsRegistry registry) {
 //                registry.addMapping("/**")
-//                        .allowedOrigins("http://localhost:5173") // ✅ đúng origin
+//                        .allowedOrigins("http://localhost:5173") //đúng origin
 //                        .allowedMethods("*")
 //                        .allowedHeaders("*")
-//                        .allowCredentials(true); // ✅ bắt buộc nếu dùng Authorization token
+//                        .allowCredentials(true); // bắt buộc nếu dùng Authorization token
 //            }
 //        };
 //    }
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // 👈 Không dùng "*"
+        config.setAllowedOrigins(List.of("http://localhost:5173")); // Không dùng "*"
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true); // 👈 Bắt buộc nếu có Authorization header hoặc cookie
+        config.setAllowCredentials(true); // Bắt buộc nếu có Authorization header hoặc cookie
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config); // Đăng ký cho mọi đường dẫn

@@ -17,3 +17,10 @@ export interface AuthResponse {
         email: string;
     };
 }
+
+// export interface LoginRes {
+//     token: string;
+//     email: string;
+//     fullName: string;
+//     imageName: string;
+// }

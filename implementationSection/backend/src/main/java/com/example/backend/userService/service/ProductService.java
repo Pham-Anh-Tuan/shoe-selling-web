@@ -116,7 +116,7 @@ public class ProductService {
                 // Lấy đường dẫn thư mục gốc của project
                 String projectDir = System.getProperty("user.dir");
 
-                String fileName = file.getOriginalFilename();
+                String fileName = UUID.randomUUID().toString() + ".png";
                 Path uploadPath = Paths.get(projectDir, "user/uploads", fileName);
 
                 try {
@@ -176,8 +176,8 @@ public class ProductService {
         List<Color> newColorList = new ArrayList<>();
 
         // Xóa ảnh với điều kiện:
-        // Những image có path mà không có trong danh sách ảnh gửi về (Xong)
-        // Hoặc những path có nhưng imageFile lại không null (Xong)
+        // Những image mà không có trong danh sách ảnh gửi về
+        // Hoặc những path có nhưng imageFile lại không null
         List<ColorUpdateRequest> colorUpdateRequestList = productUpdateRequest.getColors();
         for (int i = 0; i < colorUpdateRequestList.size(); i++) {
             Color color = new Color();
@@ -207,9 +207,9 @@ public class ProductService {
 
                     // Trường hợp update ảnh hoặc thêm ảnh
                     if (file != null) {
-                        String fileName = file.getOriginalFilename();
+                        String fileName = UUID.randomUUID().toString() + ".png";
                         Path uploadPath = Paths.get(projectDir, "user/uploads", fileName);
-
+                        image.setPath(fileName);
                         try {
                             Files.createDirectories(uploadPath.getParent()); // tạo thư mục nếu chưa có
                             Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
@@ -226,10 +226,10 @@ public class ProductService {
                 for (ImageRequest imageRequest : colorUpdateRequestList.get(i).getImages()) {
                     Image image = new Image();
                     image.setId(imageRequest.getId());
-                    image.setPath(imageRequest.getPath());
+                    String fileName = UUID.randomUUID().toString() + ".png";
+                    image.setPath(fileName);
                     MultipartFile file = imageRequest.getImageFile();
                     if (file != null) {
-                        String fileName = file.getOriginalFilename();
                         Path uploadPath = Paths.get(projectDir, "user/uploads", fileName);
 
                         try {

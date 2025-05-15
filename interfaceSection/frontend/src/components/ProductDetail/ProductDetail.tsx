@@ -72,7 +72,7 @@ const ProductDetail = () => {
     const { id } = useParams<{ id: string }>();
     const [product, setProduct] = useState<Product | null>(null);
 
-    const [activeImg, setActiveImage] = useState('');
+    const [activeImg, setActiveImage] = useState('import.meta.env.VITE_API_URL_IMG');
     const [currentImages, setCurrentImages] = useState<Image[] | null>();
 
     const [colorIndex, setColorIndex] = useState<number>(0);
@@ -91,6 +91,7 @@ const ProductDetail = () => {
         const fetchApi = async () => {
             try {
                 const { data } = await productDetailApi.getById(id);
+                console.log("call productDetailApi");
                 setProduct(data);
                 setCurrentImages(data.colors[0].images);
                 setActiveImage(import.meta.env.VITE_API_URL_IMG + data.colors[0].images[0].path); // hoặc: setActiveImg(data.images[0])

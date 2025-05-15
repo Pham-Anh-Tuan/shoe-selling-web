@@ -78,6 +78,7 @@ const Products = () => {
   useEffect(() => {
     const fetchApi = async () => {
       const { data } = await homeProductsApi.getAll();
+      console.log("call homeProductsApi");
       setProductsData(data);
     };
     fetchApi();
@@ -99,10 +100,9 @@ const Products = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center gap-5">
             {/* card section */}
             {productsData.map((data, index) => (
-              <div>
+              <div key={data.id}>
                 <div
                   data-aos="fade-up"
-                  key={data.id}
                   className="group space-y-3"
                 >
                   <div className="relative">

@@ -1,6 +1,7 @@
 package com.example.backend.userService.service;
 
 import com.example.backend.core.request.RegisterRequest;
+import com.example.backend.core.response.LoginRes;
 import com.example.backend.core.utils.JwtUtil;
 import com.example.backend.userService.model.Account;
 import com.example.backend.userService.repository.AccountRepository;
@@ -36,11 +37,28 @@ public class AuthService {
         account.setEmail(registerRequest.getEmail());
         account.setFullName(registerRequest.getFullName());
         account.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        account.setImageName("");
+        account.setImageName("userLogo192192adeal.png");
         accountRepository.save(account);
 
         return ResponseEntity.ok("Register successful");
     }
+
+//    public ResponseEntity<?> login(Map<String, String> request) {
+//        String email = request.get("email");
+//        String password = request.get("password");
+//        Optional<Account> account = accountRepository.findByEmail(email);
+//
+//        if (!account.isPresent()) {
+//            return ResponseEntity.badRequest().body("Email not found");
+//        }
+//
+//        if (!passwordEncoder.matches(password, account.get().getPassword())) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
+//        }
+//
+//        String token = jwtUtil.generateToken(account.get());
+//        return ResponseEntity.ok(token);
+//    }
 
     public ResponseEntity<?> login(Map<String, String> request) {
         String email = request.get("email");
@@ -56,6 +74,17 @@ public class AuthService {
         }
 
         String token = jwtUtil.generateToken(account.get());
-        return ResponseEntity.ok(token);
+        Account acc = account.get();
+
+        // Trả về đối tượng LoginResponse chứa token và thông tin
+        LoginRes response = new LoginRes(
+                token,
+                acc.getEmail(),
+                acc.getFullName(),
+                acc.getImageName(),
+                acc.getRole()
+        );
+
+        return ResponseEntity.ok(response);
     }
 }

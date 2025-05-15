@@ -6,7 +6,6 @@ const attachAuthToken = (axiosInstance: AxiosInstance): void => {
         (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
             const token = localStorage.getItem("token");
             console.log("token la: ", token);
-            // console.log("config.headersweb.cors la: ", config.headers);
             if (token && config.headers) {
                 config.headers["Authorization"] = `Bearer ${token}`;
             }
@@ -22,14 +21,20 @@ const attachAuthToken = (axiosInstance: AxiosInstance): void => {
         (response) => response,
         (error: AxiosError) => {
             if (error.response?.status === 401) {
-                // Token hết hạn hoặc không hợp lệ
-                console.warn("Token expired or unauthorized. Logging out...");
-                localStorage.removeItem("token");
+                const message = (error.response.data as any)?.message;
+                if (message === "Token expired" || message === "Invalid token") {
+                    // Xoá token khỏi localStorage
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("imageName");
 
-                // Optional: chuyển hướng về trang login
-                window.location.href = "/login"; // hoặc sử dụng react-router
+                    // Phát sự kiện để cập nhật UI
+                    window.dispatchEvent(new Event("logUpdated"));
+
+                    alert("Phiên đăng nhập đã hết hạn.");
+                    window.location.reload();
+                }
             }
-
+            // Trả về lỗi
             return Promise.reject(error);
         }
     );

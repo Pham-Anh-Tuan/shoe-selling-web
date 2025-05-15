@@ -1,6 +1,7 @@
 package com.example.backend.core.utils;
 
 import com.example.backend.userService.model.Account;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,11 +19,11 @@ public class JwtUtil {
                 .setSubject(account.getEmail())
                 .claim("role", account.getRole())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 giờ
+                .setExpiration(new Date(System.currentTimeMillis() + 1000)) // 1 giây
                 .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256)
                 .compact();
     }
-
+    // 1000 * 60 * 60 = 1 giờ
     public String extractEmail(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY.getBytes())
@@ -39,7 +40,9 @@ public class JwtUtil {
                     .build()
                     .parseClaimsJws(token);
             return true;
-        } catch (JwtException e) {
+        } catch (ExpiredJwtException ex) {
+            throw ex; // Ném lại để xử lý riêng biệt
+        } catch (JwtException ex) {
             return false;
         }
     }

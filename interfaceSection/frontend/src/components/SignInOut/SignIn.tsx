@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
-import { LoginData } from "./authTypes";
+import { LoginData} from "./authTypes";
 import { authApi } from "../../api-client/api";
 import { alertError } from "../Shared/AlertError";
-import { ToastContainer } from "react-toastify";
 import { alertSuccess } from "../Shared/AlertSuccess";
 
 interface SignInProps {
@@ -24,8 +23,15 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
         event.preventDefault();
         try {
             const response = await authApi.login(form);
-            // Lưu token vào localStorage nếu cần
-            localStorage.setItem('token', response.data);
+
+            // const { token, email, fullName, imageName } = response;
+            
+            // Lưu token vào localStorage
+            localStorage.setItem('token', response.data?.token);
+
+            // Lưu imageName vào localStorage
+            localStorage.setItem('imageName', response.data?.imageName);
+            
             setSignInPopup(false);
             alertSuccess("Đăng nhập thành công!");
         } catch (error: any) {
@@ -40,6 +46,20 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
             }
 
         }
+        // Gửi sự kiện custom
+        window.dispatchEvent(new Event('logUpdated'));
+    };
+
+
+    const handleLogout = () => {
+        // Xóa token khỏi localStorage
+        localStorage.removeItem('token');
+
+        // (Tuỳ chọn) Cập nhật UI, ví dụ: chuyển hướng về trang chủ hoặc hiển thị lại popup đăng nhập
+        // navigate("/"); // nếu bạn dùng react-router
+        // setSignInPopup(true); // nếu muốn hiển thị lại popup đăng nhập
+
+        alertSuccess("Đăng xuất thành công!");
     };
     return (
         <>

@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/public/productImages")
 public class ImageController {
     @GetMapping("/{imageName}")
@@ -22,7 +21,6 @@ public class ImageController {
 
         // Tạo đường dẫn đến file ảnh
         Path imagePath = Paths.get(projectDir, "user/uploads", imageName);
-
         if (!Files.exists(imagePath)) {
             return ResponseEntity.notFound().build(); // Trả về 404 nếu ảnh không tồn tại
         }
