@@ -1,7 +1,6 @@
 import { FaStar, FaBagShopping } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import RelatedProducts from "./RelatedProducts";
-import React, { useRef } from 'react';
 import { GiFoodTruck } from "react-icons/gi";
 import { TbTruckDelivery } from "react-icons/tb";
 import { FaExchangeAlt } from "react-icons/fa";
@@ -11,36 +10,12 @@ import { productDetailApi } from "../../api-client/api";
 import formatCurrencyVND from '../../hooks/FormatCurrency';
 import { CartItem } from "../Cart/CartContext";
 import { toast, ToastContainer } from "react-toastify";
+import { FaHeart } from "react-icons/fa6";
 
 const ProductDetail = () => {
     const [count, setCount] = useState<number>(1);
     const increase = () => setCount(count < availableQuantity ? count + 1 : count);
     const decrease = () => setCount(count > 1 ? count - 1 : 1);
-
-    const imgRef = useRef<HTMLImageElement | null>(null);
-    const containerRef = useRef<HTMLDivElement | null>(null);
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        const container = containerRef.current;
-        const image = imgRef.current;
-
-        if (container && image) {
-            const rect = container.getBoundingClientRect();
-            const x = ((e.clientX - rect.left) / rect.width) * 100;
-            const y = ((e.clientY - rect.top) / rect.height) * 100;
-
-            image.style.transformOrigin = `${x}% ${y}%`;
-            image.classList.add('scale-150');
-        }
-    };
-
-    const handleMouseLeave = () => {
-        const image = imgRef.current;
-        if (image) {
-            image.style.transformOrigin = 'center center';
-            image.classList.remove('scale-150');
-        }
-    }
 
     interface SizeQuantity {
         id: string;
@@ -137,7 +112,7 @@ const ProductDetail = () => {
                 item.size === product.colors[colorIndex].sizeQuantities[sizeIndex].size
         );
 
-        
+
         if (index !== -1) {
             if (count > cart[index].availableQuantity) {
                 toast.error(`Chỉ còn ${cart[index].availableQuantity} sản phẩm`, {
@@ -170,6 +145,25 @@ const ProductDetail = () => {
             draggable: true,
         });
     };
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+    const updateLogStatus = () => {
+        const token = localStorage.getItem('token');
+        setIsLoggedIn(!token);
+    };
+    useEffect(() => {
+        updateLogStatus();
+        // Tạo một sự kiện tuỳ chỉnh khi đăng nhập và đăng xuất
+        const handleLogChange = () => {
+            updateLogStatus();
+        };
+
+        window.addEventListener('logStatus', handleLogChange);
+
+        return () => {
+            window.removeEventListener('logStatus', handleLogChange);
+        };
+    }, []);
 
     return (<div className="py-14 dark:bg-gray-950">
         <div className="container">
@@ -177,12 +171,14 @@ const ProductDetail = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* product image */}
                 <div className="">
-                    <div className="overflow-hidden aspect-square group relative rounded-xl"
-                        ref={containerRef}
-                        onMouseMove={handleMouseMove}
-                        onMouseLeave={handleMouseLeave}>
-                        <img ref={imgRef} src={activeImg} alt="Zoomed" className="w-full aspect-square object-cover transform transition-transform duration-500 group-hover:scale-150" />
-
+                    <div className="overflow-hidden aspect-square group relative rounded-md">
+                        <img src={activeImg} alt="Zoomed"
+                            className="w-full aspect-square object-cover transform transition-transform duration-500" />
+                        {!isLoggedIn && (
+                            <div className="absolute top-4 left-4">
+                                <FaHeart className='text-gray-400 text-2xl hover:text-red-500 cursor-pointer' />
+                            </div>
+                        )}
                     </div>
                     <div className='grid grid-cols-4 mt-4 w-full place-items-center gap-7'>
                         {currentImages && currentImages.map((image, i) => (

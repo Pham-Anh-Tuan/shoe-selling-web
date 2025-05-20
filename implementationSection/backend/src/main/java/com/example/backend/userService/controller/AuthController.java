@@ -21,6 +21,7 @@ public class AuthController {
 
     @PostMapping("/public/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
+
         return authService.login(request);
     }
 }

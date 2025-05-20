@@ -16,6 +16,10 @@ import ProductList from '../components/Admin/ProductManager/ProductList';
 import OrderList from '../components/Admin/OrderManager/OrderList';
 import AccountList from '../components/Admin/AccountManager/AccountList';
 import ProductHelp from '../components/Admin/ProductManager/ProductHelp';
+import Profile from '../components/Profile/Profile';
+import ProfileLayout from '../layouts/ProfileLayout';
+import PassChange from '../components/Profile/PassChange';
+import FavouredProduct from '../components/Profile/FavouredProduct';
 
 const AppRoutes = () => {
     const [signInPopup, setSignInPopup] = useState(false);
@@ -67,8 +71,14 @@ const AppRoutes = () => {
                         <NeedSignIn needSignInPopup={needSignInPopup} setNeedSignInPopup={setNeedSignInPopup} handleSignInPopup={handleSignInPopup} />
                     </>} />
                     <Route path="DeliveryInformation" element={<DeliveryInfor />} />
-                    <Route path="Orders" element={<Orders />} />
+
                     <Route path="OrderDetail" element={<OrderDetail />} />
+                    <Route path="" element={<ProfileLayout />}>
+                        <Route path="profile" index element={<Profile />} />
+                        <Route path="password" element={<PassChange />} />
+                        <Route path="orders" element={<Orders />} />
+                        <Route path="product-favorite" element={<FavouredProduct />} />
+                    </Route>
                 </Route>
 
 

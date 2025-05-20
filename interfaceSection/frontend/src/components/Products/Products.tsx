@@ -2,63 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { homeProductsApi } from "../../api-client/api";
 import formatCurrencyVND from '../../hooks/FormatCurrency';
-
-// const ProductsData = [
-//   {
-//     id: 1,
-//     img: Img1,
-//     title: "Giày Thể Thao Sneaker MULGATI YC25051P",
-//     rating: 5.0,
-//     color: "white",
-//     price: "2,200,000₫",
-//     aosDelay: "0",
-//   },
-//   {
-//     id: 2,
-//     img: Img2,
-//     title: "Giày Thể Thao Sneaker MULGATI HX483A",
-//     rating: 4.5,
-//     color: "Red",
-//     price: "2,400,000₫",
-//     aosDelay: "200",
-//   },
-//   {
-//     id: 3,
-//     img: Img3,
-//     title: "Giày Sneaker MULGATI HX487A",
-//     rating: 4.7,
-//     color: "brown",
-//     price: "2,400,000₫",
-//     aosDelay: "400",
-//   },
-//   {
-//     id: 4,
-//     img: Img4,
-//     title: "Giày Thể Thao MULGATI Urban Runner S383",
-//     rating: 4.4,
-//     color: "Yellow",
-//     price: "1,990,000₫",
-//     aosDelay: "600",
-//   },
-//   {
-//     id: 5,
-//     img: Img5,
-//     title: "Giày Thể Thao Sneaker Classic Retro M32016",
-//     rating: 4.5,
-//     color: "Pink",
-//     price: "2,400,000₫",
-//     aosDelay: "800",
-//   },
-//   {
-//     id: 6,
-//     img: Img6,
-//     title: "Giày Thể Thao MULGATI Trekker M31099",
-//     rating: 4.5,
-//     color: "Pink",
-//     price: "2,700,000₫",
-//     aosDelay: "800",
-//   },
-// ];
+import { FaHeart } from "react-icons/fa6";
 
 interface ColorWithImage {
   colorHex: string;
@@ -75,6 +19,13 @@ interface Product {
 const Products = () => {
   const [productsData, setProductsData] = useState<Product[]>([]);
 
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  const updateLogStatus = () => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!token);
+  };
+
   useEffect(() => {
     const fetchApi = async () => {
       const { data } = await homeProductsApi.getAll();
@@ -82,6 +33,20 @@ const Products = () => {
       setProductsData(data);
     };
     fetchApi();
+  }, []);
+
+  useEffect(() => {
+    updateLogStatus();
+    // Tạo một sự kiện tuỳ chỉnh khi đăng nhập và đăng xuất
+    const handleLogChange = () => {
+      updateLogStatus();
+    };
+
+    window.addEventListener('logStatus', handleLogChange);
+
+    return () => {
+      window.removeEventListener('logStatus', handleLogChange);
+    };
   }, []);
 
   const [selectedColors, setSelectedColors] = useState<{ [key: number]: number }>({});
@@ -98,32 +63,25 @@ const Products = () => {
         {/* Body section */}
         <div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center gap-5">
-            {/* card section */}
             {productsData.map((data, index) => (
               <div key={data.id}>
                 <div
                   data-aos="fade-up"
                   className="group space-y-3"
                 >
-                  <div className="relative">
+                  <div
+                    className="relative cursor-pointer">
                     <img
                       src={import.meta.env.VITE_API_URL_IMG + data.colors[selectedColors[index] ?? 0].mainImage}
                       alt=""
-
+                      onClick={() => navigate(`/ProductDetail/${data.id}`)}
                       className="w-[380px] h-[300px] object-cover rounded-md"
                     />
-                    {/* hover button*/}
-                    <div className="hidden group-hover:flex absolute top-1/2 -translate-y-1/2 
-                left-1/2 -translate-x-1/2 h-full w-full text-center
-                group-hover:backdrop-blur-sm justify-center 
-                items-center duration-200">
-
-                      <button
-                        onClick={() => navigate(`/ProductDetail/${data.id}`)}
-                        className="bg-primary text-white cursor-pointer hover:scale-105 duration-300 py-2 px-8 rounded-full relative z-10"
-                      > Xem chi tiết </button>
-
-                    </div>
+                    {!isLoggedIn && (
+                      <div className="absolute top-4 left-4">
+                        <FaHeart className='text-gray-400 text-2xl hover:text-red-500' />
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="sm:w-[217px] md:w-[217px] lg:w-[217px] xl:w-[281px]">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { CartItem } from "./CartContext";
 import formatCurrencyVND from "../../hooks/FormatCurrency";
+import { Link } from "react-router-dom";
 
 interface CartProps {
     handleNeedSignIn: () => void;
@@ -42,7 +43,7 @@ const Cart: React.FC<CartProps> = ({ handleNeedSignIn }) => {
             updatedCart[index].quantity -= 1;
             updatedCart[index].availableQuantity += 1;
             saveCart(updatedCart);
-        } 
+        }
     };
 
     const removeFromCart = (index: number) => {
@@ -55,7 +56,7 @@ const Cart: React.FC<CartProps> = ({ handleNeedSignIn }) => {
 
     return (<div className="py-10 dark:bg-gray-950">
         <div className="container max-md:max-w-xl mx-auto">
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Giỏ hàng:</h1>
+            <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">GIỎ HÀNG</h1>
             <div className="grid md:grid-cols-3 gap-10 mt-8">
                 <div className="md:col-span-2 space-y-4">
                     {cart.map((item, index) => (
@@ -164,11 +165,11 @@ const Cart: React.FC<CartProps> = ({ handleNeedSignIn }) => {
 
                     <div className="mt-8 space-y-2">
                         {/* <Link to="/DeliveryInformation"> */}
-                        <button onClick={() => handleNeedSignIn()} className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md">Thanh toán ngay</button>
+                        {/* <button onClick={() => handleNeedSignIn()} className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md">Thanh toán ngay</button> */}
                         {/* </Link> */}
-                        {/* <Link to="/DeliveryInformation">
-                        <button className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md">Thanh toán ngay</button>
-                    </Link> */}
+                        <Link to="/DeliveryInformation">
+                            <button className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md">Thanh toán ngay</button>
+                        </Link>
                         <button type="button" className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent hover:bg-slate-100 text-slate-900 border border-slate-300 rounded-md">Tiếp tục mua hàng</button>
                     </div>
 

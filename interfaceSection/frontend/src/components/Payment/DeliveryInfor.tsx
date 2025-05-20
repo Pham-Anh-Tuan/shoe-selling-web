@@ -4,24 +4,24 @@ const DeliveryInfor = () => {
     const [selected, setSelected] = useState(false);
 
     return (<div className="container max-md:max-w-xl mx-auto p-4 mt-10 mb-12">
-        <h1 className="text-2xl font-bold text-slate-900 container dark:text-white">Thông tin giao hàng:</h1>
+        <h1 className="text-2xl font-semibold text-slate-900 container dark:text-white">THÔNG TIN GIAO HÀNG</h1>
         <div className="grid md:grid-cols-3 gap-10 mt-8 container">
             <div className="md:col-span-2 space-y-4 lg:w-4/5">
                 <form className="space-y-4 md:space-y-6" action="#">
                     <div>
                         <label htmlFor="name" className="block mb-2 text-base font-medium text-gray-900 dark:text-white">Họ và tên </label>
-                        <input type="name" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+                        <input type="name" name="name" id="name" className="bg-white border border-gray-300 text-gray-900 focus:outline-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
                     </div>
                     <div>
                         <label htmlFor="address" className="block mb-2 text-base font-medium text-gray-900 dark:text-white">Địa chỉ</label>
-                        <input type="address" name="address" id="address" placeholder="" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                        <input type="address" name="address" id="address" placeholder="" className="bg-white border border-gray-300 text-gray-900 focus:outline-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required />
                     </div>
                     <div>
                         <label htmlFor="tel" className="block mb-2 text-base font-medium text-gray-900 dark:text-white">Số điện thoại</label>
-                        <input type="tel" name="tel" id="tel" placeholder="" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                        <input type="tel" name="tel" id="tel" placeholder="" className="bg-white border border-gray-300 text-gray-900 focus:outline-none focus:border-gray-300 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required />
                     </div>
 
-                    <h1 className="text-2xl font-bold text-slate-900 container dark:text-white px-0 py-5">Phương thức thanh toán:</h1>
+                    <h1 className="text-2xl font-semibold text-slate-900 container dark:text-white px-0 py-5">PHƯƠNG THỨC THANH TOÁN</h1>
                     <div className="flex items-center ps-4 border border-gray-200 rounded-sm dark:border-gray-700">
                         <input id="bordered-radio-1" type="radio" value="" name="bordered-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={() => setSelected(false)} required />
                         <label htmlFor="bordered-radio-1" className="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 flex gap-3 items-center">

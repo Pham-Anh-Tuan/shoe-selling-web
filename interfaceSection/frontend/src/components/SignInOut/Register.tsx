@@ -3,7 +3,6 @@ import { IoCloseOutline } from "react-icons/io5";
 import { RegisterData } from "./authTypes";
 import { authApi } from "../../api-client/api";
 import { alertError } from "../Shared/AlertError";
-import { ToastContainer } from "react-toastify";
 import { alertSuccess } from "../Shared/AlertSuccess";
 
 interface RegisterProps {

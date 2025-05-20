@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 
 const Orders = () => {
-    return (<section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16 container">
+    return (<section className="bg-white antialiased dark:bg-gray-900 flex-1">
         <div className="mx-auto max-w-screen-xl 2xl:px-0">
             <div className="mx-auto">
                 <div className="gap-4 sm:flex sm:items-center sm:justify-between">
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Danh sách đơn hàng</h2>
+                    <h2 className="text-lg font-semibold text-slate-900 dark:text-white">DANH SÁCH ĐƠN HÀNG</h2>
 
                     <div className="mt-6 gap-4 space-y-4 sm:mt-0 sm:flex sm:items-center sm:justify-end sm:space-y-0">
                         <div>
@@ -39,7 +39,7 @@ const Orders = () => {
                             <dl className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                                 <dt className="text-base font-medium text-gray-500 dark:text-gray-400">Mã đơn hàng:</dt>
                                 <dd className="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-                                    <a href="#" className="hover:underline">#FWB127364372</a>
+                                    <a href="#" className="hover:underline">#FWB1273643</a>
                                 </dd>
                             </dl>
 
@@ -73,7 +73,7 @@ const Orders = () => {
                             <dl className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                                 <dt className="text-base font-medium text-gray-500 dark:text-gray-400">Mã đơn hàng:</dt>
                                 <dd className="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-                                    <a href="#" className="hover:underline">#FWB125467980</a>
+                                    <a href="#" className="hover:underline">#FWB1254679</a>
                                 </dd>
                             </dl>
 
@@ -109,7 +109,7 @@ const Orders = () => {
                             <dl className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                                 <dt className="text-base font-medium text-gray-500 dark:text-gray-400">Mã đơn hàng:</dt>
                                 <dd className="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-                                    <a href="#" className="hover:underline">#FWB127364372</a>
+                                    <a href="#" className="hover:underline">#FWB1273643</a>
                                 </dd>
                             </dl>
 

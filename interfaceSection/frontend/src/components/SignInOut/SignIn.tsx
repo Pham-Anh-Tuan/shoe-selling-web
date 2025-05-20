@@ -36,7 +36,6 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
             alertSuccess("Đăng nhập thành công!");
         } catch (error: any) {
             const message = error.response.data;
-            console.log("ádd ", message);
             if (message === "Email not found") {
                 alertError("Email không tồn tại.");
             } else if (message === "Invalid password") {
@@ -48,6 +47,7 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
         }
         // Gửi sự kiện custom
         window.dispatchEvent(new Event('logUpdated'));
+        window.dispatchEvent(new Event('logStatus'));
     };
 
 

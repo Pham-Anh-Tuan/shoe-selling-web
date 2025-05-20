@@ -132,18 +132,6 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
         };
     }, []);
 
-    const handleLogout = () => {
-        // Xóa token khỏi localStorage
-        localStorage.removeItem('token');
-
-        localStorage.removeItem('imageName');
-
-        // Gửi sự kiện custom
-        window.dispatchEvent(new Event('logUpdated'));
-
-        alertSuccess("Đăng xuất thành công!");
-    };
-
     return (
         <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
             {/* upper bar */}
@@ -163,21 +151,6 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                     {/* search bar*/}
                     <div className="flex justify-between items-center gap-2 sm:gap-4">
                         <div className="relative group hidden sm:block">
-                            {/* <input type="text" placeholder="Tìm kiếm"
-                                className="w-[200px] sm:w-[200px] 
-                        group-hover:w-[300px] transition-all
-                        duration-300 rounded-full
-                        border
-                       border-gray-300 px-2 py-1
-                        focus:outline-none 
-                        focus:border-1
-                        focus:border-primary
-                        dark:border-gray-500
-                        dark:bg-gray-800"
-                            />
-                            <IoMdSearch
-                                className="text-gray-500 group-hover:text-primary 
-                        absolute top-1/2 -translate-y-1/2 right-3" /> */}
                             <form className="flex items-center max-w-sm mx-auto">
                                 <label htmlFor="simple-search1" className="sr-only">Search</label>
                                 <div className="relative w-full">
@@ -231,22 +204,12 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                             </div>
                         ) : (
                             <div className="group relative cursor-pointer">
-                                <button onClick={() => handleLogout()}
+                                <a href="/profile"
                                     className="flex items-center">
                                     <img alt="" src={import.meta.env.VITE_API_URL_IMG + imageName} className="size-9 rounded-full" />
-                                </button>
+                                </a>
                             </div>
                         )}
-
-                        <div className="group relative cursor-pointer">
-                            <button
-                                className="bg-gradient-to-r from-primary to-secondary
-                     text-white py-4 px-4 rounded-full
-                    flex items-center group">
-
-                            </button>
-                        </div>
-
 
                         {/* Mobile view  */}
                         {showMenu ? (
