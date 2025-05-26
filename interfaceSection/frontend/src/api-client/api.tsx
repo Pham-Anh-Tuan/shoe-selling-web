@@ -44,12 +44,14 @@ export const authApi = {
     register(registerData: RegisterData) {
         return axiosClient.post('/api/public/register', registerData);
     },
-
-    logout() {
-        return axiosClient.post('/logout');
-    },
-
-    getProfile() {
-        return axiosClient.get('/profile');
-    },
 };
+
+export const profileApi = {
+    getByEmail(email: String) {
+        return axiosClient.get('/api/user/getProfileByEmail/' + email);
+    },
+
+    updateProfile(formData: FormData) {
+        return axiosServer.put('/api/user/updateProfile', formData);
+    },
+}

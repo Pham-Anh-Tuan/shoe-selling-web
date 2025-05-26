@@ -3,7 +3,6 @@ import { IoCloseOutline } from "react-icons/io5";
 import { LoginData} from "./authTypes";
 import { authApi } from "../../api-client/api";
 import { alertError } from "../Shared/AlertError";
-import { alertSuccess } from "../Shared/AlertSuccess";
 
 interface SignInProps {
     signInPopup: boolean;
@@ -31,9 +30,14 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
 
             // Lưu imageName vào localStorage
             localStorage.setItem('imageName', response.data?.imageName);
-            
-            setSignInPopup(false);
-            alertSuccess("Đăng nhập thành công!");
+
+            localStorage.setItem('email', response.data?.email);
+            // localStorage.setItem('fullName', response.data?.fullName);
+            // localStorage.setItem('phoneNumber', response.data?.phoneNumber);
+            // localStorage.setItem('shippingAddress', response.data?.shippingAddress);
+            // localStorage.setItem('gender', response.data?.gender);
+
+            window.location.reload();
         } catch (error: any) {
             const message = error.response.data;
             if (message === "Email not found") {
@@ -46,21 +50,10 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
 
         }
         // Gửi sự kiện custom
-        window.dispatchEvent(new Event('logUpdated'));
-        window.dispatchEvent(new Event('logStatus'));
+        // window.dispatchEvent(new Event('logUpdated'));
+        // window.dispatchEvent(new Event('logStatus'));
     };
 
-
-    const handleLogout = () => {
-        // Xóa token khỏi localStorage
-        localStorage.removeItem('token');
-
-        // (Tuỳ chọn) Cập nhật UI, ví dụ: chuyển hướng về trang chủ hoặc hiển thị lại popup đăng nhập
-        // navigate("/"); // nếu bạn dùng react-router
-        // setSignInPopup(true); // nếu muốn hiển thị lại popup đăng nhập
-
-        alertSuccess("Đăng xuất thành công!");
-    };
     return (
         <>
             {signInPopup && (

@@ -326,17 +326,18 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
         } catch (error) {
             console.error("Error saving product:", error);
         }
-        toggleRefresh();
-        toggleAdd();
+        // toggleRefresh();
+        // toggleAdd();
+        window.location.reload();
     }
 
     return (
         <div className="relative p-4 w-full max-w-2xl max-h-full">
-            <div className="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+            <div className="relative p-4 bg-white rounded-md shadow dark:bg-gray-800 sm:p-5">
                 <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Thêm sản phẩm</h3>
                     <button onClick={toggleAdd}
-                        type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                        type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-md text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
                         <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
@@ -349,27 +350,30 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                         <div>
                             <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tên</label>
                             <input onChange={(e) => setProductName(e.target.value)}
-                                type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500 placeholder-gray-600 placeholder-opacity-40" placeholder="Tên sản phẩm" required />
+                                type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 focus:outline-none focus:border-gray-300 text-gray-900 text-sm rounded-md block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white placeholder-gray-600 placeholder-opacity-40" placeholder="Tên sản phẩm" required />
                         </div>
                         <div>
                             <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giá</label>
-                            <p className="block w-full"><input type="text" min="0" value={product?.price.toLocaleString("en-US")}
-                                onChange={(e) => {
-                                    let value = e.target.value.replace(/,/g, '');
-                                    const number = parseFloat(value);
-                                    if (!isNaN(number)) setPrice(number);
-                                }}
-                                onKeyDown={(e) => {
-                                    if (e.key === '-' || e.key === 'e') {  // Ngăn "-" và "e" (tránh nhập số mũ)
-                                        e.preventDefault();
-                                    }
-                                }}
-                                name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />₫</p>
+                            <p className="relative block w-full">
+                                <input type="text" min="0" value={product?.price.toLocaleString("en-US")}
+                                    onChange={(e) => {
+                                        let value = e.target.value.replace(/,/g, '');
+                                        const number = parseFloat(value);
+                                        if (!isNaN(number)) setPrice(number);
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === '-' || e.key === 'e') {  // Ngăn "-" và "e" (tránh nhập số mũ)
+                                            e.preventDefault();
+                                        }
+                                    }}
+                                    name="price" id="price" className="bg-gray-50 w-full pr-10 border border-gray-300 focus:outline-none focus:border-gray-300 text-gray-900 text-sm rounded-md p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required />
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300 pointer-events-none">₫</span>
+                            </p>
                         </div>
                         <div>
                             <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Loại</label>
                             <select onChange={(e) => setType(e.target.value)}
-                                id="category" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required>
+                                id="category" className="bg-gray-50 border border-gray-300 focus:outline-none focus:border-gray-300 text-gray-900 text-sm rounded-md block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
                                 <option selected>Chọn loại giày</option>
                                 <option value={1}>Giày thể thao nam</option>
                                 <option value={2}>Sandal nam</option>
@@ -380,17 +384,17 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                         <div className="sm:col-span-2">
                             <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả tóm tắt</label>
                             <textarea onChange={(e) => setMainDes(e.target.value)}
-                                id="description" rows={1} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500 placeholder-gray-600 placeholder-opacity-40" placeholder="Viết phần mô tả sản phẩm ngắn gọn" required></textarea>
+                                id="description" rows={1} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 focus:outline-none focus:border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white placeholder-gray-600 placeholder-opacity-40" placeholder="Viết phần mô tả sản phẩm ngắn gọn" required></textarea>
                         </div>
                         <div className="sm:col-span-2">
                             <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả chi tiết</label>
                             <textarea onChange={(e) => setSideDes(e.target.value)}
-                                id="description" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500 placeholder-gray-600 placeholder-opacity-40" placeholder="Viết chi tiết cho phần mô tả sản phẩm" required></textarea>
+                                id="description" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 focus:outline-none focus:border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white placeholder-gray-600 placeholder-opacity-40" placeholder="Viết chi tiết cho phần mô tả sản phẩm" required></textarea>
                         </div>
                     </div>
 
                     <div className="flex items-center justify-end space-x-4 mb-1">
-                        <button type="button" onClick={addColor} className="flex items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg w-28 px-2 py-2 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 text-sm">
+                        <button type="button" onClick={addColor} className="flex items-center justify-center text-white bg-green-700 hover:bg-green-800 font-medium rounded-md w-28 px-2 py-2 text-center dark:bg-green-600 dark:hover:bg-green-700 text-sm">
                             <svg className="h-3.5 w-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                             </svg>
@@ -416,7 +420,7 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                                         <th scope="row" className="px-4 py-3">
                                             <div className="flex flex-col items-center justify-center space-y-1">
                                                 <input onChange={(e) => setColorHex(color.id, e.target.value)}
-                                                    type="color" defaultValue={color.colorHex} className="p-1 h-10 w-14 block bg-white cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700" id="hs-color-input" title="Choose your color" />
+                                                    type="color" defaultValue={color.colorHex} className="p-1 h-10 w-14 block bg-white cursor-pointer rounded-md disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700" id="hs-color-input" title="Choose your color" />
                                             </div>
                                         </th>
                                         <td className="px-4 py-3">
@@ -432,11 +436,11 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                                                     {color.images.map((image) => (
                                                         <div className="flex flex-col items-center justify-center space-y-1">
                                                             <div className="mb-1">
-                                                                <label className="cursor-pointer bg-blue-500 text-white px-1 py-1 rounded-lg hover:bg-blue-600 text-xs mr-1">
+                                                                <label className="cursor-pointer bg-blue-500 text-white px-1 py-1 rounded-md hover:bg-blue-600 text-xs mr-1">
                                                                     Chọn
                                                                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, color.id, image.id)} />
                                                                 </label>
-                                                                <button type='button' className="cursor-pointer bg-red-500 text-white px-1 py-1 rounded-lg hover:bg-red-600 text-xs" onClick={() => deleteImage(color.id, image.id)}>
+                                                                <button type='button' className="cursor-pointer bg-red-500 text-white px-1 py-1 rounded-md hover:bg-red-600 text-xs" onClick={() => deleteImage(color.id, image.id)}>
                                                                     Xóa
                                                                 </button>
                                                             </div>
@@ -449,7 +453,7 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                                                                             ? URL.createObjectURL(new Blob([image.path])) // Nếu image là ArrayBuffer, tạo URL từ nó
                                                                             : '/path/to/default-image.jpg'}
                                                                     key={image.id}
-                                                                    className="w-20 h-20 object-cover rounded-lg shadow border" />
+                                                                    className="w-20 h-20 object-cover rounded-md shadow border" />
                                                             </div>
                                                         </div>
                                                     ))}
@@ -478,16 +482,16 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                                                         {color.sizeQuantities.map((sizeQuantity) => (
                                                             <tr>
                                                                 <td>
-                                                                    <input type="number" value={sizeQuantity.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
+                                                                    <input type="number" value={sizeQuantity.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
                                                                         onChange={(e) => setSizeQuantity(color.id, sizeQuantity.id, "size", parseInt(e.target.value, 10) || 0)} />
                                                                     -
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" value={sizeQuantity.quantity} name="quantity" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
+                                                                    <input type="number" value={sizeQuantity.quantity} name="quantity" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required
                                                                         onChange={(e) => setSizeQuantity(color.id, sizeQuantity.id, "quantity", parseInt(e.target.value, 10) || 0)} />
                                                                 </td>
                                                                 <td>
-                                                                    <button onClick={() => deleteSizeQuantity(color.id, sizeQuantity.id)} type="button" className="text-gray-400 bg-transparent hover:text-red-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:text-red-600">
+                                                                    <button onClick={() => deleteSizeQuantity(color.id, sizeQuantity.id)} type="button" className="text-gray-400 bg-transparent hover:text-red-600 rounded-md text-sm p-1.5 ml-auto inline-flex items-center dark:hover:text-red-600">
                                                                         <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                                         </svg>
@@ -519,7 +523,7 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                         </table>
                     </div>
 
-                    <button type="submit" className="text-white inline-flex items-center bg-orange-400 hover:bg-orange-500 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center dark:bg-orange-400 dark:hover:bg-orange-500 dark:focus:ring-orange-600">
+                    <button type="submit" className="text-white inline-flex items-center bg-orange-400 hover:bg-orange-500 font-medium rounded-md text-sm px-4 py-2.5 text-center dark:bg-orange-400 dark:hover:bg-orange-500">
                         <svg className="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                         </svg>

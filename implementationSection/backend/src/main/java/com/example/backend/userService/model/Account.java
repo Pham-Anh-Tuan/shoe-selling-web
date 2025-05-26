@@ -30,6 +30,15 @@ public class Account {
     @Column(name = "imageName", nullable = false, length = 200)
     private String imageName = "";
 
+    @Column(name = "phoneNumber", nullable = false, length = 20)
+    private String phoneNumber;
+
+    @Column(name = "shippingAddress", nullable = false, length = 200)
+    private String shippingAddress;
+
+    @Column(name = "gender")
+    private int gender = 0;
+
     @Column(name = "role")
     private int role = 2;
 }

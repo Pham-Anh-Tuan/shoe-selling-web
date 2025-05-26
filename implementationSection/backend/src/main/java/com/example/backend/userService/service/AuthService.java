@@ -43,23 +43,6 @@ public class AuthService {
         return ResponseEntity.ok("Register successful");
     }
 
-//    public ResponseEntity<?> login(Map<String, String> request) {
-//        String email = request.get("email");
-//        String password = request.get("password");
-//        Optional<Account> account = accountRepository.findByEmail(email);
-//
-//        if (!account.isPresent()) {
-//            return ResponseEntity.badRequest().body("Email not found");
-//        }
-//
-//        if (!passwordEncoder.matches(password, account.get().getPassword())) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
-//        }
-//
-//        String token = jwtUtil.generateToken(account.get());
-//        return ResponseEntity.ok(token);
-//    }
-
     public ResponseEntity<?> login(Map<String, String> request) {
         String email = request.get("email");
         String password = request.get("password");
@@ -82,6 +65,9 @@ public class AuthService {
                 acc.getEmail(),
                 acc.getFullName(),
                 acc.getImageName(),
+                acc.getPhoneNumber(),
+                acc.getShippingAddress(),
+                acc.getGender(),
                 acc.getRole()
         );
 

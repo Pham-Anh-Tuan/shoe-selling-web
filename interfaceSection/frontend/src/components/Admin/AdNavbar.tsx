@@ -52,14 +52,14 @@ const AdNavbar = () => {
                   size={30}
                 />
               )}
-              <Link to="/">
-                <a href="#" className="font-bold 
+
+              <a href="/" className="font-bold 
                     text-xl sm:text-xl flex gap-2 items-center">
-                  <img src={Logo} alt="Logo"
-                    className="w-12" />
-                  KuShoe
-                </a>
-              </Link>
+                <img src={Logo} alt="Logo"
+                  className="w-12" />
+                KuShoe
+              </a>
+
             </div>
 
             {/* search bar*/}

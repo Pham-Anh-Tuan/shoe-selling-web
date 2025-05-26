@@ -29,7 +29,6 @@ const Products = () => {
   useEffect(() => {
     const fetchApi = async () => {
       const { data } = await homeProductsApi.getAll();
-      console.log("call homeProductsApi");
       setProductsData(data);
     };
     fetchApi();
@@ -38,15 +37,15 @@ const Products = () => {
   useEffect(() => {
     updateLogStatus();
     // Tạo một sự kiện tuỳ chỉnh khi đăng nhập và đăng xuất
-    const handleLogChange = () => {
-      updateLogStatus();
-    };
+    // const handleLogChange = () => {
+    //   updateLogStatus();
+    // };
 
-    window.addEventListener('logStatus', handleLogChange);
+    // window.addEventListener('logStatus', handleLogChange);
 
-    return () => {
-      window.removeEventListener('logStatus', handleLogChange);
-    };
+    // return () => {
+    //   window.removeEventListener('logStatus', handleLogChange);
+    // };
   }, []);
 
   const [selectedColors, setSelectedColors] = useState<{ [key: number]: number }>({});

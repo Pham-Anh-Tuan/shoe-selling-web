@@ -1,41 +1,45 @@
 import Logo from "../../assets/logo.png";
-import { IoMdSearch } from "react-icons/io";
 import { FaCaretDown, FaCartShopping, FaUser } from "react-icons/fa6";
 import DarkMode from "./DarkMode";
 import { useEffect, useState } from "react";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { alertSuccess } from "../Shared/AlertSuccess";
 
 export const Menu = [
+    {
+        id: 1,
+        name: "TRANG CHỦ",
+        link: "/",
+        cate: []
+    },
     {
         id: 2,
         name: "GIÀY NAM",
         link: "/#services",
         cate: [{
             id: 1,
-            name: "GIÀY THỂ THAO NAM",
+            name: "GIÀY THỂ THAO",
             link: "/#",
         }, {
             id: 2,
-            name: "SANDAL NAM",
+            name: "GIÀY LƯỜI",
+            link: "/#",
+        }, {
+            id: 3,
+            name: "GIÀY BOOTS",
+            link: "/#",
+        }, {
+            id: 4,
+            name: "GIÀY TÂY DERBY",
             link: "/#",
         }]
     },
     {
         id: 3,
-        name: "GIÀY NỮ",
+        name: "DÉP DA NAM",
         link: "/#",
-        cate: [{
-            id: 1,
-            name: "GIÀY CAO GÓT",
-            link: "/#",
-        }, {
-            id: 2,
-            name: "GIÀY THỂ THAO NỮ",
-            link: "/#",
-        }]
+        cate: []
     },
     {
         id: 4,
@@ -51,6 +55,12 @@ export const Menu = [
             link: "/#",
         }]
     },
+    {
+        id: 5,
+        name: "BLOGS",
+        link: "/#",
+        cate: []
+    }
 ];
 
 interface NavbarProps {
@@ -121,7 +131,6 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
 
         // Tạo một sự kiện tuỳ chỉnh khi đăng nhập và đăng xuất
         const handleLogChange = () => {
-            updateLogStatus();
             updateImageName();
         };
 
@@ -136,6 +145,7 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
         <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
             {/* upper bar */}
             <div className="bg-primary/40 py-2">
+                {/* <div className="bg-blue-300 py-2"> */}
                 <div className="container flex justify-between items-center">
                     <div>
                         <Link to="">
@@ -157,6 +167,7 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                                     <input type="text" id="simple-search1" className="w-[160px] md:w-[200px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block h-8" placeholder="Tên sản phẩm..." required />
                                 </div>
                                 <button type="submit" className="bg-gradient-to-r from-primary to-secondary rounded-md px-2 py-0 ms-2 text-sm font-medium text-white h-8">
+                                    {/* <button type="submit" className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-md px-2 py-0 ms-2 text-sm font-medium text-white h-8"> */}
                                     <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                     </svg>
@@ -206,7 +217,7 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                             <div className="group relative cursor-pointer">
                                 <a href="/profile"
                                     className="flex items-center">
-                                    <img alt="" src={import.meta.env.VITE_API_URL_IMG + imageName} className="size-9 rounded-full" />
+                                    <img alt="" src={import.meta.env.VITE_API_URL_AVATAR_IMG + imageName} className="size-9 rounded-full" />
                                 </a>
                             </div>
                         )}
@@ -237,8 +248,7 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
             {/* lower bar */}
             <div className="flex justify-center">
                 <ul className="sm:flex hidden items-center gap-4">
-
-                    <div>
+                    {/* <div>
                         <Link to="">
                             <div
                                 className="inline-block px-4
@@ -247,39 +257,40 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                                 TRANG CHỦ
                             </div>
                         </Link>
-                    </div>
-
-
+                    </div> */}
                     {/* Simple Dropdown and Links*/}
                     {Menu.map((data) => (
                         <li key={data.id} className="group relative cursor-pointer">
-                            <a href="#"
+                            <a href={data.link}
                                 className="flex items-center
-                        gap-[2px] py-2 font-medium">
+                        gap-[2px] py-2 font-medium hover:text-primary">
                                 {data.name}
-                                <span>
-                                    <FaCaretDown
-                                        className="transition-all
+                                {data.cate.length > 0 && (
+                                    <span>
+                                        <FaCaretDown
+                                            className="transition-all
                                 duration-200
                                 group-hover:rotate-180"/>
-                                </span>
+                                    </span>
+                                )}
                             </a>
-                            <div className="absolute z-[9999] hidden
+                            {data.cate.length > 0 && (
+                                <div className="absolute z-[9999] hidden
                         group-hover:block w-[200px]
                         bg-white p-2 text-black shadow-md dark:bg-gray-900 dark:text-white">
-                                <ul>
-                                    {data.cate.map((cateData) => (
-                                        <li key={cateData.id}>
-                                            <a href={cateData.link}
-                                                className="inline-block w-full rounded-md p-2
+                                    <ul>
+                                        {data.cate.map((cateData) => (
+                                            <li key={cateData.id}>
+                                                <a href={cateData.link}
+                                                    className="inline-block w-full rounded-md p-2
                                         hover:bg-primary/20">
-                                                {cateData.name}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
+                                                    {cateData.name}
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                         </li>
                     ))}
                 </ul>

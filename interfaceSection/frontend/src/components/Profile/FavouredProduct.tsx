@@ -68,7 +68,7 @@ const FavouredProduct = () => {
         <div className="flex-1 mb-2">
             <div className="">
                 {/* Header section */}
-                <div className="mb-10 max-w-[600px]">
+                <div className="mb-5 max-w-[600px]">
                     <h1 data-aos="fade-up" className="text-lg font-semibold">
                         SẢN PHẨM YÊU THÍCH
                     </h1>

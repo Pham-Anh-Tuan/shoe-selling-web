@@ -11,6 +11,8 @@ export default {
       colors: {
         primary: "#fea928" ,
         secondary: "#ed8900",
+        // primary: "#2874fe" ,
+        // secondary: "#0060ed",
       },
       container: {
         center: true,

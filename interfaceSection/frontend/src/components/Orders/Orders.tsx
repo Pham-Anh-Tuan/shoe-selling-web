@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 const Orders = () => {
-    return (<section className="bg-white antialiased dark:bg-gray-900 flex-1">
+    return (<section className="bg-white antialiased dark:bg-gray-900 flex-1 p-4 rounded-lg border">
         <div className="mx-auto max-w-screen-xl 2xl:px-0">
             <div className="mx-auto">
                 <div className="gap-4 sm:flex sm:items-center sm:justify-between">

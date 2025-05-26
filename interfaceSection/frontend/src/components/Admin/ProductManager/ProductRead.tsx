@@ -38,25 +38,25 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
 
     // const [product, setProduct] = useState<Product | null>(null);
     const [product, setProduct] = useState<Product>({
-            id: "",
-            productName: "",
-            price: 0,
-            type: "0",
-            mainDes: "",
-            sideDes: "",
-            colors: [
-                {
-                    id: crypto.randomUUID(),
-                    colorHex: "",
-                    images: [
-                        // { id: crypto.randomUUID(), path: "", imageFile: null },
-                    ],
-                    sizeQuantities: [
-                        // { id: crypto.randomUUID(), size: 0, quantity: 0 },
-                    ],
-                },
-            ],
-        });
+        id: "",
+        productName: "",
+        price: 0,
+        type: "0",
+        mainDes: "",
+        sideDes: "",
+        colors: [
+            {
+                id: crypto.randomUUID(),
+                colorHex: "",
+                images: [
+                    // { id: crypto.randomUUID(), path: "", imageFile: null },
+                ],
+                sizeQuantities: [
+                    // { id: crypto.randomUUID(), size: 0, quantity: 0 },
+                ],
+            },
+        ],
+    });
 
     useEffect(() => {
         if (!readId) return;  // Chặn gọi API nếu id là undefined
@@ -81,11 +81,11 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
 
     return (
         <div className="relative p-4 w-full max-w-2xl max-h-full">
-            <div className="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+            <div className="relative p-4 bg-white rounded-md shadow dark:bg-gray-800 sm:p-5">
                 <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Xem chi tiết sản phẩm</h3>
                     <button onClick={toggleRead}
-                        type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="readProductModal">
+                        type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-md text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="readProductModal">
                         <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
@@ -96,28 +96,22 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
                     <div className="grid gap-4 mb-4 sm:grid-cols-2">
                         <div>
                             <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tên</label>
-                            <input disabled type="text" name="name" id="name" value={product?.productName} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Ex. Apple iMac 27&ldquo;" />
+                            <input disabled type="text" name="name" id="name" value={product?.productName} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Ex. Apple iMac 27&ldquo;" />
                         </div>
                         <div>
                             <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giá</label>
-                            <p className="block w-full">
-                                <input onChange={(e) => {
-                                    // let value = parseFloat(e.target.value);
-                                    // if (value < 0) value = 0;
-                                    // setPrice(value);
-                                    let value = e.target.value.replace(/,/g, '');
-                                    const number = parseFloat(value);
-                                    if (!isNaN(number)) setPrice(number);
-                                }}
-                                disabled type="text" value={product?.price.toLocaleString("en-US")} name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
-                                ₫</p>
+                            <p className="relative block w-full">
+                                <input
+                                    disabled type="text" value={product?.price.toLocaleString("en-US")} name="price" id="price" className="bg-gray-50 w-full pr-10 border border-gray-300 focus:outline-none focus:border-gray-300 text-gray-900 text-sm rounded-md p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required />
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300 pointer-events-none">₫</span>
+                            </p>
                         </div>
                         <div>
                             <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Loại</label>
                             <select
                                 disabled
                                 value={product?.type}
-                                id="category" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500">
+                                id="category" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500">
                                 <option>Chọn loại giày</option>
                                 <option value="1">Giày thể thao nam</option>
                                 <option value="2">Sandal nam</option>
@@ -127,13 +121,13 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
                         </div>
                         <div className="sm:col-span-2">
                             <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả tóm tắt</label>
-                            <textarea disabled id="description" rows={2} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết phần mô tả sản phẩm ngắn gọn"
+                            <textarea disabled id="description" rows={2} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết phần mô tả sản phẩm ngắn gọn"
                                 defaultValue={product?.mainDes}>
                             </textarea>
                         </div>
                         <div className="sm:col-span-2">
                             <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả chi tiết</label>
-                            <textarea disabled id="description" rows={5} className="overflow-auto whitespace-pre-wrap block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết chi tiết cho phần mô tả sản phẩm"
+                            <textarea disabled id="description" rows={5} className="overflow-auto whitespace-pre-wrap block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết chi tiết cho phần mô tả sản phẩm"
                                 defaultValue={product?.sideDes}>
                             </textarea>
                         </div>
@@ -156,7 +150,7 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
                                     <tr key={color.id} className="border-b dark:border-gray-700">
                                         <th scope="row" className="px-4 py-3">
                                             <div className="flex flex-col items-center justify-center space-y-1">
-                                                <input type="color" defaultValue={color?.colorHex} className="p-1 h-10 w-14 block bg-white cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700" id="hs-color-input" title="Choose your color" />
+                                                <input type="color" defaultValue={color?.colorHex} className="p-1 h-10 w-14 block bg-white cursor-pointer rounded-md disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700" id="hs-color-input" title="Choose your color" />
                                             </div>
                                         </th>
                                         <td className="px-4 py-3">
@@ -167,7 +161,7 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
                                                             <div className="mt-1 w-fit">
                                                                 <img src={import.meta.env.VITE_API_URL_IMG + image.path}
                                                                     key={image.id}
-                                                                    className="w-20 h-20 object-cover rounded-lg shadow border" />
+                                                                    className="w-20 h-20 object-cover rounded-md shadow border" />
                                                             </div>
                                                         </div>
                                                     ))}
@@ -189,11 +183,11 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
                                                         {color.sizeQuantities.map((sizeQuantity) => (
                                                             <tr>
                                                                 <td>
-                                                                    <input type="number" disabled value={sizeQuantity.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
+                                                                    <input type="number" disabled value={sizeQuantity.size} name="size" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
                                                                     -
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" disabled value={sizeQuantity.quantity} name="amount" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
+                                                                    <input type="number" disabled value={sizeQuantity.quantity} name="amount" id="" className="w-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-orange-600 focus:border-orange-600 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" required />
                                                                 </td>
                                                             </tr>
                                                         ))}

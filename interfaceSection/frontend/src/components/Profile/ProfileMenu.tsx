@@ -2,20 +2,15 @@ import { LuClipboardList } from "react-icons/lu";
 import { MdFavoriteBorder } from "react-icons/md";
 import { IoMdLogOut } from "react-icons/io";
 import { FaRegUser } from "react-icons/fa";
-import { alertSuccess } from "../Shared/AlertSuccess";
+import { LuChartColumnIncreasing } from "react-icons/lu";
 export const ProfileMenu = () => {
     const handleLogout = () => {
         // Xóa token khỏi localStorage
         localStorage.removeItem('token');
-
         localStorage.removeItem('imageName');
+        localStorage.removeItem('email');
 
-        // Gửi sự kiện custom
-        window.dispatchEvent(new Event('logUpdated'));
-        window.dispatchEvent(new Event('logStatus'));
-
-        window.location.href = "/";
-        alertSuccess("Đăng xuất thành công!");
+        window.location.href = '/';
     };
     return (
         <div className="w-[180px]">
@@ -39,7 +34,7 @@ export const ProfileMenu = () => {
 
                 <li>
                     <a href="orders" className='flex items-center'>
-                        <LuClipboardList className='text-blue-500 text-xl' />
+                        <LuClipboardList className='text-yellow-500 text-xl' />
                         <span className={`ms-2 ${location.pathname.toLowerCase() === '/orders' ? 'text-red-600' : ''}`}>Đơn Hàng</span>
                     </a>
                 </li>
@@ -47,6 +42,12 @@ export const ProfileMenu = () => {
                     <a href="product-favorite" className='flex items-center'>
                         <MdFavoriteBorder className='text-red-500 text-xl' />
                         <span className={`ms-2 ${location.pathname.toLowerCase() === '/product-favorite' ? 'text-red-600' : ''}`}>Sản Phẩm Yêu Thích</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Admin" className='flex items-center'>
+                        <LuChartColumnIncreasing className='text-green-500 text-xl' />
+                        <span className="ms-2">Trình Quản Lý</span>
                     </a>
                 </li>
                 <li>
