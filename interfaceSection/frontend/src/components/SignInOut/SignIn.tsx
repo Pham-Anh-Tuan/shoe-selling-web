@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
-import { LoginData} from "./authTypes";
+import { LoginData } from "./authTypes";
 import { authApi } from "../../api-client/api";
 import { alertError } from "../Shared/AlertError";
 
@@ -24,7 +24,7 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
             const response = await authApi.login(form);
 
             // const { token, email, fullName, imageName } = response;
-            
+
             // Lưu token vào localStorage
             localStorage.setItem('token', response.data?.token);
 
@@ -54,6 +54,24 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
         // window.dispatchEvent(new Event('logStatus'));
     };
 
+    const emailRef = useRef<HTMLInputElement>(null);
+
+    const handleInvalid = (e: React.FormEvent<HTMLInputElement>) => {
+        const input = e.currentTarget;
+
+        if (input.validity.valueMissing) {
+            input.setCustomValidity("Vui lòng điền vào trường này.");
+        } else if (input.validity.typeMismatch && input.type === "email") {
+            input.setCustomValidity("Vui lòng nhập đúng định dạng email.");
+        } else {
+            input.setCustomValidity(""); // reset nếu hợp lệ
+        }
+    };
+
+    const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+        e.currentTarget.setCustomValidity(""); // reset khi người dùng đang gõ
+    };
+
     return (
         <>
             {signInPopup && (
@@ -73,7 +91,10 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
                                 <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
                                     <div>
                                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                        <input onChange={handleChange}
+                                        <input ref={emailRef}
+                                            onInvalid={handleInvalid}
+                                            onInput={handleInput}
+                                            onChange={handleChange}
                                             type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
                                     </div>
                                     <div>

@@ -1,29 +1,128 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Qr from "../../assets/QRnhanTien.png";
+import { CartItem } from "../Cart/CartContext";
+import formatCurrencyVND from "../../hooks/FormatCurrency";
+import { orderApi, profileApi } from "../../api-client/api";
+import { Order } from "./OrderInterface";
+import { alertError } from "../Shared/AlertError";
+import { alertSuccess } from "../Shared/AlertSuccess";
 const DeliveryInfor = () => {
     const [selected, setSelected] = useState(false);
+
+    const [cart, setCart] = useState<CartItem[]>([]);
+    useEffect(() => {
+        const cartFromStorage = localStorage.getItem('cart');
+        if (cartFromStorage) {
+            setCart(JSON.parse(cartFromStorage));
+        }
+    }, []);
+
+    const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    const [order, setOrder] = useState<Order>({
+        fullName: "",
+        phoneNumber: "",
+        shippingAddress: "",
+        payMethod: 0,
+        totalPrice: totalPrice,
+        email: "",
+        orderItemRequests: cart,
+    });
+
+    const setFullName = (fullName: string) => {
+        setOrder(prev => ({ ...prev, fullName }));
+    };
+
+    const setPhoneNumber = (phoneNumber: string) => {
+        setOrder(prev => ({ ...prev, phoneNumber }));
+    };
+
+    const setShippingAddress = (shippingAddress: string) => {
+        setOrder(prev => ({ ...prev, shippingAddress }));
+    };
+
+    const setPayMethod = (payMethod: number) => {
+        setOrder(prev => ({ ...prev, payMethod }));
+    };
+
+    const setEmail = (email: string) => {
+        setOrder(prev => ({ ...prev, email }));
+    };
+
+    const setOrderProduct = (orderItemRequests: CartItem[]) => {
+        setOrder(prev => ({ ...prev, orderItemRequests }));
+    };
+
+    const getOrderData = async () => {
+        const userEmail = localStorage.getItem('email');
+        if (userEmail !== null) {
+            const { data } = await profileApi.getProfileSumByEmail(userEmail);
+            // setOrder(data);
+            // setEmail(userEmail);
+            setOrder(prev => ({
+                ...prev,
+                ...data
+            }));
+            setEmail(userEmail);
+        }
+    };
+
+    const handleOrder = async (event: React.FormEvent<HTMLFormElement>) => {
+        // event.preventDefault();
+        // try {
+        //     console.log(cart);
+        //     setOrderProduct(cart);
+        //     console.log("email là: " + JSON.stringify(order, null, 2));
+        //     const response = await orderApi.createOrder(order);
+        //     alert("Đặt hàng thành công.");
+        // } catch (error: any) {
+        //     alert("Đặt hàng thất bại.");
+        // }
+        event.preventDefault();
+        try {
+            const updatedOrder = {
+                ...order,
+                orderItemRequests: cart,
+            };
+            console.log("Dữ liệu order đầy đủ:", JSON.stringify(updatedOrder, null, 2));
+            const response = await orderApi.createOrder(updatedOrder);
+            alertSuccess("Đặt hàng thành công.");
+        } catch (error: any) {
+            alertError(error?.response?.data);
+        }
+    };
+
+    useEffect(() => {
+        getOrderData();
+    }, []);
 
     return (<div className="container max-md:max-w-xl mx-auto p-4 mt-10 mb-12">
         <h1 className="text-2xl font-semibold text-slate-900 container dark:text-white">THÔNG TIN GIAO HÀNG</h1>
         <div className="grid md:grid-cols-3 gap-10 mt-8 container">
             <div className="md:col-span-2 space-y-4 lg:w-4/5">
-                <form className="space-y-4 md:space-y-6" action="#">
+                <form className="space-y-4 md:space-y-6" onSubmit={handleOrder}>
                     <div>
                         <label htmlFor="name" className="block mb-2 text-base font-medium text-gray-900 dark:text-white">Họ và tên </label>
-                        <input type="name" name="name" id="name" className="bg-white border border-gray-300 text-gray-900 focus:outline-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
-                    </div>
-                    <div>
-                        <label htmlFor="address" className="block mb-2 text-base font-medium text-gray-900 dark:text-white">Địa chỉ</label>
-                        <input type="address" name="address" id="address" placeholder="" className="bg-white border border-gray-300 text-gray-900 focus:outline-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required />
+                        <input value={order.fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            type="name" name="name" id="name" className="bg-white border border-gray-300 text-gray-900 focus:outline-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
                     </div>
                     <div>
                         <label htmlFor="tel" className="block mb-2 text-base font-medium text-gray-900 dark:text-white">Số điện thoại</label>
-                        <input type="tel" name="tel" id="tel" placeholder="" className="bg-white border border-gray-300 text-gray-900 focus:outline-none focus:border-gray-300 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required />
+                        <input value={order.phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            type="tel" name="tel" id="tel" placeholder="" className="bg-white border border-gray-300 text-gray-900 focus:outline-none focus:border-gray-300 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required />
                     </div>
-
+                    <div>
+                        <label htmlFor="address" className="block mb-2 text-base font-medium text-gray-900 dark:text-white">Địa chỉ nhận hàng</label>
+                        <input value={order.shippingAddress}
+                            onChange={(e) => setShippingAddress(e.target.value)}
+                            type="address" name="address" id="address" placeholder="" className="bg-white border border-gray-300 text-gray-900 focus:outline-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required />
+                    </div>
                     <h1 className="text-2xl font-semibold text-slate-900 container dark:text-white px-0 py-5">PHƯƠNG THỨC THANH TOÁN</h1>
                     <div className="flex items-center ps-4 border border-gray-200 rounded-sm dark:border-gray-700">
-                        <input id="bordered-radio-1" type="radio" value="" name="bordered-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={() => setSelected(false)} required />
+                        <input value={1} onChange={() => setPayMethod(1)}
+                            id="bordered-radio-1" type="radio" name="bordered-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={() => setSelected(false)} required />
                         <label htmlFor="bordered-radio-1" className="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 flex gap-3 items-center">
                             <svg className="w-[25px] h-[25px] fill-green-600" viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M112 112c0 35.3-28.7 64-64 64V336c35.3 0 64 28.7 64 64H464c0-35.3 28.7-64 64-64V176c-35.3 0-64-28.7-64-64H112zM0 128C0 92.7 28.7 64 64 64H512c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM176 256a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zm80-48c0 8.8 7.2 16 16 16v64h-8c-8.8 0-16 7.2-16 16s7.2 16 16 16h24 24c8.8 0 16-7.2 16-16s-7.2-16-16-16h-8V208c0-8.8-7.2-16-16-16H272c-8.8 0-16 7.2-16 16z"></path>
@@ -32,7 +131,8 @@ const DeliveryInfor = () => {
                     </div>
 
                     <div className="flex items-center ps-4 border border-gray-200 rounded-sm dark:border-gray-700">
-                        <input id="bordered-radio-2" type="radio" value="" name="bordered-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={() => setSelected(!selected)} required />
+                        <input value={2} onChange={() => setPayMethod(2)}
+                            id="bordered-radio-2" type="radio" name="bordered-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={() => setSelected(!selected)} required />
                         <label htmlFor="bordered-radio-2" className="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 flex gap-3 items-center">
                             <svg className="w-[25px] h-[25px] fill-blue-600" viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M512 80c8.8 0 16 7.2 16 16v32H48V96c0-8.8 7.2-16 16-16H512zm16 144V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V224H528zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm56 304c-13.3 0-24 10.7-24 24s10.7 24 24 24h48c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm128 0c-13.3 0-24 10.7-24 24s10.7 24 24 24H360c13.3 0 24-10.7 24-24s-10.7-24-24-24H248z"></path>
@@ -62,11 +162,11 @@ const DeliveryInfor = () => {
 
             <div className="bg-white rounded-md px-4 py-6 h-max shadow-[0_2px_12px_-3px_rgba(61,63,68,0.3)]">
                 <ul className="text-slate-900 font-medium space-y-4">
-                    <li className="flex flex-wrap gap-4 text-sm">Tổng tiền hàng <span className="ml-auto font-semibold">2,200,000₫</span></li>
+                    <li className="flex flex-wrap gap-4 text-sm">Tổng tiền hàng <span className="ml-auto font-semibold">{formatCurrencyVND(totalPrice)}</span></li>
                     <li className="flex flex-wrap gap-4 text-sm">Phí vận chuyển <span className="ml-auto font-semibold">0₫</span></li>
                     <li className="flex flex-wrap gap-4 text-sm">Thuế <span className="ml-auto font-semibold">0₫</span></li>
                     <hr className="border-slate-300" />
-                    <li className="flex flex-wrap gap-4 text-sm font-semibold">Thành tiền <span className="ml-auto">2,200,000₫</span></li>
+                    <li className="flex flex-wrap gap-4 text-sm font-semibold">Thành tiền <span className="ml-auto">{formatCurrencyVND(totalPrice)}</span></li>
                 </ul>
 
                 {/* <div className="mt-8 space-y-2">

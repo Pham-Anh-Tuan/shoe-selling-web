@@ -19,6 +19,7 @@ public class ProductDetailMapper {
         dto.setProductName(product.getProductName());
         dto.setPrice(product.getPrice());
         dto.setType(product.getType());
+        dto.setStatus(product.getStatus());
         dto.setSideDes(product.getSideDes());
         dto.setMainDes(product.getMainDes());
 

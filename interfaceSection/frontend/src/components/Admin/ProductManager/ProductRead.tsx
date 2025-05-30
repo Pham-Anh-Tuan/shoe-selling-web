@@ -31,6 +31,7 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
         productName: string;
         price: number;
         type: string;
+        status: string;
         mainDes: string;
         sideDes: string;
         colors: Color[];
@@ -42,6 +43,7 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
         productName: "",
         price: 0,
         type: "0",
+        status: "1",
         mainDes: "",
         sideDes: "",
         colors: [
@@ -112,13 +114,24 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
                                 disabled
                                 value={product?.type}
                                 id="category" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500">
-                                <option>Chọn loại giày</option>
                                 <option value="1">Giày thể thao nam</option>
                                 <option value="2">Sandal nam</option>
                                 <option value="3">Giày cao gót</option>
                                 <option value="4">Giày thể thao nữ</option>
                             </select>
                         </div>
+
+                        <div>
+                            <label htmlFor="status" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Trạng thái</label>
+                            <select
+                                disabled
+                                value={product.status}
+                                id="status" className="bg-gray-50 border border-gray-300 focus:outline-none focus:border-gray-300 text-gray-900 text-sm rounded-md block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option value={0} className="bg-red-100">Inactive</option>
+                                <option value={1} className="bg-green-100">Active</option>
+                            </select>
+                        </div>
+
                         <div className="sm:col-span-2">
                             <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả tóm tắt</label>
                             <textarea disabled id="description" rows={2} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Viết phần mô tả sản phẩm ngắn gọn"

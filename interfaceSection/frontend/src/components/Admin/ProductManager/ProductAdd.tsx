@@ -33,6 +33,7 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
         productName: string;
         price: number;
         type: string;
+        status: string;
         mainDes: string;
         sideDes: string;
         colors: Color[];
@@ -42,7 +43,8 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
         id: crypto.randomUUID(),
         productName: "",
         price: 0,
-        type: "0",
+        type: "1",
+        status: "1",
         mainDes: "",
         sideDes: "",
         colors: [
@@ -99,6 +101,13 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
         setProduct((prev) => ({
             ...prev,
             type: newType,
+        }));
+    };
+
+    const setStatus = (newStatus: string) => {
+        setProduct((prev) => ({
+            ...prev,
+            status: newStatus,
         }));
     };
 
@@ -296,6 +305,7 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
         formData.append("productName", product.productName);
         formData.append("price", product.price.toString());
         formData.append("type", product.type.toString());
+        formData.append("status", product.status);
         formData.append("mainDes", product.mainDes);
         formData.append("sideDes", product.sideDes);
 
@@ -374,13 +384,24 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                             <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Loại</label>
                             <select onChange={(e) => setType(e.target.value)}
                                 id="category" className="bg-gray-50 border border-gray-300 focus:outline-none focus:border-gray-300 text-gray-900 text-sm rounded-md block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
-                                <option selected>Chọn loại giày</option>
                                 <option value={1}>Giày thể thao nam</option>
                                 <option value={2}>Sandal nam</option>
                                 <option value={3}>Giày cao gót</option>
                                 <option value={4}>Giày thể thao nữ</option>
                             </select>
                         </div>
+
+                        <div>
+                            <label htmlFor="status" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Trạng thái</label>
+                            <select
+                                value={product.status}
+                                onChange={(e) => setStatus(e.target.value)}
+                                id="status" className="bg-gray-50 border border-gray-300 focus:outline-none focus:border-gray-300 text-gray-900 text-sm rounded-md block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option value={0} className="bg-red-100">Inactive</option>
+                                <option value={1} className="bg-green-100">Active</option>
+                            </select>
+                        </div>
+                        
                         <div className="sm:col-span-2">
                             <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả tóm tắt</label>
                             <textarea onChange={(e) => setMainDes(e.target.value)}

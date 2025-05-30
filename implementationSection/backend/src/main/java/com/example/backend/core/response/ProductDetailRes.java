@@ -10,6 +10,7 @@ public class ProductDetailRes {
     private String productName;
     private double price;
     private int type;
+    private int status;
     private String sideDes;
     private String mainDes;
     private List<ColorRes> colors;

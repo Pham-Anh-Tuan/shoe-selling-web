@@ -10,6 +10,7 @@ public class ProductUpdateRequest {
     private String productName;
     private double price;
     private int type;
+    private int status;
     private String mainDes;
     private String sideDes;
     private List<ColorUpdateRequest> colors;

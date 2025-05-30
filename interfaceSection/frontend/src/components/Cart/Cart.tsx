@@ -1,17 +1,13 @@
 import { useEffect, useState } from "react";
 import { CartItem } from "./CartContext";
 import formatCurrencyVND from "../../hooks/FormatCurrency";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface CartProps {
     handleNeedSignIn: () => void;
 }
 
 const Cart: React.FC<CartProps> = ({ handleNeedSignIn }) => {
-    // const priceItem: number = 2200000;
-    // const [count, setCount] = useState<number>(1);
-    // const increase = () => setCount(count + 1);
-    // const decrease = () => setCount(count > 1 ? count - 1 : 1);
 
     const [cart, setCart] = useState<CartItem[]>([]);
     useEffect(() => {
@@ -54,13 +50,27 @@ const Cart: React.FC<CartProps> = ({ handleNeedSignIn }) => {
 
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+    const navigate = useNavigate();
+
+    // Giả sử bạn có biến kiểm tra đăng nhập
+    const isLoggedIn = !!localStorage.getItem("token"); // hoặc kiểm tra từ context/state
+
+    const handleCheckout = () => {
+        if (isLoggedIn) {
+            navigate("/DeliveryInformation");
+        } else {
+            handleNeedSignIn();
+        }
+    };
+
     return (<div className="py-10 dark:bg-gray-950">
         <div className="container max-md:max-w-xl mx-auto">
             <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">GIỎ HÀNG</h1>
             <div className="grid md:grid-cols-3 gap-10 mt-8">
                 <div className="md:col-span-2 space-y-4">
                     {cart.map((item, index) => (
-                        <div className="flex gap-4 bg-white px-4 py-6 rounded-md shadow-[0_2px_12px_-3px_rgba(61,63,68,0.3)]">
+                        <div key={index}
+                            className="flex gap-4 bg-white px-4 py-6 rounded-md shadow-[0_2px_12px_-3px_rgba(61,63,68,0.3)]">
                             <div className="flex gap-4">
                                 <div className="w-28 h-28 max-sm:w-24 max-sm:h-24 shrink-0">
                                     <img src={import.meta.env.VITE_API_URL_IMG + item.path} className="w-full h-full object-contain" />
@@ -164,12 +174,12 @@ const Cart: React.FC<CartProps> = ({ handleNeedSignIn }) => {
                     </ul>
 
                     <div className="mt-8 space-y-2">
-                        {/* <Link to="/DeliveryInformation"> */}
-                        {/* <button onClick={() => handleNeedSignIn()} className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md">Thanh toán ngay</button> */}
-                        {/* </Link> */}
-                        <Link to="/DeliveryInformation">
+
+                        <button onClick={handleCheckout} className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md">Thanh toán ngay</button>
+
+                        {/* <Link to="/DeliveryInformation">
                             <button className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md">Thanh toán ngay</button>
-                        </Link>
+                        </Link> */}
                         <button type="button" className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent hover:bg-slate-100 text-slate-900 border border-slate-300 rounded-md">Tiếp tục mua hàng</button>
                     </div>
 

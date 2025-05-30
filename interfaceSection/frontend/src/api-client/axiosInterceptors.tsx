@@ -5,7 +5,7 @@ const attachAuthToken = (axiosInstance: AxiosInstance): void => {
     axiosInstance.interceptors.request.use(
         (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
             const token = localStorage.getItem("token");
-            console.log("token la: ", token);
+            // console.log("token la: ", token);
             if (token && config.headers) {
                 config.headers["Authorization"] = `Bearer ${token}`;
             }

@@ -32,14 +32,12 @@ const Register: React.FC<RegisterProps> = ({ registerPopup, setRegisterPopup, ha
 
         try {
             const response = await authApi.register(form);
-            console.log('Đăng ký thành công:', response);
             setRegisterPopup(false);
             alertSuccess("Đăng ký thành công!");
             // Lưu token nếu cần
             // localStorage.setItem('token', response.data.token);
         } catch (error: any) {
             // Nếu API trả lỗi email đã tồn tại
-            console.log("ádd ", error?.response?.data);
             if (error?.response?.data === "Email already exists") {
                 alertError("Email đã tồn tại. Vui lòng chọn email khác.");
             } else {

@@ -13,4 +13,6 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     // Sắp xếp toàn bộ danh sách Product theo createdAt
     List<Product> findAllByOrderByCreatedAtDesc();
+
+    List<Product> findAllByStatusOrderByCreatedAtDesc(int status);
 }

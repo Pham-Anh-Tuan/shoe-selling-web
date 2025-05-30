@@ -98,7 +98,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 // Xác thực token
                 if (jwtUtil.validateToken(token)) {
-                    System.out.println("Trong validate");
                     String email = jwtUtil.extractEmail(token);
                     Optional<Account> optionalAccount = accountRepository.findByEmail(email);
 

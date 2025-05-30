@@ -2,6 +2,7 @@ package com.example.backend.userService.service;
 
 import com.example.backend.core.request.ProfileRequest;
 import com.example.backend.core.response.ProfileRes;
+import com.example.backend.core.response.ProfileSumRes;
 import com.example.backend.userService.model.Account;
 import com.example.backend.userService.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,5 +78,19 @@ public class ProfileService {
             }
         }
         accountRepository.save(account);
+    }
+
+    public ResponseEntity<?> getProfileSumByEmail(String email) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+
+        if (!account.isPresent()) {
+            return ResponseEntity.badRequest().body("This account not found");
+        }
+        Account acc = account.get();
+        ProfileSumRes profileRes = new ProfileSumRes(
+                acc.getFullName(),
+                acc.getPhoneNumber(),
+                acc.getShippingAddress());
+        return ResponseEntity.ok(profileRes);
     }
 }

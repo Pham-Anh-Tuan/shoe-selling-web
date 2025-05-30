@@ -1,3 +1,4 @@
+import { Order } from '../components/Payment/OrderInterface';
 import { LoginData, RegisterData } from '../components/SignInOut/authTypes';
 import { axiosClient, axiosServer } from './axiosClient';
 
@@ -53,5 +54,15 @@ export const profileApi = {
 
     updateProfile(formData: FormData) {
         return axiosServer.put('/api/user/updateProfile', formData);
+    },
+
+    getProfileSumByEmail(email: String) {
+        return axiosClient.get('/api/user/getProfileSumByEmail/' + email);
+    },
+}
+
+export const orderApi = {
+    createOrder(order: Order) {
+        return axiosClient.post('/api/user/createOrder', order);
     },
 }

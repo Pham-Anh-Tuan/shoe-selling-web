@@ -59,7 +59,7 @@ public class ProductService {
     }
 
     public List<HomeProductRes> getAllProductsOrdered() {
-        List<Product> products = productRepository.findAllByOrderByCreatedAtDesc();
+        List<Product> products = productRepository.findAllByStatusOrderByCreatedAtDesc(1);
 
         return products.stream().map(product -> {
             HomeProductRes res = new HomeProductRes();
@@ -90,6 +90,7 @@ public class ProductService {
             res.setId(product.getId());
             res.setProductName(product.getProductName());
             res.setType(product.getType());
+            res.setStatus(product.getStatus());
             res.setPrice(product.getPrice());
             return res;
         }).collect(Collectors.toList());
@@ -101,6 +102,7 @@ public class ProductService {
         product.setProductName(productRequest.getProductName());
         product.setPrice(productRequest.getPrice());
         product.setType(productRequest.getType());
+        product.setStatus(productRequest.getStatus());
         product.setSideDes(productRequest.getSideDes());
         product.setMainDes(productRequest.getMainDes());
 
@@ -156,6 +158,7 @@ public class ProductService {
         product.setProductName(productUpdateRequest.getProductName());
         product.setPrice(productUpdateRequest.getPrice());
         product.setType(productUpdateRequest.getType());
+        product.setStatus(productUpdateRequest.getStatus());
         product.setSideDes(productUpdateRequest.getSideDes());
         product.setMainDes(productUpdateRequest.getMainDes());
 

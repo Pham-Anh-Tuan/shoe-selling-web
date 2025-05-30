@@ -23,8 +23,13 @@ public class ProfileController {
         return ResponseEntity.ok("Profile updated successfully");
     }
 
-    @GetMapping(path = "/user/getProfileByEmail/{id}")
-    public ResponseEntity<?> getProfileByEmail(@PathVariable("id") String email) {
+    @GetMapping(path = "/user/getProfileByEmail/{email}")
+    public ResponseEntity<?> getProfileByEmail(@PathVariable("email") String email) {
         return profileService.getProfileByEmail(email);
+    }
+
+    @GetMapping(path = "/user/getProfileSumByEmail/{email}")
+    public ResponseEntity<?> getProfileSum(@PathVariable("email") String email) {
+        return profileService.getProfileSumByEmail(email);
     }
 }

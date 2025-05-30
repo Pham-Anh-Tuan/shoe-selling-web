@@ -123,7 +123,7 @@ const Profile = () => {
                             name="email"
                             id="email"
                             className="bg-white border border-gray-300 text-gray-900 focus:outline-none focus:border-gray-300 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                            defaultValue={profile?.email ?? ""}
+                            defaultValue={profile?.email}
                             disabled
                             required
                         />
@@ -138,7 +138,7 @@ const Profile = () => {
                             name="name"
                             id="name"
                             className="bg-white border border-gray-300 text-gray-900 focus:outline-none focus:border-gray-300 w-full h-[40px] px-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                            value={profile.fullName ?? ""}
+                            value={profile.fullName}
                             onChange={(e) => setFullName(e.target.value)}
                             required
                         />
@@ -152,7 +152,7 @@ const Profile = () => {
                             type="tel"
                             name="tel"
                             id="tel"
-                            value={profile.phoneNumber ?? ""}
+                            value={profile.phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value)}
                             className="bg-white border border-gray-300 text-gray-900 focus:outline-none focus:border-gray-300 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                             required
@@ -167,7 +167,7 @@ const Profile = () => {
                             type="address"
                             name="address"
                             id="address"
-                            value={profile.shippingAddress ?? ""}
+                            value={profile.shippingAddress}
                             onChange={(e) => setShippingAddress(e.target.value)}
                             className="bg-white border border-gray-300 text-gray-900 focus:outline-none focus:border-gray-300 w-full h-[40px] px-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                             required

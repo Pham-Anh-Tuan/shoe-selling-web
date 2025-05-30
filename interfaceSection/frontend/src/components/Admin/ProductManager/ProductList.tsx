@@ -34,6 +34,7 @@ const ProductList = () => {
         productName: string;
         type: number;
         price: number;
+        status: number;
     }
 
 
@@ -79,9 +80,6 @@ const ProductList = () => {
             console.error("Xóa sản phẩm không thành công!", error);
         }
     };
-
-    const [productIndex, setProductIndex] = useState<number>(0);
-
 
     return (
         <div className="p-4 w-full h-screen overflow-auto bg-gray-100 dark:bg-gray-900">
@@ -131,6 +129,7 @@ const ProductList = () => {
                                         <th scope="col" className="px-4 py-4">Tên sản phẩm</th>
                                         <th scope="col" className="px-4 py-3">Loại</th>
                                         <th scope="col" className="px-4 py-3">Giá</th>
+                                        <th scope="col" className="px-4 py-3">Trạng thái</th>
                                         <th scope="col" className="px-4 py-3">
                                             <span className="sr-only">Actions</span>
                                         </th>
@@ -151,6 +150,15 @@ const ProductList = () => {
                                                             ? "Giày thể thao nữ"
                                                             : "Không xác định"}</td>
                                             <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{formatCurrencyVND(data?.price || 0)}</td>
+                                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{data?.status === 0
+                                                ? <dd className="me-2 mt-1.5 inline-flex items-center rounded bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
+                                                    Inactive
+                                                </dd>
+                                                : data?.status === 1
+                                                    ? <dd className="me-2 mt-1.5 inline-flex items-center rounded bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
+                                                        Active
+                                                    </dd> : "Không xác định"}</td>
+
                                             <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center justify-end relative">
                                                 <button id={index + "giay-the-thao-1-dropdown-button"}
                                                     onClick={() => {

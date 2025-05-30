@@ -8,4 +8,5 @@ public class ManagerProductRes {
     private String productName;
     private int type;
     private double price;
+    private int status;
 }
