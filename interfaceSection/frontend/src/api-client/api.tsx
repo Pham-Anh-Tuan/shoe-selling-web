@@ -1,3 +1,5 @@
+import { OrderUpdate } from '../components/Admin/OrderManager/OrderContext';
+import { CartItem } from '../components/Cart/CartContext';
 import { Order } from '../components/Payment/OrderInterface';
 import { LoginData, RegisterData } from '../components/SignInOut/authTypes';
 import { axiosClient, axiosServer } from './axiosClient';
@@ -61,8 +63,29 @@ export const profileApi = {
     },
 }
 
+export const cartApi = {
+    getNewestCartItem(updatedCart: CartItem[]) {
+        return axiosClient.post('/api/public/getNewestCartItem', updatedCart);
+    },
+}
+
 export const orderApi = {
     createOrder(order: Order) {
         return axiosClient.post('/api/user/createOrder', order);
+    },
+    getManagerProducts() {
+        return axiosClient.get('/api/admin/managerOrders');
+    },
+    getById(id: String) {
+        return axiosClient.get('/api/admin/orderDetail/' + id);
+    },
+    getUpdationById(id: String) {
+        return axiosClient.get('/api/admin/orderUpdation/' + id);
+    },
+    updateOrder(orderUpdate: OrderUpdate) {
+        return axiosClient.post('/api/admin/updateOrder', orderUpdate);
+    },
+    deleteById(id: String) {
+        return axiosClient.delete(`/api/admin/cancelOrder/${id}`);
     },
 }

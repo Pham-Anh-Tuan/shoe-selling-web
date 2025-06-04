@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -31,10 +32,10 @@ public class Order {
     private double totalPrice;
 
     @Column(name = "orderDate", updatable = false)
-    LocalDate orderDate;
+    private LocalDate orderDate;
 
-    @Column(name = "deliveryDate", updatable = false)
-    LocalDate deliveryDate;
+    @Column(name = "deliveryDate")
+    private LocalDate deliveryDate;
 
     @Column(name = "shippingStatus")
     private int shippingStatus = 0;

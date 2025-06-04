@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
 import { Link } from "react-router-dom";
+import { CartItem } from "../Cart/CartContext";
 
 export const Menu = [
     {
@@ -82,8 +83,11 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
         const storedCart = localStorage.getItem('cart');
         if (storedCart) {
             try {
+                
                 const cart = JSON.parse(storedCart) || [];
-                setCartLength(cart.length);
+                // setCartLength(cart.length);
+                const totalQuantity = cart.reduce((sum: number, item: { quantity: number }) => sum + (item.quantity || 0), 0);
+                setCartLength(totalQuantity);
             } catch (error) {
                 setCartLength(0);
             }

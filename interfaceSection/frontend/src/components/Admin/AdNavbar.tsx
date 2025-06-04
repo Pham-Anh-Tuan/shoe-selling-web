@@ -1,5 +1,4 @@
 import Logo from "../../assets/logo.png";
-import { Link } from "react-router-dom";
 import { AiFillDashboard, AiFillProduct } from "react-icons/ai";
 import { FaHistory, FaSignOutAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
@@ -13,7 +12,18 @@ const AdNavbar = () => {
     setShowMenu(!showMenu);
   };
 
+  const [imageName, setImageName] = useState<string>("userLogo192192adeal.png");
+
+  const updateImageName = () => {
+    const userLogo = localStorage.getItem('imageName');
+    if (userLogo !== null) {
+      setImageName(userLogo);
+    }
+  };
+
   useEffect(() => {
+    updateImageName();
+
     const handleResize = () => {
       if (window.innerWidth > 900) {
         setShowMenu(false);
@@ -83,6 +93,12 @@ const AdNavbar = () => {
               <div>
                 <DarkMode />
               </div>
+              <div className="group relative cursor-pointer">
+                <a href="/profile"
+                  className="flex items-center">
+                  <img alt="" src={import.meta.env.VITE_API_URL_AVATAR_IMG + imageName} className="size-9 rounded-full" />
+                </a>
+              </div>
             </div>
 
           </div>
@@ -101,7 +117,7 @@ const AdNavbar = () => {
                 <li>
                   <a href="/Admin" className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group mt-10 ${location.pathname === '/Admin' ? 'bg-white' : 'dark:text-white'}`}>
                     <AiFillDashboard className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                    <span className="ms-3">Tổng quát</span>
+                    <span className="ms-3">Tổng quan</span>
                   </a>
                 </li>
                 <li>

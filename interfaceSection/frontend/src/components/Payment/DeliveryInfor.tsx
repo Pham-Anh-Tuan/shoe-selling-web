@@ -5,7 +5,7 @@ import formatCurrencyVND from "../../hooks/FormatCurrency";
 import { orderApi, profileApi } from "../../api-client/api";
 import { Order } from "./OrderInterface";
 import { alertError } from "../Shared/AlertError";
-import { alertSuccess } from "../Shared/AlertSuccess";
+import { useNavigate } from "react-router-dom";
 const DeliveryInfor = () => {
     const [selected, setSelected] = useState(false);
 
@@ -24,7 +24,7 @@ const DeliveryInfor = () => {
         phoneNumber: "",
         shippingAddress: "",
         payMethod: 0,
-        totalPrice: totalPrice,
+        totalPrice: 0,
         email: "",
         orderItemRequests: cart,
     });
@@ -43,6 +43,10 @@ const DeliveryInfor = () => {
 
     const setPayMethod = (payMethod: number) => {
         setOrder(prev => ({ ...prev, payMethod }));
+    };
+
+    const setTotalPrice = (totalPrice: number) => {
+        setOrder(prev => ({ ...prev, totalPrice }));
     };
 
     const setEmail = (email: string) => {
@@ -67,26 +71,20 @@ const DeliveryInfor = () => {
         }
     };
 
+    const navigate = useNavigate();
     const handleOrder = async (event: React.FormEvent<HTMLFormElement>) => {
-        // event.preventDefault();
-        // try {
-        //     console.log(cart);
-        //     setOrderProduct(cart);
-        //     console.log("email là: " + JSON.stringify(order, null, 2));
-        //     const response = await orderApi.createOrder(order);
-        //     alert("Đặt hàng thành công.");
-        // } catch (error: any) {
-        //     alert("Đặt hàng thất bại.");
-        // }
         event.preventDefault();
         try {
+            const dynamicTotalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
             const updatedOrder = {
                 ...order,
+                totalPrice: dynamicTotalPrice,
                 orderItemRequests: cart,
             };
-            console.log("Dữ liệu order đầy đủ:", JSON.stringify(updatedOrder, null, 2));
+            // console.log("Dữ liệu order đầy đủ:", JSON.stringify(updatedOrder, null, 2));
             const response = await orderApi.createOrder(updatedOrder);
-            alertSuccess("Đặt hàng thành công.");
+            localStorage.removeItem('cart');
+            navigate("/orderSuccess");
         } catch (error: any) {
             alertError(error?.response?.data);
         }

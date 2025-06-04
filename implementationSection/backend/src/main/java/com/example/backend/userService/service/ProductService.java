@@ -251,7 +251,8 @@ public class ProductService {
             List<SizeQuantity> sizeList = new ArrayList<>();
             for (SizeQuantityRequest sizeQuantity : colorUpdateRequestList.get(i).getSizeQuantities()) {
                 SizeQuantity size = new SizeQuantity();
-                size.setId(UUID.randomUUID().toString());
+//                size.setId(UUID.randomUUID().toString());
+                size.setId(sizeQuantity.getId());
                 size.setSize(sizeQuantity.getSize());
                 size.setQuantity(sizeQuantity.getQuantity());
                 size.setColor(color);

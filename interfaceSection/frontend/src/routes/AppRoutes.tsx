@@ -20,6 +20,7 @@ import Profile from '../components/Profile/Profile';
 import ProfileLayout from '../layouts/ProfileLayout';
 import PassChange from '../components/Profile/PassChange';
 import FavouredProduct from '../components/Profile/FavouredProduct';
+import OrderSuccess from '../components/Payment/OrderSuccess';
 
 const AppRoutes = () => {
     const [signInPopup, setSignInPopup] = useState(false);
@@ -71,6 +72,7 @@ const AppRoutes = () => {
                         <NeedSignIn needSignInPopup={needSignInPopup} setNeedSignInPopup={setNeedSignInPopup} handleSignInPopup={handleSignInPopup} />
                     </>} />
                     <Route path="DeliveryInformation" element={<DeliveryInfor />} />
+                    <Route path="orderSuccess" element={<OrderSuccess />} />
 
                     <Route path="OrderDetail" element={<OrderDetail />} />
                     <Route path="" element={<ProfileLayout />}>

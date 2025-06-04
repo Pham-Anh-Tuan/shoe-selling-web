@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { CartItem } from "./CartContext";
 import formatCurrencyVND from "../../hooks/FormatCurrency";
 import { Link, useNavigate } from "react-router-dom";
+import { cartApi } from "../../api-client/api";
 
 interface CartProps {
     handleNeedSignIn: () => void;
@@ -13,9 +14,17 @@ const Cart: React.FC<CartProps> = ({ handleNeedSignIn }) => {
     useEffect(() => {
         const cartFromStorage = localStorage.getItem('cart');
         if (cartFromStorage) {
+            // setCart(JSON.parse(cartFromStorage));
+            const fetchApi = async () => {
+                const { data } = await cartApi.getNewestCartItem(JSON.parse(cartFromStorage));
+                saveCart(data);
+            };
+            fetchApi();
             setCart(JSON.parse(cartFromStorage));
         }
     }, []);
+
+    const totalQuantity = cart.reduce((sum: number, item: { quantity: number }) => sum + (item.quantity || 0), 0);
 
     const saveCart = (updatedCart: CartItem[]) => {
         localStorage.setItem('cart', JSON.stringify(updatedCart));
@@ -56,18 +65,39 @@ const Cart: React.FC<CartProps> = ({ handleNeedSignIn }) => {
     const isLoggedIn = !!localStorage.getItem("token"); // hoặc kiểm tra từ context/state
 
     const handleCheckout = () => {
-        if (isLoggedIn) {
-            navigate("/DeliveryInformation");
-        } else {
-            handleNeedSignIn();
+        if (totalQuantity === 0) {
+            window.location.reload();
+            return;
         }
+    
+        if (!isLoggedIn) {
+            handleNeedSignIn();
+            return;
+        }
+    
+        navigate("/DeliveryInformation");
+    };
+
+    const goBack = () => {
+        navigate(-1); // -1 để quay lại trang trước
     };
 
     return (<div className="py-10 dark:bg-gray-950">
         <div className="container max-md:max-w-xl mx-auto">
-            <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">GIỎ HÀNG</h1>
-            <div className="grid md:grid-cols-3 gap-10 mt-8">
+            {/* <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">GIỎ HÀNG</h1> */}
+            <div className="grid md:grid-cols-3 gap-10 mt-12">
                 <div className="md:col-span-2 space-y-4">
+                    <div className="mt-[-48px] flex justify-between items-end">
+                        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">GIỎ HÀNG</h1>
+                        <span className="underline">{totalQuantity} Sản phẩm</span>
+                    </div>
+
+                    {totalQuantity === 0 && (
+                        <div className="text-red-500">
+                            <span>Giỏ hàng của bạn đang trống. Mời bạn mua thêm sản phẩm.</span>
+                        </div>
+                    )}
+
                     {cart.map((item, index) => (
                         <div key={index}
                             className="flex gap-4 bg-white px-4 py-6 rounded-md shadow-[0_2px_12px_-3px_rgba(61,63,68,0.3)]">
@@ -180,7 +210,7 @@ const Cart: React.FC<CartProps> = ({ handleNeedSignIn }) => {
                         {/* <Link to="/DeliveryInformation">
                             <button className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md">Thanh toán ngay</button>
                         </Link> */}
-                        <button type="button" className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent hover:bg-slate-100 text-slate-900 border border-slate-300 rounded-md">Tiếp tục mua hàng</button>
+                        <button type="button" onClick={goBack} className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent hover:bg-slate-100 text-slate-900 border border-slate-300 rounded-md">Tiếp tục mua hàng</button>
                     </div>
 
                     <div className="mt-4 flex flex-wrap justify-center gap-4">
