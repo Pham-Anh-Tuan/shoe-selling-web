@@ -30,7 +30,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/public/**").permitAll()  // ✅ Cho phép truy cập không cần đăng nhập (ví dụ: đăng ký, đăng nhập)
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // 🔐 Chỉ admin mới truy cập được
-                        .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/staff/**").hasAnyRole("STAFF", "ADMIN")
+                        .requestMatchers("/api/user/**").hasAnyRole("USER", "STAFF", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

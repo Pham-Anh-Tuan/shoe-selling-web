@@ -37,6 +37,7 @@ const ProductUpdation: React.FC<ProductUpdationProps> = ({ updateId, toggleUpdat
         status: string;
         mainDes: string;
         sideDes: string;
+        email: string;
         colors: Color[];
     }
 
@@ -48,6 +49,7 @@ const ProductUpdation: React.FC<ProductUpdationProps> = ({ updateId, toggleUpdat
         status: "1",
         mainDes: "",
         sideDes: "",
+        email: "",
         colors: [
             {
                 id: crypto.randomUUID(),
@@ -338,6 +340,10 @@ const ProductUpdation: React.FC<ProductUpdationProps> = ({ updateId, toggleUpdat
         formData.append("status", product.status);
         formData.append("mainDes", product.mainDes);
         formData.append("sideDes", product.sideDes);
+        const userEmail = localStorage.getItem('email');
+        if (userEmail !== null) {
+            formData.append("email", userEmail);
+        }
 
         product.colors.forEach((color, colorIndex) => {
             formData.append(`colors[${colorIndex}].id`, color.id);
@@ -427,10 +433,13 @@ const ProductUpdation: React.FC<ProductUpdationProps> = ({ updateId, toggleUpdat
                                 value={product.type}
                                 onChange={(e) => setType(e.target.value)}
                                 id="category" className="bg-gray-50 border border-gray-300 focus:outline-none focus:border-gray-300 text-gray-900 text-sm rounded-md block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                                <option value={1}>Giày thể thao nam</option>
-                                <option value={2}>Sandal nam</option>
-                                <option value={3}>Giày cao gót</option>
-                                <option value={4}>Giày thể thao nữ</option>
+                                <option value={1}>Giày thể thao</option>
+                                <option value={2}>Giày lười</option>
+                                <option value={3}>Giày boots</option>
+                                <option value={4}>Giày tây Derby</option>
+                                <option value={5}>Dép nam</option>
+                                <option value={6}>Vớ</option>
+                                <option value={7}>Dây giày</option>
                             </select>
                         </div>
 
@@ -469,7 +478,7 @@ const ProductUpdation: React.FC<ProductUpdationProps> = ({ updateId, toggleUpdat
                             Thêm màu</button>
                     </div>
 
-                    <div className="w-full overflow-x-auto mb-4">
+                    <div className="w-full overflow-x-auto mb-1">
                         <table className="min-w-[600px] w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
@@ -591,6 +600,9 @@ const ProductUpdation: React.FC<ProductUpdationProps> = ({ updateId, toggleUpdat
                             </tbody>
                         </table>
                     </div>
+
+                    <p className="text-right text-gray-400 text-sm">Cập nhật lần cuối: {product.email}</p>
+
 
                     <div className="flex items-center space-x-4">
                         <button type="submit" className="text-white bg-orange-400 hover:bg-orange-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-400 dark:hover:bg-orange-500">Cập nhật</button>

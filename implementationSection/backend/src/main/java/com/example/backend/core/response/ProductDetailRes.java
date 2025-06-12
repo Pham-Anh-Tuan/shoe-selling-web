@@ -13,5 +13,6 @@ public class ProductDetailRes {
     private int status;
     private String sideDes;
     private String mainDes;
+    private String email;
     private List<ColorRes> colors;
 }

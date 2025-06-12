@@ -3,11 +3,17 @@
 @tailwind utilities;
 
 @layer components {
-    .size-selector input:checked + label {
+    .size-selector input:checked+label {
         @apply bg-primary text-white;
     }
 
-    .color-selector input:checked + label {
+    .color-selector input:checked+label {
         @apply ring-2 ring-primary;
     }
+
+    /* .btn-icon {
+        @apply p-2 rounded-md hover:bg-gray-200 transition;
+    } */
+
+    
 }

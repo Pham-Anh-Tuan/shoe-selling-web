@@ -9,6 +9,7 @@ export const ProfileMenu = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('imageName');
         localStorage.removeItem('email');
+        localStorage.removeItem('role');
 
         window.location.href = '/';
     };
@@ -23,7 +24,6 @@ export const ProfileMenu = () => {
                 </li>
 
                 <ul className="ml-4 space-y-3">
-                    {/* ${location.pathname === '/Admin' ? 'bg-white' : 'dark:text-white'} */}
                     <li className={`${location.pathname.toLowerCase() === '/profile' ? 'text-red-600' : ''}`}>
                         <a href="profile"> Hồ Sơ </a>
                     </li>
@@ -44,12 +44,14 @@ export const ProfileMenu = () => {
                         <span className={`ms-2 ${location.pathname.toLowerCase() === '/product-favorite' ? 'text-red-600' : ''}`}>Sản Phẩm Yêu Thích</span>
                     </a>
                 </li>
-                <li>
-                    <a href="Admin" className='flex items-center'>
-                        <LuChartColumnIncreasing className='text-green-500 text-xl' />
-                        <span className="ms-2">Trình Quản Lý</span>
-                    </a>
-                </li>
+                {localStorage.getItem("role") === "1" && (
+                    <li>
+                        <a href="admin" className='flex items-center'>
+                            <LuChartColumnIncreasing className='text-green-500 text-xl' />
+                            <span className="ms-2">Trình Quản Lý</span>
+                        </a>
+                    </li>
+                )}
 
                 <li>
                     <button onClick={() => handleLogout()} className='flex items-center'>

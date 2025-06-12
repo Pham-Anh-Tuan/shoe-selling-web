@@ -58,7 +58,7 @@ export const Menu = [
     },
     {
         id: 5,
-        name: "BLOGS",
+        name: "BÀI VIẾT",
         link: "/#",
         cate: []
     }
@@ -83,7 +83,6 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
         const storedCart = localStorage.getItem('cart');
         if (storedCart) {
             try {
-                
                 const cart = JSON.parse(storedCart) || [];
                 // setCartLength(cart.length);
                 const totalQuantity = cart.reduce((sum: number, item: { quantity: number }) => sum + (item.quantity || 0), 0);
@@ -181,7 +180,7 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                         </div>
 
                         {/* cart */}
-                        <Link to="/Cart">
+                        <Link to="/cart">
                             <button
                                 className="bg-gradient-to-r from-primary to-secondary
                     transition-all duration-200 text-white py-1 px-3 rounded-full

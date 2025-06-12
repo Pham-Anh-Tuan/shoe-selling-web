@@ -34,6 +34,7 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
         status: string;
         mainDes: string;
         sideDes: string;
+        email: string;
         colors: Color[];
     }
 
@@ -46,6 +47,7 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
         status: "1",
         mainDes: "",
         sideDes: "",
+        email: "",
         colors: [
             {
                 id: crypto.randomUUID(),
@@ -114,10 +116,13 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
                                 disabled
                                 value={product?.type}
                                 id="category" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500">
-                                <option value="1">Giày thể thao nam</option>
-                                <option value="2">Sandal nam</option>
-                                <option value="3">Giày cao gót</option>
-                                <option value="4">Giày thể thao nữ</option>
+                                <option value={1}>Giày thể thao</option>
+                                <option value={2}>Giày lười</option>
+                                <option value={3}>Giày boots</option>
+                                <option value={4}>Giày tây Derby</option>
+                                <option value={5}>Dép nam</option>
+                                <option value={6}>Vớ</option>
+                                <option value={7}>Dây giày</option>
                             </select>
                         </div>
 
@@ -146,7 +151,7 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
                         </div>
                     </div>
 
-                    <div className="w-full overflow-x-auto mb-4">
+                    <div className="w-full overflow-x-auto mb-1">
                         <table className="min-w-[600px] w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
@@ -214,6 +219,7 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
                             </tbody>
                         </table>
                     </div>
+                    <p className="text-right text-gray-400 text-sm">Cập nhật lần cuối: {product.email}</p>
                 </form>
             </div>
         </div>

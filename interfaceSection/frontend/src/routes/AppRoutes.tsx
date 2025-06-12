@@ -15,12 +15,12 @@ import Chart from '../components/Admin/Charts/Chart';
 import ProductList from '../components/Admin/ProductManager/ProductList';
 import OrderList from '../components/Admin/OrderManager/OrderList';
 import AccountList from '../components/Admin/AccountManager/AccountList';
-import ProductHelp from '../components/Admin/ProductManager/ProductHelp';
 import Profile from '../components/Profile/Profile';
 import ProfileLayout from '../layouts/ProfileLayout';
 import PassChange from '../components/Profile/PassChange';
 import FavouredProduct from '../components/Profile/FavouredProduct';
 import OrderSuccess from '../components/Payment/OrderSuccess';
+import BlogList from '../components/Admin/BlogManager/BlogList';
 
 const AppRoutes = () => {
     const [signInPopup, setSignInPopup] = useState(false);
@@ -42,6 +42,10 @@ const AppRoutes = () => {
     const handleNeedSignIn = () => {
         setNeedSignInPopup(!needSignInPopup);
     };
+
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const hasCartItems = Array.isArray(cart) && cart.length > 0;
+
     return (
         <Router>
             <Routes>
@@ -61,40 +65,51 @@ const AppRoutes = () => {
                         <Hero />
                         <Products />
                     </>} />
-                    <Route path="ProductDetail/:id" element={
+                    <Route path="productDetail/:id" element={
                         <>
                             <ScrollToTop />
                             <ProductDetail />
                         </>}
                     />
-                    <Route path="Cart" element={<>
+                    <Route path="cart" element={<>
                         <Cart handleNeedSignIn={handleNeedSignIn} />
                         <NeedSignIn needSignInPopup={needSignInPopup} setNeedSignInPopup={setNeedSignInPopup} handleSignInPopup={handleSignInPopup} />
                     </>} />
-                    <Route path="DeliveryInformation" element={<DeliveryInfor />} />
+
+                    {hasCartItems && (
+                        <Route path="deliveryInformation" element={<DeliveryInfor />} />
+                    )}
+
                     <Route path="orderSuccess" element={<OrderSuccess />} />
 
-                    <Route path="OrderDetail" element={<OrderDetail />} />
-                    <Route path="" element={<ProfileLayout />}>
-                        <Route path="profile" index element={<Profile />} />
-                        <Route path="password" element={<PassChange />} />
-                        <Route path="orders" element={<Orders />} />
-                        <Route path="product-favorite" element={<FavouredProduct />} />
-                    </Route>
+                    <Route path="orderDetail" element={<OrderDetail />} />
+
+                    {localStorage.getItem("email") && (
+                        <Route path="" element={<ProfileLayout />}>
+                            <Route path="profile" index element={<Profile />} />
+                            <Route path="password" element={<PassChange />} />
+                            <Route path="orders" element={<Orders />} />
+                            <Route path="product-favorite" element={<FavouredProduct />} />
+                        </Route>
+                    )}
                 </Route>
 
+                {(
+                    localStorage.getItem("role") === "1" ||
+                    localStorage.getItem("role") === "3"
+                ) && (
+                        <Route path="admin/" element={<AdminLayout />}>
+                            <Route index element={<>
+                                <Chart />
+                            </>} />
+                            <Route path="productList" element={<ProductList />} />
+                            <Route path="orderList" element={<OrderList />} />
+                            <Route path="accountList" element={<AccountList />} />
+                            <Route path="blogList" element={<BlogList />} />
+                        </Route>
+                    )}
 
-                <Route path="Admin/" element={<AdminLayout />}>
-                    <Route index element={<>
-                        <Chart />
-                    </>} />
-                    <Route path="ProductList" element={<ProductList />} />
-                    <Route path="OrderList" element={<OrderList />} />
-                    <Route path="AccountList" element={<AccountList />} />
-                </Route>
-
-                <Route path="/ProductHelp" element={<ProductHelp />} />
-
+                {/* <Route path="/blogAdd" element={<BlogAdd />} /> */}
             </Routes>
         </Router>
     )

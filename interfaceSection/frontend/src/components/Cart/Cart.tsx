@@ -75,7 +75,7 @@ const Cart: React.FC<CartProps> = ({ handleNeedSignIn }) => {
             return;
         }
     
-        navigate("/DeliveryInformation");
+        navigate("/deliveryInformation");
     };
 
     const goBack = () => {

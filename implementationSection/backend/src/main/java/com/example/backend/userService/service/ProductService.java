@@ -105,6 +105,7 @@ public class ProductService {
         product.setStatus(productRequest.getStatus());
         product.setSideDes(productRequest.getSideDes());
         product.setMainDes(productRequest.getMainDes());
+        product.setEmail(productRequest.getEmail());
 
         List<Color> colorList = new ArrayList<>();
         for (ColorRequest colorRequest : productRequest.getColors()) {
@@ -161,7 +162,7 @@ public class ProductService {
         product.setStatus(productUpdateRequest.getStatus());
         product.setSideDes(productUpdateRequest.getSideDes());
         product.setMainDes(productUpdateRequest.getMainDes());
-
+        product.setEmail(productUpdateRequest.getEmail());
         // Xóa những file ảnh mà id màu trong database không có trong danh sách màu gửi về
         List<Color> deleteColors = UpdateProductUtil.deleteColorList(product.getColors(), productUpdateRequest.getColors());
         UpdateProductUtil.deleteImageByColor(deleteColors);

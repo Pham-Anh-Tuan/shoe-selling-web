@@ -73,7 +73,7 @@ const Products = () => {
                     <img
                       src={import.meta.env.VITE_API_URL_IMG + data.colors[selectedColors[index] ?? 0].mainImage}
                       alt=""
-                      onClick={() => navigate(`/ProductDetail/${data.id}`)}
+                      onClick={() => navigate(`/productDetail/${data.id}`)}
                       className="w-[380px] h-[300px] object-cover rounded-md"
                     />
                     {!isLoggedIn && (

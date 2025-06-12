@@ -13,5 +13,6 @@ public class ProductUpdateRequest {
     private int status;
     private String mainDes;
     private String sideDes;
+    private String email;
     private List<ColorUpdateRequest> colors;
 }

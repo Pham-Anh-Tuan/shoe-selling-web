@@ -139,7 +139,7 @@ const Chart = () => {
                 </div>
             </div> */}
 
-            <div className="mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow mt-16 pt-3">
+            <div className="mx-auto bg-white dark:bg-gray-800 rounded-md shadow mt-16 pt-3">
                 <h2 className="text-2xl font-semibold mb-4 text-center">
                     Doanh thu hàng tháng - {selectedYear}
                 </h2>

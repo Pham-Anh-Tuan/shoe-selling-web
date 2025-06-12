@@ -40,17 +40,8 @@ const ResponsiveMenu: React.FC<ResponsiveMenuProps> = ({ showMenu, toggleMenu })
                 </div>
                 <nav className="mt-12">
                     <ul className="space-y-4 text-xl">
-                        <div>
-                            <a href="#"
-                                className="inline-block
-                                            hover:text-primary font-medium"
-                            >
-                                TRANG CHỦ
-                            </a>
-                        </div>
-
                         {/* Simple Dropdown and Links*/}
-                        {Menu.map((data) => (
+                        {/* {Menu.map((data) => (
                             <li key={data.id} className="group relative cursor-pointer">
                                 <a href="#"
                                     className="flex items-center
@@ -79,6 +70,41 @@ const ResponsiveMenu: React.FC<ResponsiveMenuProps> = ({ showMenu, toggleMenu })
                                     </ul>
                                 </div>
 
+                            </li>
+                        ))} */}
+
+                        {Menu.map((data) => (
+                            <li key={data.id} className="group relative cursor-pointer">
+                                <a href={data.link}
+                                    className="flex items-center
+                        gap-[2px] py-2 font-medium hover:text-primary">
+                                    {data.name}
+                                    {data.cate.length > 0 && (
+                                        <span>
+                                            <FaCaretDown
+                                                className="transition-all
+                                duration-200
+                                group-hover:rotate-180"/>
+                                        </span>
+                                    )}
+                                </a>
+                                {data.cate.length > 0 && (
+                                    <div className="absolute z-[9999] hidden
+                        group-hover:block w-[200px]
+                        bg-white p-2 text-black shadow-md dark:bg-gray-900 dark:text-white">
+                                        <ul>
+                                            {data.cate.map((cateData) => (
+                                                <li key={cateData.id}>
+                                                    <a href={cateData.link}
+                                                        className="inline-block w-full rounded-md p-2
+                                        hover:bg-primary/20">
+                                                        {cateData.name}
+                                                    </a>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </li>
                         ))}
                     </ul>

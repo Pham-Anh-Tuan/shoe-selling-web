@@ -32,6 +32,8 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
             localStorage.setItem('imageName', response.data?.imageName);
 
             localStorage.setItem('email', response.data?.email);
+
+            localStorage.setItem('role', response.data?.role);
             // localStorage.setItem('fullName', response.data?.fullName);
             // localStorage.setItem('phoneNumber', response.data?.phoneNumber);
             // localStorage.setItem('shippingAddress', response.data?.shippingAddress);

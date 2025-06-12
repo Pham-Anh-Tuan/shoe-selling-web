@@ -57,7 +57,9 @@ const OrderList = () => {
     return (
         <div className="p-4 w-full h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
             <section className="antialiased mt-16">
-                <div className="mx-auto max-w-screen-2xl">
+                <div className="mx-auto w-full">
+
+                    
                     <div className=" bg-white dark:bg-gray-800 relative shadow-md rounded-md">
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                             <div className="flex-1 flex flex-col">
@@ -173,7 +175,7 @@ const OrderList = () => {
                                                             setUpdateId(data.id);
                                                             toggleUpdate();
                                                         }}
-                                                            type="button" className="w-28 py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700">
+                                                            type="button" className="w-28 py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-primary hover:bg-orange-400 rounded-lg dark:bg-orange-600 dark:hover:bg-orange-700">
                                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 -ml-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                                 <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                                                 <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />

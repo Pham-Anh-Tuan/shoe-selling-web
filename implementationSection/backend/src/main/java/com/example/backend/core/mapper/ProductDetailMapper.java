@@ -22,7 +22,7 @@ public class ProductDetailMapper {
         dto.setStatus(product.getStatus());
         dto.setSideDes(product.getSideDes());
         dto.setMainDes(product.getMainDes());
-
+        dto.setEmail(product.getEmail());
         // Map list Color
         if (product.getColors() != null) {
             dto.setColors(product.getColors().stream()

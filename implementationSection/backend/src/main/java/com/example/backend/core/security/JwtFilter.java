@@ -31,58 +31,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private AccountRepository accountRepository;
 
-//    @Override
-//    protected void doFilterInternal(HttpServletRequest request,
-//                                    HttpServletResponse response,
-//                                    FilterChain filterChain)
-//            throws ServletException, IOException {
-//
-//        String authHeader = request.getHeader("Authorization");
-//
-//        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-//            String token = authHeader.substring(7);
-//
-//            if (jwtUtil.validateToken(token)) {
-//                String email = jwtUtil.extractEmail(token);
-//                Optional<Account> optionalAccount = accountRepository.findByEmail(email);
-//
-//                if (optionalAccount.isPresent()) {
-//                    Account account = optionalAccount.get();
-//
-//                    String roleName;
-//                    switch (account.getRole()) {
-//                        case 1:
-//                            roleName = "ADMIN";
-//                            break;
-//                        case 3:
-//                            roleName = "STAFF";
-//                            break;
-//                        default:
-//                            roleName = "USER";
-//                    }
-//
-//                    UsernamePasswordAuthenticationToken authentication =
-//                            new UsernamePasswordAuthenticationToken(
-//                                    account.getEmail(),
-//                                    null,
-//                                    List.of(new SimpleGrantedAuthority("ROLE_" + roleName))
-//                            );
-//
-//                    SecurityContextHolder.getContext().setAuthentication(authentication);
-//                }
-//            }
-//        }
-//
-//        filterChain.doFilter(request, response);
-//    }
-
-    //        String path = request.getRequestURI();
-//        if (path.startsWith("/api/public/")) {
-//            System.out.println("Trong /api/public/");
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
