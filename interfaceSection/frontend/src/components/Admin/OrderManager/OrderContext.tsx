@@ -3,4 +3,5 @@ export interface OrderUpdate {
     deliveryDate: string;
     shippingStatus: string;
     paymentStatus: string;
+    email: string;
 }

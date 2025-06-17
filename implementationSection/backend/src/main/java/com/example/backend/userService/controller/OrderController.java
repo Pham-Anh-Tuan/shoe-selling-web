@@ -25,7 +25,7 @@ public class OrderController {
     }
 
     @GetMapping(path = "/admin/managerOrders")
-    public ResponseEntity<List<ManagerOrderRes>> getManagerProducts() {
+    public ResponseEntity<List<ManagerOrderRes>> getManagerOrders() {
         return ResponseEntity.ok(orderService.getManagerOrders());
     }
 

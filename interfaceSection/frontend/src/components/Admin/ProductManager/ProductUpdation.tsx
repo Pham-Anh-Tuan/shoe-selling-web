@@ -380,12 +380,10 @@ const ProductUpdation: React.FC<ProductUpdationProps> = ({ updateId, toggleUpdat
 
         try {
             const response = await updateProductApi.updateProduct(formData);
-            console.log("Product saved:", response.data);
-        } catch (error) {
-            console.error("Error saving product:", error);
+            window.location.reload();
+        } catch (error: any) {
+            alertError(error?.response?.data);
         }
-
-        window.location.reload();
         // toggleRefresh();
         // toggleUpdate();
     }

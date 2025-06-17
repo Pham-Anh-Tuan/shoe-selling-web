@@ -21,7 +21,7 @@ const OrderList = () => {
 
     useEffect(() => {
         const fetchApi = async () => {
-            const { data } = await orderApi.getManagerProducts();
+            const { data } = await orderApi.getManagerOrders();
             setOrdersData(data);
         };
         fetchApi();

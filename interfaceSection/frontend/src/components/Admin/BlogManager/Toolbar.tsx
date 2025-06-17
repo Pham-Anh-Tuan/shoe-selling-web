@@ -24,34 +24,35 @@ const Toolbar: React.FC<ToolbarProps> = ({ editor }) => {
 
     return (
         <div className="flex flex-wrap gap-2 mb-4 border rounded-md py-2 text-gray-600 bg-gray-50">
-            <button onClick={() => editor.chain().focus().toggleBold().run()} className="btn-icon">
+            <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} className="btn-icon">
                 <Bold size={18} />
             </button>
-            <button onClick={() => editor.chain().focus().toggleItalic().run()} className="btn-icon">
+            <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} className="btn-icon">
                 <Italic size={18} />
             </button>
-            <button onClick={() => editor.chain().focus().toggleUnderline().run()} className="btn-icon">
+            <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()} className="btn-icon">
                 <Underline size={18} />
             </button>
 
-            <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className="btn-icon">
+            <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className="btn-icon">
                 <Heading1 size={18} />
             </button>
-            <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className="btn-icon">
+            <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className="btn-icon">
                 <Heading2 size={18} />
             </button>
-            <button onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className="btn-icon">
+            <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className="btn-icon">
                 <Heading3 size={18} />
             </button>
 
-            <button onClick={() => editor.chain().focus().toggleBulletList().run()} className="btn-icon">
+            <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} className="btn-icon">
                 <List size={18} />
             </button>
-            <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className="btn-icon">
+            <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} className="btn-icon">
                 <ListOrdered size={18} />
             </button>
 
             <button
+                type="button"
                 onClick={() => {
                     editor.chain().focus().setTextAlign("left").run();
 
@@ -66,6 +67,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ editor }) => {
             </button>
 
             <button
+                type="button"
                 onClick={() => {
                     editor.chain().focus().setTextAlign("center").run();
 
@@ -80,6 +82,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ editor }) => {
             </button>
 
             <button
+                type="button"
                 onClick={() => {
                     editor.chain().focus().setTextAlign("right").run();
 

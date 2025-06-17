@@ -11,6 +11,7 @@ import com.example.backend.userService.model.Product;
 import com.example.backend.userService.model.SizeQuantity;
 import com.example.backend.userService.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -96,9 +97,16 @@ public class ProductService {
         }).collect(Collectors.toList());
     }
 
-    public void addProduct(ProductRequest productRequest) {
+    public ResponseEntity<?> addProduct(ProductRequest productRequest) {
         Product product = new Product();
         product.setId(UUID.randomUUID().toString());
+
+        if (productRepository.existsByProductName(productRequest.getProductName())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Tên của sản phẩm này đã tồn tại.");
+        }
+
         product.setProductName(productRequest.getProductName());
         product.setPrice(productRequest.getPrice());
         product.setType(productRequest.getType());
@@ -151,12 +159,22 @@ public class ProductService {
         }
         product.setColors(colorList);
         productRepository.save(product);
+        return ResponseEntity.ok("Product added successful");
     }
 
-    public void updateProduct(ProductUpdateRequest productUpdateRequest) {
+    public ResponseEntity<?> updateProduct(ProductUpdateRequest productUpdateRequest) {
         Product product = productRepository.findById(productUpdateRequest.getId())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
-        product.setProductName(productUpdateRequest.getProductName());
+
+        String productNameRes = productUpdateRequest.getProductName();
+
+        if (!productNameRes.equals(product.getProductName()) && productRepository.existsByProductName(productUpdateRequest.getProductName())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Tên của sản phẩm này đã tồn tại.");
+        }
+
+        product.setProductName(productNameRes);
         product.setPrice(productUpdateRequest.getPrice());
         product.setType(productUpdateRequest.getType());
         product.setStatus(productUpdateRequest.getStatus());
@@ -266,6 +284,7 @@ public class ProductService {
         product.getColors().clear();
         product.getColors().addAll(newColorList);
         productRepository.save(product);
+        return ResponseEntity.ok("Product updated successful");
     }
 
     public boolean deleteProductById(String id) {

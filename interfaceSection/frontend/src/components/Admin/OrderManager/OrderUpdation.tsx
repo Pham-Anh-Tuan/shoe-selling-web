@@ -15,6 +15,7 @@ const OrderUpdation: React.FC<OrderUpdationProps> = ({ updateId, toggleUpdate })
     deliveryDate: "",
     shippingStatus: "0",
     paymentStatus: "0",
+    email: "",
   });
 
   const setDeliveryDate = (newDate: string) => {
@@ -74,7 +75,7 @@ const OrderUpdation: React.FC<OrderUpdationProps> = ({ updateId, toggleUpdate })
           </button>
         </div>
         <form onSubmit={updateOrder}>
-          <div className="grid gap-4 mb-6 sm:grid-cols-1">
+          <div className="grid gap-4 mb-1 sm:grid-cols-1 border-b pb-8">
             {/* <div>
               <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tên</label>
               <input disabled type="text" name="name" id="name" value={""} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Ex. Apple iMac 27&ldquo;" />
@@ -111,7 +112,10 @@ const OrderUpdation: React.FC<OrderUpdationProps> = ({ updateId, toggleUpdate })
             </div>
 
           </div>
-          <div className="flex items-center space-x-4 border-t pt-3">
+
+          <p className="text-right text-gray-400 text-sm">Cập nhật lần cuối: {order.email}</p>
+
+          <div className="flex items-center space-x-4">
             <button type="submit" className="text-white bg-orange-700 hover:bg-orange-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-600 dark:hover:bg-orange-700">Cập nhật</button>
             <button onClick={toggleUpdate}
               type="button" className="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600">Hủy</button>

@@ -165,6 +165,7 @@ public class OrderService {
         res.setPaymentStatus(orderDetail.getPaymentStatus());
         res.setPayMethod(orderDetail.getPayMethod());
         res.setEmail(orderDetail.getAccount().getEmail());
+        res.setEmailUpdated(orderDetail.getEmail());
 
         List<OrderItemRes> orderItemResList = new ArrayList<>();
 
@@ -192,7 +193,8 @@ public class OrderService {
         OrderUpdationDTO res = new OrderUpdationDTO(orderDetail.getId(),
                 orderDetail.getDeliveryDate(),
                 orderDetail.getShippingStatus(),
-                orderDetail.getPaymentStatus());
+                orderDetail.getPaymentStatus(),
+                orderDetail.getEmail());
         return res;
     }
 
@@ -205,6 +207,7 @@ public class OrderService {
         orderDetail.setDeliveryDate(orderUpdationDTO.getDeliveryDate());
         orderDetail.setShippingStatus(orderUpdationDTO.getShippingStatus());
         orderDetail.setPaymentStatus(orderUpdationDTO.getPaymentStatus());
+        orderDetail.setEmail(orderUpdationDTO.getEmail());
         orderRepository.save(orderDetail);
     }
 

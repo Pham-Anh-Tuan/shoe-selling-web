@@ -59,7 +59,7 @@ export const Menu = [
     {
         id: 5,
         name: "BÀI VIẾT",
-        link: "/#",
+        link: "/blogs",
         cate: []
     }
 ];

@@ -40,14 +40,12 @@ public class ProductController {
     }
 
     @PostMapping(value = "/admin/addProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> addProduct(@ModelAttribute ProductRequest productRequest) {
-        productService.addProduct(productRequest);
-        return ResponseEntity.ok("Product added successfully.");
+    public ResponseEntity<?> addProduct(@ModelAttribute ProductRequest productRequest) {
+        return productService.addProduct(productRequest);
     }
     @PutMapping(value ="/admin/updateProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateProduct(@ModelAttribute ProductUpdateRequest productUpdateRequest) {
-        productService.updateProduct(productUpdateRequest);
-        return ResponseEntity.ok("Product updated successfully");
+        return productService.updateProduct(productUpdateRequest);
     }
 
     @DeleteMapping("/admin/deleteProduct/{id}")

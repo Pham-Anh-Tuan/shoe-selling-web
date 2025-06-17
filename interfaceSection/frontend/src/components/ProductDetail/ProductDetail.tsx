@@ -66,7 +66,6 @@ const ProductDetail = () => {
         const fetchApi = async () => {
             try {
                 const { data } = await productDetailApi.getById(id);
-                console.log("call productDetailApi");
                 setProduct(data);
                 setCurrentImages(data.colors[0].images);
                 setActiveImage(import.meta.env.VITE_API_URL_IMG + data.colors[0].images[0].path); // hoặc: setActiveImg(data.images[0])

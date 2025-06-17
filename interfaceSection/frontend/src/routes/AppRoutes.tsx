@@ -21,6 +21,8 @@ import PassChange from '../components/Profile/PassChange';
 import FavouredProduct from '../components/Profile/FavouredProduct';
 import OrderSuccess from '../components/Payment/OrderSuccess';
 import BlogList from '../components/Admin/BlogManager/BlogList';
+import Blogs from '../components/Blogs/Blogs';
+import BlogDetail from '../components/BlogDetail/BlogDetail';
 
 const AppRoutes = () => {
     const [signInPopup, setSignInPopup] = useState(false);
@@ -79,6 +81,14 @@ const AppRoutes = () => {
                     {hasCartItems && (
                         <Route path="deliveryInformation" element={<DeliveryInfor />} />
                     )}
+
+                    <Route path="blogs" element={<Blogs />} />
+                    <Route path="blogDetail/:id" element={
+                        <>
+                            <ScrollToTop />
+                            <BlogDetail />
+                        </>}
+                    />
 
                     <Route path="orderSuccess" element={<OrderSuccess />} />
 

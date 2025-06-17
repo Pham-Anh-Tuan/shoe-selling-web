@@ -18,5 +18,6 @@ public class OrderDetailRes {
     private int paymentStatus;
     private int payMethod;
     private String email;
+    private String emailUpdated;
     private List<OrderItemRes> orderItems;
 }

@@ -1,3 +1,4 @@
+import { Blog } from '../components/Admin/BlogManager/BlogInterface';
 import { OrderUpdate } from '../components/Admin/OrderManager/OrderContext';
 import { CartItem } from '../components/Cart/CartContext';
 import { Order } from '../components/Payment/OrderInterface';
@@ -69,11 +70,38 @@ export const cartApi = {
     },
 }
 
+export const blogApi = {
+    createBlog(formData: FormData) {
+        return axiosServer.post('/api/admin/createBlog', formData);
+    },
+
+    updateBlog(formData: FormData) {
+        return axiosServer.put('/api/admin/updateBlog', formData);
+    },
+
+    getSumBlogs() {
+        return axiosClient.get('/api/public/sumBlogs');
+    },
+
+    getBlogPage(id: String) {
+        return axiosClient.get('/api/public/blogPage/' + id);
+    },
+
+    getBlogDetail(id: String) {
+        return axiosClient.get('/api/admin/blogDetail/' + id);
+    },
+
+    getManagerBlogs() {
+        return axiosClient.get('/api/admin/managerBlogs');
+    },
+
+}
+
 export const orderApi = {
     createOrder(order: Order) {
         return axiosClient.post('/api/user/createOrder', order);
     },
-    getManagerProducts() {
+    getManagerOrders() {
         return axiosClient.get('/api/admin/managerOrders');
     },
     getById(id: String) {

@@ -1,13 +1,32 @@
 import { useEffect, useState } from 'react';
 import Img1 from "../../../assets/male-sneaker/sneaker-blue.png";
 import { BlogAdd } from './BlogAdd';
+import { ManagerBlog } from './BlogInterface';
+import { blogApi } from '../../../api-client/api';
+import formatDateDMYHM from '../../../hooks/DateTimeFormat';
+import { BlogUpdation } from './BlogUpdation';
 
 const BlogList = () => {
     const [showAdd, setShowAdd] = useState(false);
+    const [showUpdate, setShowUpdate] = useState(false);
+    const [updateId, setUpdateId] = useState<string>("");
 
     const toggleAdd = () => {
         setShowAdd(!showAdd);
     };
+    const toggleUpdate = () => {
+        setShowUpdate(!showUpdate);
+    };
+
+    const [managerBlogs, setManagerBlogs] = useState<ManagerBlog[]>([]);
+
+    useEffect(() => {
+        const fetchApi = async () => {
+            const { data } = await blogApi.getManagerBlogs();
+            setManagerBlogs(data);
+        };
+        fetchApi();
+    }, []);
 
     return (
         <div className="p-4 w-full h-screen overflow-auto bg-gray-100 dark:bg-gray-900">
@@ -61,40 +80,55 @@ const BlogList = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {managerBlogs.map((managerBlog) => (
+                                        <tr className="border-b dark:border-gray-700">
+                                            <th scope="row" className="px-4 py-3 font-medium text-gray-900  dark:text-white">
+                                                <p className='w-44'> {managerBlog.title}</p>
+                                            </th>
+                                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                <img
+                                                    src={
+                                                        typeof managerBlog.thumbnailName === 'string'
+                                                            ? managerBlog.thumbnailName.startsWith('data:image') || managerBlog.thumbnailName.startsWith('blob:')
+                                                                ? managerBlog.thumbnailName // ảnh mới upload
+                                                                : import.meta.env.VITE_API_URL_THUMB_IMG + managerBlog.thumbnailName // ảnh từ server
+                                                            : '/path/to/default-image.jpg'
+                                                    }
+                                                    alt="Blog"
+                                                    className="w-[180px] h-[180px] object-cover rounded-md"
+                                                />
+                                            </td>
 
-                                    <tr className="border-b dark:border-gray-700">
-                                        <th scope="row" className="px-4 py-3 font-medium text-gray-900  dark:text-white">
-                                            <p className='w-44'> Giày Derby là gì? Những đôi giày Derby hot nhất 2025 và cách phối đồ </p>
-                                        </th>
-                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            <img
-                                                src={Img1}
-                                                alt=""
-                                                className="w-[180px] h-[180px] object-cover rounded-md"
-                                            />
-                                        </td>
+                                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{managerBlog?.createdAt ? formatDateDMYHM(managerBlog.createdAt) : ''}</td>
 
-                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">20/06/2025</td>
+                                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                {managerBlog?.status === 0
+                                                    ? <dd className="me-2 inline-flex items-center rounded bg-red-100 px-2.5 py-2 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
+                                                        Inactive
+                                                    </dd>
+                                                    : managerBlog?.status === 1
+                                                        ? <dd className="me-2 inline-flex items-center rounded bg-green-100 px-2.5 py-2 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
+                                                            Active
+                                                        </dd> : "Không xác định"}
+                                            </td>
 
-                                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            <dd className="me-2 inline-flex items-center rounded bg-green-100 px-2.5 py-2 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
-                                                Active
-                                            </dd>
-                                        </td>
-
-                                        <td className="px-4 py-3">
-                                            <div className="flex items-center space-x-4">
-                                                <button
-                                                    type="button" className="w-28 py-2 px-3 flex items-center text-sm font-medium text-center text-white
+                                            <td className="px-4 py-3">
+                                                <div className="flex items-center space-x-4">
+                                                    <button
+                                                        onClick={() => {
+                                                            setUpdateId(managerBlog.id);
+                                                            toggleUpdate();
+                                                        }}
+                                                        type="button" className="w-28 py-2 px-3 flex items-center text-sm font-medium text-center text-white
                                                          bg-primary hover:bg-orange-400  rounded-lg dark:bg-orange-600 dark:hover:bg-orange-700">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 -ml-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                                        <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
-                                                    </svg>
-                                                    Cập nhật
-                                                </button>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 -ml-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                            <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                                            <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
+                                                        </svg>
+                                                        Cập nhật
+                                                    </button>
 
-                                                {/* <button
+                                                    {/* <button
                                                     type="button" className="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 mr-2 -ml-0.5">
                                                         <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
@@ -103,22 +137,22 @@ const BlogList = () => {
                                                     Xem
                                                 </button> */}
 
-                                                <button onClick={() => {
-                                                    const dropdown = document.getElementById("deleteAlertId");
-                                                    dropdown?.classList.toggle("hidden");
-                                                }}
-                                                    type="button" className="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 -ml-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                                                    </svg>
-                                                    Xóa
-                                                </button>
+                                                    <button onClick={() => {
+                                                        const dropdown = document.getElementById("deleteAlertId");
+                                                        dropdown?.classList.toggle("hidden");
+                                                    }}
+                                                        type="button" className="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 -ml-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                            <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                                                        </svg>
+                                                        Xóa
+                                                    </button>
 
-                                            </div>
-                                        </td>
+                                                </div>
+                                            </td>
 
-                                    </tr>
-
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
@@ -170,6 +204,12 @@ const BlogList = () => {
             {showAdd && (
                 <div tabIndex={-1} aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full bg-black bg-opacity-50">
                     <BlogAdd toggleAdd={toggleAdd} />
+                </div>
+            )}
+
+            {showUpdate && (
+                <div tabIndex={-1} aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full bg-black bg-opacity-50">
+                    <BlogUpdation updateId={updateId} toggleUpdate={toggleUpdate} />
                 </div>
             )}
 

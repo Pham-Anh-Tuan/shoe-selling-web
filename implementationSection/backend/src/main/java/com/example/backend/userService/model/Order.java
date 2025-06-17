@@ -46,6 +46,9 @@ public class Order {
     @Column(name = "payMethod")
     private int payMethod = 1;
 
+    @Column(length = 100)
+    private String email;
+
     @ManyToOne
     @JoinColumn(name = "accountId", nullable = false)
     private Account account;

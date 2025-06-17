@@ -5,19 +5,22 @@ import TextAlign from "@tiptap/extension-text-align";
 import Heading from "@tiptap/extension-heading";
 import Toolbar from "./Toolbar";
 import { CustomResizableImage } from "./CustomResizableImage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { MdOutlineCancel } from "react-icons/md";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { Blog } from "./BlogInterface";
 import { blogApi } from "../../../api-client/api";
+import { alertError } from "../../Shared/AlertError";
+import { ToastContainer } from "react-toastify";
 
 
-interface BlogAddProps {
-  toggleAdd: () => void;
+interface BlogUpdationProps {
+  updateId: string;
+  toggleUpdate: () => void;
 }
 
-export const BlogAdd: React.FC<BlogAddProps> = ({ toggleAdd }) => {
+export const BlogUpdation: React.FC<BlogUpdationProps> = ({ updateId, toggleUpdate }) => {
   const editor = useEditor({
     extensions: [
       // StarterKit,
@@ -69,6 +72,27 @@ export const BlogAdd: React.FC<BlogAddProps> = ({ toggleAdd }) => {
     }
   };
 
+  const getBlogData = async (updateId: string) => {
+    try {
+      const { data } = await blogApi.getBlogDetail(updateId);
+      setBlog(data);
+    } catch (error) {
+      console.error("Lỗi khi gọi API sản phẩm:", error);
+    }
+
+  };
+
+  useEffect(() => {
+    if (!updateId) return;  // Chặn gọi API nếu id là undefined
+    getBlogData(updateId);
+  }, [updateId]);
+
+  useEffect(() => {
+    if (editor && blog.content) {
+      editor.commands.setContent(blog.content);
+    }
+  }, [editor, blog.content]);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -77,6 +101,7 @@ export const BlogAdd: React.FC<BlogAddProps> = ({ toggleAdd }) => {
     const contentHTML = editor.getHTML(); // hoặc editor.getJSON()
 
     const formData = new FormData();
+    formData.append("id", updateId);
     formData.append("title", blog.title);
 
     if (blog.thumbnailFile) {
@@ -93,13 +118,12 @@ export const BlogAdd: React.FC<BlogAddProps> = ({ toggleAdd }) => {
     }
 
     try {
-      const response = await blogApi.createBlog(formData);
-      console.log("Blog saved:", response.data);
-    } catch (error) {
-      console.error("Error saving product:", error);
+      const response = await blogApi.updateBlog(formData);
+      window.location.reload();
+    } catch (error: any) {
+      console.log("vao error");
+      alertError(error?.response?.data);
     }
-
-    window.location.reload();
   }
 
   return (
@@ -109,8 +133,8 @@ export const BlogAdd: React.FC<BlogAddProps> = ({ toggleAdd }) => {
 
         <form onSubmit={handleSubmit}>
           <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Thêm bài viết mới</h3>
-            <button onClick={toggleAdd}
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Cập nhật bài viết</h3>
+            <button onClick={toggleUpdate}
               type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-md text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
               <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -121,18 +145,17 @@ export const BlogAdd: React.FC<BlogAddProps> = ({ toggleAdd }) => {
 
           <div>
             <label htmlFor="title" className="block mb-2 text-base font-medium text-gray-900 dark:text-white">Tiêu đề</label>
-            <input onChange={(e) => setTitle(e.target.value)}
+            <input value={blog.title}
+              onChange={(e) => setTitle(e.target.value)}
               type="text" name="title" id="title" className="bg-gray-50 border border-gray-300 focus:outline-none focus:border-gray-300 text-gray-900 text-sm rounded-md block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white placeholder-gray-600 placeholder-opacity-40 mb-6" placeholder="Tiêu đề bài viết" required />
           </div>
 
           <div className="flex flex-col items-center justify-center space-y-1">
-
             <label htmlFor="title" className="block mb-2 text-base font-medium text-gray-900 dark:text-white">Ảnh đại điện bài viết</label>
-
             <div className="mb-1">
               <label className="">
                 <IoCloudUploadOutline className='text-gray-500 text-2xl cursor-pointer' />
-                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e)} required />
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e)} />
               </label>
             </div>
 
@@ -159,13 +182,15 @@ export const BlogAdd: React.FC<BlogAddProps> = ({ toggleAdd }) => {
             <label htmlFor="title" className="block text-base font-medium text-gray-900 dark:text-white">Trạng thái: </label>
             <div className="flex items-center gap-2">
               <div className="flex items-center">
-                <input onChange={() => setStatus(1)}
-                  id="default-radio-1" type="radio" value="" name="default-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required />
+                <input value={1} checked={blog.status === 1}
+                  onChange={() => setStatus(1)}
+                  id="default-radio-1" type="radio" name="default-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required />
                 <label htmlFor="default-radio-1" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Công khai</label>
               </div>
               <div className="flex items-center">
-                <input onChange={() => setStatus(0)}
-                  id="default-radio-2" type="radio" value="" name="default-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required />
+                <input value={0} checked={blog.status === 0}
+                  onChange={() => setStatus(0)}
+                  id="default-radio-2" type="radio" name="default-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required />
                 <label htmlFor="default-radio-2" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Riêng tư</label>
               </div>
             </div>
@@ -194,9 +219,8 @@ export const BlogAdd: React.FC<BlogAddProps> = ({ toggleAdd }) => {
             <button type="submit" className="inline-flex items-center
         text-white bg-orange-400 hover:bg-orange-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-400 dark:hover:bg-orange-500">
               <IoDocumentTextOutline className="mr-1 -ml-1 w-5 h-5" />
-              Thêm</button>
-            <button
-              onClick={toggleAdd}
+              Cập nhật</button>
+            <button onClick={toggleUpdate}
               type="button" className="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600">
               <svg className="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
@@ -206,6 +230,7 @@ export const BlogAdd: React.FC<BlogAddProps> = ({ toggleAdd }) => {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </div >
   );
 }

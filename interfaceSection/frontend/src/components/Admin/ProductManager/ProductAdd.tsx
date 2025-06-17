@@ -339,13 +339,13 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
 
         try {
             const response = await addProductApi.addProduct(formData);
-            console.log("Product saved:", response.data);
-        } catch (error) {
-            console.error("Error saving product:", error);
+            window.location.reload();
+        } catch (error: any) {
+            alertError(error?.response?.data);
         }
         // toggleRefresh();
         // toggleAdd();
-        window.location.reload();
+        
     }
 
     return (

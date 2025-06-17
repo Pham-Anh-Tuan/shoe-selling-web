@@ -24,6 +24,7 @@ const OrderRead: React.FC<OrderReadProps> = ({ readId, toggleRead }) => {
         paymentStatus: number;
         payMethod: number;
         email: string;
+        emailUpdated: string;
         orderItems: OrderItem[];
     }
 
@@ -48,6 +49,7 @@ const OrderRead: React.FC<OrderReadProps> = ({ readId, toggleRead }) => {
         paymentStatus: 0,
         payMethod: 0,
         email: "",
+        emailUpdated: "",
         orderItems: [
             {
                 productName: "",
@@ -215,6 +217,8 @@ const OrderRead: React.FC<OrderReadProps> = ({ readId, toggleRead }) => {
                             </div> */}
                         </div>
                     </div>
+
+                    <p className="text-right text-gray-400 text-sm mt-3">Cập nhật lần cuối: {order.emailUpdated}</p>
                 </form>
             </div >
         </div >
