@@ -396,8 +396,8 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                                 <option value={3}>Giày boots</option>
                                 <option value={4}>Giày tây Derby</option>
                                 <option value={5}>Dép nam</option>
-                                <option value={6}>Vớ</option>
-                                <option value={7}>Dây giày</option>
+                                <option value={6}>Túi cầm tay nam</option>
+                                <option value={7}>Thắt lưng nam</option>
                             </select>
                         </div>
 
@@ -415,12 +415,12 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                         <div className="sm:col-span-2">
                             <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả tóm tắt</label>
                             <textarea onChange={(e) => setMainDes(e.target.value)}
-                                id="description" rows={1} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 focus:outline-none focus:border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white placeholder-gray-600 placeholder-opacity-40" placeholder="Viết phần mô tả sản phẩm ngắn gọn" required></textarea>
+                                id="description" rows={1} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 focus:outline-none focus:border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white placeholder-gray-600 placeholder-opacity-40" placeholder="Viết phần mô tả sản phẩm ngắn gọn"></textarea>
                         </div>
                         <div className="sm:col-span-2">
                             <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả chi tiết</label>
                             <textarea onChange={(e) => setSideDes(e.target.value)}
-                                id="description" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 focus:outline-none focus:border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white placeholder-gray-600 placeholder-opacity-40" placeholder="Viết chi tiết cho phần mô tả sản phẩm" required></textarea>
+                                id="description" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 focus:outline-none focus:border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white placeholder-gray-600 placeholder-opacity-40" placeholder="Viết chi tiết cho phần mô tả sản phẩm"></textarea>
                         </div>
                     </div>
 

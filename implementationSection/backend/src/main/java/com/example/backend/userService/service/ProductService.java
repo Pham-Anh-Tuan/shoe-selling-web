@@ -11,6 +11,8 @@ import com.example.backend.userService.model.Product;
 import com.example.backend.userService.model.SizeQuantity;
 import com.example.backend.userService.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +34,56 @@ public class ProductService {
 
     public Product getProductDetailById(String id) {
         return productRepository.findById(id).orElse(null);
+    }
+
+    public List<HomeProductRes> getProductsByTypeOrderByCreatedAtDesc(List<Integer> types) {
+        List<Product> products = productRepository.findAllByTypeInOrderByCreatedAtDesc(types);
+
+        return products.stream().map(product -> {
+            HomeProductRes res = new HomeProductRes();
+            res.setId(product.getId());
+            res.setProductName(product.getProductName());
+            res.setPrice(product.getPrice());
+
+            List<ColorWithImageRes> colorWithImageDTOs = product.getColors().stream().map(color -> {
+                ColorWithImageRes colorWithImageDTO = new ColorWithImageRes();
+                colorWithImageDTO.setColorHex(color.getColorHex());
+
+                // Lấy ảnh đầu tiên (nếu có)
+                String mainImage = color.getImages().isEmpty() ? null :
+                        color.getImages().get(0).getPath();
+                colorWithImageDTO.setMainImage(mainImage);
+                return colorWithImageDTO;
+            }).collect(Collectors.toList());
+
+            res.setColors(colorWithImageDTOs);
+            return res;
+        }).collect(Collectors.toList());
+    }
+
+    public Page<HomeProductRes> getProductsByTypeOrderByCreatedAtDescAndPage(List<Integer> types, Pageable pageable) {
+        Page<Product> products = productRepository.findAllByTypeInOrderByCreatedAtDesc(types, pageable);
+
+        return products.map(product -> {
+            HomeProductRes res = new HomeProductRes();
+            res.setId(product.getId());
+            res.setProductName(product.getProductName());
+            res.setPrice(product.getPrice());
+
+            List<ColorWithImageRes> colorWithImageDTOs = product.getColors().stream().map(color -> {
+                ColorWithImageRes colorWithImageDTO = new ColorWithImageRes();
+                colorWithImageDTO.setColorHex(color.getColorHex());
+
+                // Lấy ảnh đầu tiên (nếu có)
+                String mainImage = color.getImages().isEmpty() ? null :
+                        color.getImages().get(0).getPath();
+                colorWithImageDTO.setMainImage(mainImage);
+                return colorWithImageDTO;
+            }).collect(Collectors.toList());
+
+            res.setColors(colorWithImageDTOs);
+            return res;
+        });
     }
 
     public List<HomeProductRes> getAllProducts() {

@@ -98,7 +98,8 @@ export const BlogUpdation: React.FC<BlogUpdationProps> = ({ updateId, toggleUpda
 
     if (!editor) return;
 
-    const contentHTML = editor.getHTML(); // hoặc editor.getJSON()
+    const contentHTML = editor.getHTML();
+    const cleanedHTML = contentHTML.replace(/<p[^>]*>\s*<\/p>/g, '<p>&nbsp;</p>');
 
     const formData = new FormData();
     formData.append("id", updateId);
@@ -110,7 +111,7 @@ export const BlogUpdation: React.FC<BlogUpdationProps> = ({ updateId, toggleUpda
     }
     formData.append("status", blog.status.toString());
 
-    formData.append("content", contentHTML);
+    formData.append("content", cleanedHTML);
 
     const userEmail = localStorage.getItem('email');
     if (userEmail !== null) {
@@ -121,7 +122,6 @@ export const BlogUpdation: React.FC<BlogUpdationProps> = ({ updateId, toggleUpda
       const response = await blogApi.updateBlog(formData);
       window.location.reload();
     } catch (error: any) {
-      console.log("vao error");
       alertError(error?.response?.data);
     }
   }
@@ -214,8 +214,9 @@ export const BlogUpdation: React.FC<BlogUpdationProps> = ({ updateId, toggleUpda
              [&_div[data-align='left']>img]:mr-auto"
             />
           </div>
+          <p className="text-right text-gray-400 text-sm">Cập nhật lần cuối: {blog.email}</p>
 
-          <div className="flex items-center space-x-4 justify-end mt-6">
+          <div className="flex items-center space-x-4 justify-end mt-4">
             <button type="submit" className="inline-flex items-center
         text-white bg-orange-400 hover:bg-orange-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-400 dark:hover:bg-orange-500">
               <IoDocumentTextOutline className="mr-1 -ml-1 w-5 h-5" />

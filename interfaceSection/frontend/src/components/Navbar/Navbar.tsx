@@ -17,43 +17,43 @@ export const Menu = [
     {
         id: 2,
         name: "GIÀY NAM",
-        link: "/#services",
+        link: "/giay-nam",
         cate: [{
             id: 1,
             name: "GIÀY THỂ THAO",
-            link: "/#",
+            link: "/giay-the-thao",
         }, {
             id: 2,
             name: "GIÀY LƯỜI",
-            link: "/#",
+            link: "/giay-luoi",
         }, {
             id: 3,
             name: "GIÀY BOOTS",
-            link: "/#",
+            link: "/giay-boots",
         }, {
             id: 4,
             name: "GIÀY TÂY DERBY",
-            link: "/#",
+            link: "/giay-tay-derby",
         }]
     },
     {
         id: 3,
         name: "DÉP DA NAM",
-        link: "/#",
+        link: "/dep-da-nam",
         cate: []
     },
     {
         id: 4,
         name: "PHỤ KIỆN",
-        link: "/#",
+        link: "/phu-kien",
         cate: [{
             id: 1,
-            name: "VỚ",
-            link: "/#",
+            name: "TÚI CẦM TAY NAM",
+            link: "/tui-cam-tay-nam",
         }, {
             id: 2,
-            name: "DÂY GIÀY",
-            link: "/#",
+            name: "THẮT LƯNG NAM",
+            link: "/that-lung-nam",
         }]
     },
     {

@@ -42,11 +42,11 @@ const Blogs = () => {
                                             src={import.meta.env.VITE_API_URL_THUMB_IMG + data.thumbnailName + ""}
                                             alt=""
                                             // onClick={() => navigate(`/productDetail/${data.id}`)}
-                                            className="w-[380px] h-[200px] object-cover rounded-md"
+                                            className="w-[350px] sm:w-[380px] h-[200px] object-cover rounded-md"
                                         />
                                     </div>
                                 </div>
-                                <div className="sm:w-[217px] md:w-[217px] lg:w-[217px] xl:w-[281px]">
+                                <div className="w-[350px] sm:w-[270px] md:w-[217px] lg:w-[217px] xl:w-[281px]">
                                     <h3 className="uppercase font-semibold hover:text-orange-500 cursor-pointer"
                                         style={{
                                             display: "-webkit-box",
@@ -55,19 +55,6 @@ const Blogs = () => {
                                             overflow: "hidden",
                                             textOverflow: "ellipsis",
                                         }}>{data.title}</h3>
-                                    {/* <p className="text-sm text-gray-600 font-bold text-center dark:text-white"> ádasdasd</p> */}
-                                    <div className="flex items-center justify-center gap-2">
-                                        {/* {data.colors.map((color, i) => (
-                                            <div key={i} className="color-selector">
-                                                <input onChange={() =>
-                                                    setSelectedColors((prev) => ({ ...prev, [index]: i }))
-                                                }
-                                                    type="radio" name={`color-${index}`} className="hidden" id={`color-${index}-${i}`} />
-                                                <label style={{ backgroundColor: color.colorHex }}
-                                                    htmlFor={`color-${index}-${i}`} className="text-xs border border-gray-200 rounded-full h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm"></label>
-                                            </div>
-                                        ))} */}
-                                    </div>
                                 </div>
                             </div>
                         ))}

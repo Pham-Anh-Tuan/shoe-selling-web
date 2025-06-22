@@ -67,6 +67,16 @@ const AppRoutes = () => {
                         <Hero />
                         <Products />
                     </>} />
+                    <Route path="giay-nam" element={<Products />} />
+                    <Route path="giay-the-thao" element={<Products />} />
+                    <Route path="giay-luoi" element={<Products />} />
+                    <Route path="giay-boots" element={<Products />} />
+                    <Route path="giay-tay-derby" element={<Products />} />
+                    <Route path="dep-da-nam" element={<Products />} />
+                    <Route path="phu-kien" element={<Products />} />
+                    <Route path="tui-cam-tay-nam" element={<Products />} />
+                    <Route path="that-lung-nam" element={<Products />} />
+                    
                     <Route path="productDetail/:id" element={
                         <>
                             <ScrollToTop />

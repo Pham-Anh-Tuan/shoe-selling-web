@@ -9,6 +9,10 @@ import com.example.backend.userService.model.Product;
 import com.example.backend.core.request.ProductRequest;
 import com.example.backend.userService.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,21 @@ public class ProductController {
     @GetMapping(path = "/public/homeProducts")
     public ResponseEntity<List<HomeProductRes>> getProducts() {
         return ResponseEntity.ok(productService.getAllProductsOrdered());
+    }
+
+//    @GetMapping(path = "/public/getProductsByType")
+//    public ResponseEntity<List<HomeProductRes>> getProductsByType(@RequestParam("types") List<Integer> types) {
+//        return ResponseEntity.ok(productService.getProductsByTypeOrderByCreatedAtDesc(types));
+//    }
+
+    @GetMapping(path = "/public/getProductsByType")
+    public Page<HomeProductRes> getProductsByTypeWithPaging(
+            @RequestParam("types") List<Integer> types,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        return productService.getProductsByTypeOrderByCreatedAtDescAndPage(types, pageable);
     }
 
     @GetMapping(path = "/public/productDetail/{id}")

@@ -74,8 +74,9 @@ const ProductList = () => {
     const deleteProduct = async () => {
         try {
             await deleteProductApi.deleteById(deleteId);
-            setRefresh(prev => !prev);
-            document.getElementById("deleteAlertId")?.classList.add("hidden");
+            // setRefresh(prev => !prev);
+            // document.getElementById("deleteAlertId")?.classList.add("hidden");
+            window.location.reload();
         } catch (error) {
             console.error("Xóa sản phẩm không thành công!", error);
         }
@@ -151,9 +152,9 @@ const ProductList = () => {
                                                             : data?.type === 5
                                                                 ? "Dép nam"
                                                                 : data?.type === 6
-                                                                    ? "Vớ"
+                                                                    ? "Túi cầm tay nam"
                                                                     : data?.type === 7
-                                                                        ? "Dây giày"
+                                                                        ? "Thắt lưng nam"
                                                                         : "Không xác định"}</td>
                                             <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{formatCurrencyVND(data?.price || 0)}</td>
                                             <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{data?.status === 0

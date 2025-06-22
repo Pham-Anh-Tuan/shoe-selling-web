@@ -69,12 +69,12 @@ const Cart: React.FC<CartProps> = ({ handleNeedSignIn }) => {
             window.location.reload();
             return;
         }
-    
+
         if (!isLoggedIn) {
             handleNeedSignIn();
             return;
         }
-    
+
         navigate("/deliveryInformation");
     };
 
@@ -110,7 +110,11 @@ const Cart: React.FC<CartProps> = ({ handleNeedSignIn }) => {
                                     <div>
                                         <h3 className="text-sm sm:text-base font-semibold text-slate-900">{item.productName}</h3>
                                         <p className="text-sm font-semibold text-slate-500 mt-2 flex items-center gap-2">Màu: <span style={{ backgroundColor: item.colorHex }} className="inline-block w-5 h-5 rounded-md border border-gray-200"></span></p>
-                                        <p className="text-sm font-semibold text-slate-500 mt-2 flex items-center gap-2">Kích thước: <span className="inline-block w-5 h-5 rounded-md">{item.size}</span></p>
+                                        {item.size !== 0 && (
+                                            <p className="text-sm font-semibold text-slate-500 mt-2 flex items-center gap-2">
+                                                Kích thước: <span className="inline-block w-5 h-5 rounded-md">{item.size}</span>
+                                            </p>
+                                        )}
                                     </div>
 
                                     <div className="mt-auto flex items-center gap-3">

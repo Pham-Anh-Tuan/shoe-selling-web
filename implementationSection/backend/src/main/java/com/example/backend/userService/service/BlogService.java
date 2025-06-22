@@ -147,9 +147,7 @@ public class BlogService {
 
             for (Element img : imgs) {
                 String src = img.attr("src");
-                // Giả định src là baseUrl + fileName (ví dụ: /api/blog/images/image-xxx.png)
-                // -> lấy fileName ở cuối đường dẫn
-                String fileName = Paths.get(src).getFileName().toString();
+                String fileName = src.substring(src.lastIndexOf("/") + 1); // Lấy tên ảnh từ URL
                 Path imagePath = Paths.get(projectDir, ImageConfig.blogPath, fileName);
 
                 try {

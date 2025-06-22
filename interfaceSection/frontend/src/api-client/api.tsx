@@ -41,6 +41,22 @@ export const deleteProductApi = {
     },
 }
 
+export const productApi = {
+    getProductByType(types: number[], page: number, size: number) {
+        const params = new URLSearchParams();
+
+        types.forEach((type) => {
+            params.append("types", type.toString());
+        });
+
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+
+        return axiosClient.get(`/api/public/getProductsByType`, { params });
+    },
+};
+
+
 export const authApi = {
     login(loginData: LoginData) {
         return axiosClient.post('/api/public/login', loginData);
@@ -77,6 +93,10 @@ export const blogApi = {
 
     updateBlog(formData: FormData) {
         return axiosServer.put('/api/admin/updateBlog', formData);
+    },
+
+    deleteBlogById(id: String) {
+        return axiosClient.delete(`/api/admin/deleteBlogById/${id}`);
     },
 
     getSumBlogs() {

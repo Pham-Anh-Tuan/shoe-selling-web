@@ -121,8 +121,8 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
                                 <option value={3}>Giày boots</option>
                                 <option value={4}>Giày tây Derby</option>
                                 <option value={5}>Dép nam</option>
-                                <option value={6}>Vớ</option>
-                                <option value={7}>Dây giày</option>
+                                <option value={6}>Túi cầm tay nam</option>
+                                <option value={7}>Thắt lưng nam</option>
                             </select>
                         </div>
 

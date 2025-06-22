@@ -220,14 +220,20 @@ const ProductDetail = () => {
                         <p className="text-gray-800 font-semibold space-x-2">
                             <span className="text-gray-800 font-semibold dark:text-white">Loại hàng:</span>
                             <span className="text-gray-600 dark:text-white">{product?.type === 1
-                                ? "Giày thể thao nam"
+                                ? "Giày thể thao"
                                 : product?.type === 2
-                                    ? "Sandal nam"
+                                    ? "Giày lười"
                                     : product?.type === 3
-                                        ? "Giày cao gót"
+                                        ? "Giày boots"
                                         : product?.type === 4
-                                            ? "Giày thể thao nữ"
-                                            : "Không xác định"}</span>
+                                            ? "Giày tây Derby"
+                                            : product?.type === 5
+                                                ? "Dép nam"
+                                                : product?.type === 6
+                                                    ? "Túi cầm tay nam"
+                                                    : product?.type === 7
+                                                        ? "Thắt lưng nam"
+                                                        : "Không xác định"}</span>
                         </p>
                     </div>
 
@@ -245,7 +251,7 @@ const ProductDetail = () => {
                         <div className="flex items-center gap-2">
 
                             {/* single size */}
-                            {product?.colors[colorIndex].sizeQuantities.map((sizeQuantity, i) => (
+                            {/* {product?.colors[colorIndex].sizeQuantities.map((sizeQuantity, i) => (
                                 <div className="size-selector">
                                     <input onChange={() => setSizeIndex(i)}
                                         type="radio" name="size" className="hidden" id={'size-' + i} defaultChecked={i === 0} />
@@ -253,7 +259,28 @@ const ProductDetail = () => {
                                         {sizeQuantity.size}
                                     </label>
                                 </div>
-                            ))}
+                            ))} */}
+                            {product?.colors[colorIndex].sizeQuantities
+                                .filter((sq, _, arr) => !(arr.length === 1 && sq.size === 0))
+                                .map((sizeQuantity, i) => (
+                                    <div key={i} className="size-selector">
+                                        <input
+                                            onChange={() => setSizeIndex(i)}
+                                            type="radio"
+                                            name="size"
+                                            className="hidden"
+                                            id={'size-' + i}
+                                            defaultChecked={i === 0}
+                                        />
+                                        <label
+                                            htmlFor={'size-' + i}
+                                            className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600 dark:text-white"
+                                        >
+                                            {sizeQuantity.size}
+                                        </label>
+                                    </div>
+                                ))}
+
                             {/* single size end */}
                         </div>
                     </div>
@@ -324,11 +351,11 @@ const ProductDetail = () => {
             </div>
             {/* product properties end*/}
 
-            {/* product description */}
-            <div className="pb-16">
+            {/* product description  lg:w-3/5 md:w-full pt-6*/}
+            <div className="pb-10 pt-6">
                 <h3 className="border-b border-gray-200 text-gray-800 pb-3 font-medium dark:text-white">Mô tả sản phẩm</h3>
-                <div className="lg:w-3/5 md:w-full pt-6">
-                    <div className="text-gray-600 space-y-3 dark:text-white">
+                <div className="w-full pt-2">
+                    <div className="text-gray-900 space-y-3 dark:text-white">
                         {/* <p>{product?.sideDes}</p> */}
                         {product?.sideDes?.replace(/\\n/g, '\n').split('\n').map((line, idx) => (
                             <p key={idx}>{line.trim()}</p>

@@ -5,11 +5,14 @@ import { ManagerBlog } from './BlogInterface';
 import { blogApi } from '../../../api-client/api';
 import formatDateDMYHM from '../../../hooks/DateTimeFormat';
 import { BlogUpdation } from './BlogUpdation';
+import { alertError } from '../../Shared/AlertError';
+import { ToastContainer } from 'react-toastify';
 
 const BlogList = () => {
     const [showAdd, setShowAdd] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
     const [updateId, setUpdateId] = useState<string>("");
+    const [deleteId, setDeleteId] = useState<string>("");
 
     const toggleAdd = () => {
         setShowAdd(!showAdd);
@@ -27,6 +30,15 @@ const BlogList = () => {
         };
         fetchApi();
     }, []);
+
+    const deleteBlog = async () => {
+        try {
+            await blogApi.deleteBlogById(deleteId);
+            window.location.reload();
+        } catch (error: any) {
+            alertError(error?.response?.data);
+        }
+    };
 
     return (
         <div className="p-4 w-full h-screen overflow-auto bg-gray-100 dark:bg-gray-900">
@@ -81,7 +93,8 @@ const BlogList = () => {
                                 </thead>
                                 <tbody>
                                     {managerBlogs.map((managerBlog) => (
-                                        <tr className="border-b dark:border-gray-700">
+                                        <tr key={managerBlog.id}
+                                            className="border-b dark:border-gray-700">
                                             <th scope="row" className="px-4 py-3 font-medium text-gray-900  dark:text-white">
                                                 <p className='w-44'> {managerBlog.title}</p>
                                             </th>
@@ -138,6 +151,7 @@ const BlogList = () => {
                                                 </button> */}
 
                                                     <button onClick={() => {
+                                                        setDeleteId(managerBlog.id);
                                                         const dropdown = document.getElementById("deleteAlertId");
                                                         dropdown?.classList.toggle("hidden");
                                                     }}
@@ -213,8 +227,8 @@ const BlogList = () => {
                 </div>
             )}
 
-            <div id="deleteAlertId" tabIndex={-1} aria-hidden="true"
-                className="hidden fixed inset-0 z-50 items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50">
+            <div id="deleteAlertId"
+                className="flex hidden fixed inset-0 z-50 items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50">
                 <div className="relative p-4 w-full max-w-md max-h-full">
                     <div className="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
                         <button onClick={() => {
@@ -230,19 +244,20 @@ const BlogList = () => {
                             <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
                         <p className="mb-4 text-gray-500 dark:text-gray-300">Bạn có chắc chắn muốn xóa bài viết này không?</p>
-                        {/* <div className="flex justify-center items-center space-x-4">
+                        <div className="flex justify-center items-center space-x-4">
                             <button onClick={() => {
                                 document.getElementById("deleteAlertId")?.classList.add("hidden");
                             }}
-                                type="button" className="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-orange-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Không</button>
+                                type="button" className="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600">Không</button>
                             <button onClick={() => {
-                                cancelOrder;
+                                deleteBlog();
                             }}
                                 type="button" className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700">Có</button>
-                        </div> */}
+                        </div>
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </div >
     )
 }

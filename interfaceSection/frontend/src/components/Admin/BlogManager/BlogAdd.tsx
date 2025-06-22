@@ -74,7 +74,8 @@ export const BlogAdd: React.FC<BlogAddProps> = ({ toggleAdd }) => {
 
     if (!editor) return;
 
-    const contentHTML = editor.getHTML(); // hoặc editor.getJSON()
+    const contentHTML = editor.getHTML();
+    const cleanedHTML = contentHTML.replace(/<p[^>]*>\s*<\/p>/g, '<p>&nbsp;</p>');
 
     const formData = new FormData();
     formData.append("title", blog.title);
@@ -85,7 +86,7 @@ export const BlogAdd: React.FC<BlogAddProps> = ({ toggleAdd }) => {
     }
     formData.append("status", blog.status.toString());
 
-    formData.append("content", contentHTML);
+    formData.append("content", cleanedHTML);
 
     const userEmail = localStorage.getItem('email');
     if (userEmail !== null) {
