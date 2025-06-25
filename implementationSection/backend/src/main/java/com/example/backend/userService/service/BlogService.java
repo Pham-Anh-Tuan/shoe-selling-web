@@ -14,6 +14,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,15 +66,15 @@ public class BlogService {
         blogRepository.save(blog);
     }
 
-    public List<SumBlogRes> getSumBlogs() {
-        List<Blog> blogs = blogRepository.findAllByStatus(1);
-        return blogs.stream().map(blog -> {
+    public Page<SumBlogRes> getSumBlogs(Pageable pageable) {
+        Page<Blog> blogs = blogRepository.findAllByStatusOrderByCreatedAtDesc(1, pageable);
+        return blogs.map(blog -> {
             SumBlogRes res = new SumBlogRes();
             res.setId(blog.getId());
             res.setTitle(blog.getTitle());
             res.setThumbnailName(blog.getThumbnailName());
             return res;
-        }).collect(Collectors.toList());
+        });
     }
 
     public BlogPageRes getBlogPage(String blogId) {
@@ -259,7 +261,5 @@ public class BlogService {
 
         return fileNames;
     }
-
-
 
 }

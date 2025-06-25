@@ -76,6 +76,7 @@ const AppRoutes = () => {
                     <Route path="phu-kien" element={<Products />} />
                     <Route path="tui-cam-tay-nam" element={<Products />} />
                     <Route path="that-lung-nam" element={<Products />} />
+                    <Route path="products/" element={<Products />} />
                     
                     <Route path="productDetail/:id" element={
                         <>

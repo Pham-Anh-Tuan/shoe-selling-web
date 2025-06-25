@@ -4,7 +4,7 @@ import DarkMode from "./DarkMode";
 import { useEffect, useState } from "react";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CartItem } from "../Cart/CartContext";
 
 export const Menu = [
@@ -144,6 +144,16 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
         };
     }, []);
 
+    const [searchTerm, setSearchTerm] = useState("");
+    const navigate = useNavigate();
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (searchTerm.trim()) {
+            navigate(`/products?keyword=${encodeURIComponent(searchTerm.trim())}`);
+        }
+    };
+
     return (
         <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
             {/* upper bar */}
@@ -164,10 +174,12 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                     {/* search bar*/}
                     <div className="flex justify-between items-center gap-2 sm:gap-4">
                         <div className="relative group hidden sm:block">
-                            <form className="flex items-center max-w-sm mx-auto">
+                            <form className="flex items-center max-w-sm mx-auto" onSubmit={handleSearch}>
                                 <label htmlFor="simple-search1" className="sr-only">Search</label>
                                 <div className="relative w-full">
-                                    <input type="text" id="simple-search1" className="w-[160px] md:w-[200px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block h-8" placeholder="Tên sản phẩm..." required />
+                                    <input value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        type="text" id="simple-search1" className="w-[160px] md:w-[200px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block h-8" placeholder="Tên sản phẩm..." required />
                                 </div>
                                 <button type="submit" className="bg-gradient-to-r from-primary to-secondary rounded-md px-2 py-0 ms-2 text-sm font-medium text-white h-8">
                                     {/* <button type="submit" className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-md px-2 py-0 ms-2 text-sm font-medium text-white h-8"> */}

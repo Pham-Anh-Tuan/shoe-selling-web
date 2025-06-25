@@ -31,19 +31,32 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAllProductsOrdered());
     }
 
-//    @GetMapping(path = "/public/getProductsByType")
-//    public ResponseEntity<List<HomeProductRes>> getProductsByType(@RequestParam("types") List<Integer> types) {
-//        return ResponseEntity.ok(productService.getProductsByTypeOrderByCreatedAtDesc(types));
-//    }
-
     @GetMapping(path = "/public/getProductsByType")
     public Page<HomeProductRes> getProductsByTypeWithPaging(
             @RequestParam("types") List<Integer> types,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "9") int size
+            @RequestParam(defaultValue = "12") int size
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         return productService.getProductsByTypeOrderByCreatedAtDescAndPage(types, pageable);
+    }
+
+    @GetMapping(path = "/public/search")
+    public Page<HomeProductRes> getProductsByTypeWithPaging(
+            @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return productService.searchProducts(keyword, pageable);
+    }
+
+    @GetMapping(path = "/admin/managerProducts")
+    public Page<ManagerProductRes> getManagerProducts(@RequestParam(defaultValue = "0") int page,
+                                                                      @RequestParam(defaultValue = "5") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return productService.getManagerProducts(pageable);
     }
 
     @GetMapping(path = "/public/productDetail/{id}")
@@ -51,11 +64,6 @@ public class ProductController {
         Product product = productService.getProductDetailById(id);
         ProductDetailRes dto = ProductDetailMapper.toProductDetailRes(product);
         return ResponseEntity.ok(dto);
-    }
-
-    @GetMapping(path = "/admin/managerProducts")
-    public ResponseEntity<List<ManagerProductRes>> getManagerProducts() {
-        return ResponseEntity.ok(productService.getManagerProducts());
     }
 
     @PostMapping(value = "/admin/addProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

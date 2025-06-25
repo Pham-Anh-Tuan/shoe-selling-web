@@ -27,18 +27,9 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
 
             // Lưu token vào localStorage
             localStorage.setItem('token', response.data?.token);
-
-            // Lưu imageName vào localStorage
             localStorage.setItem('imageName', response.data?.imageName);
-
             localStorage.setItem('email', response.data?.email);
-
             localStorage.setItem('role', response.data?.role);
-            // localStorage.setItem('fullName', response.data?.fullName);
-            // localStorage.setItem('phoneNumber', response.data?.phoneNumber);
-            // localStorage.setItem('shippingAddress', response.data?.shippingAddress);
-            // localStorage.setItem('gender', response.data?.gender);
-
             window.location.reload();
         } catch (error: any) {
             const message = error.response.data;
@@ -51,9 +42,6 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
             }
 
         }
-        // Gửi sự kiện custom
-        // window.dispatchEvent(new Event('logUpdated'));
-        // window.dispatchEvent(new Event('logStatus'));
     };
 
     const emailRef = useRef<HTMLInputElement>(null);
@@ -90,7 +78,7 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
                                         onClick={() => setSignInPopup(false)}
                                     />
                                 </div>
-                                <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
+                                <form className="space-y-4 md:space-y-4" onSubmit={handleLogin}>
                                     <div>
                                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                                         <input ref={emailRef}
@@ -108,6 +96,28 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
                                         <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500" onClick={() => { setSignInPopup(false); handleForgotPWPopup() }}>Quên mật khẩu?</a>
                                     </div>
                                     <button type="submit" className="w-full text-white bg-primary hover:bg-orange-400 focus:ring-4 focus:outline-none focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Đăng nhập</button>
+
+                                    <div className="flex items-center justify-center my-2">
+                                        <hr className="flex-grow border-gray-300" />
+                                        <span className="mx-4 text-gray-500 text-xs">HOẶC</span>
+                                        <hr className="flex-grow border-gray-300" />
+                                    </div>
+
+                                    <div className="flex items-center gap-4">
+                                        <button type="button" className="w-full flex items-center justify-center gap-2 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M21.35 11.1H12v2.8h5.35c-.6 2.35-2.5 3.85-5.35 3.85a6.06 6.06 0 0 1 0-12.12c1.55 0 2.95.6 4 1.55l2.1-2.1C16.95 3.65 14.65 2.7 12 2.7 6.9 2.7 2.7 6.9 2.7 12S6.9 21.3 12 21.3c5.15 0 9.15-3.75 9.15-9 0-.6-.05-1.1-.15-1.65Z" />
+                                            </svg>
+                                            Google
+                                        </button>
+                                        <button type="button" className="w-full flex items-center justify-center gap-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99h-2.54v-2.89h2.54V9.41c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.62.77-1.62 1.56v1.87h2.76l-.44 2.89h-2.32v6.99C18.34 21.12 22 16.99 22 12" />
+                                            </svg>
+                                            Facebook
+                                        </button>
+                                    </div>
+
                                     <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                                         Bạn chưa có tài khoản? <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500" onClick={() => { setSignInPopup(false); handleRegisterPopup() }}>Đăng ký</a>
                                     </p>

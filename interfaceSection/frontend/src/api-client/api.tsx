@@ -54,6 +54,22 @@ export const productApi = {
 
         return axiosClient.get(`/api/public/getProductsByType`, { params });
     },
+
+    getManagerProducts(page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+
+        return axiosClient.get(`/api/admin/managerProducts`, { params });
+    },
+
+    searchProducts(keyword: string, page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("keyword", keyword);
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+        return axiosClient.get(`/api/public/search`, { params });
+    }
 };
 
 
@@ -99,8 +115,11 @@ export const blogApi = {
         return axiosClient.delete(`/api/admin/deleteBlogById/${id}`);
     },
 
-    getSumBlogs() {
-        return axiosClient.get('/api/public/sumBlogs');
+    getSumBlogs(page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+        return axiosClient.get('/api/public/sumBlogs', { params });
     },
 
     getBlogPage(id: String) {

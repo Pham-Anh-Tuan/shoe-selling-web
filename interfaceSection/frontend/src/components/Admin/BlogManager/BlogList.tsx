@@ -41,7 +41,7 @@ const BlogList = () => {
     };
 
     return (
-        <div className="p-4 w-full h-screen overflow-auto bg-gray-100 dark:bg-gray-900">
+        <div className="p-4 w-full h-screen overflow-x-hidden bg-gray-100 dark:bg-gray-900">
             <section className="antialiased mt-16 z-10">
                 <div className="mx-auto w-full">
 
@@ -78,14 +78,14 @@ const BlogList = () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="w-full overflow-scroll">
+                        <div className="w-full overflow-x-auto">
                             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" className="px-4 py-4">Tiêu đề</th>
-                                        <th scope="col" className="px-4 py-3">Ảnh bài viết</th>
-                                        <th scope="col" className="px-4 py-3">Ngày đăng</th>
-                                        <th scope="col" className="px-4 py-3">Trạng thái</th>
+                                        <th scope="col" className="px-4 py-4 text-center">Tiêu đề</th>
+                                        <th scope="col" className="px-4 py-3 text-center">Ảnh bài viết</th>
+                                        <th scope="col" className="px-4 py-3 text-center">Ngày đăng</th>
+                                        <th scope="col" className="px-4 py-3 text-center">Trạng thái</th>
                                         <th scope="col" className="px-4 py-3">
                                             <span className="sr-only">Actions</span>
                                         </th>
@@ -98,7 +98,7 @@ const BlogList = () => {
                                             <th scope="row" className="px-4 py-3 font-medium text-gray-900  dark:text-white">
                                                 <p className='w-44'> {managerBlog.title}</p>
                                             </th>
-                                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <td className="py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 <img
                                                     src={
                                                         typeof managerBlog.thumbnailName === 'string'
@@ -108,13 +108,13 @@ const BlogList = () => {
                                                             : '/path/to/default-image.jpg'
                                                     }
                                                     alt="Blog"
-                                                    className="w-[180px] h-[180px] object-cover rounded-md"
+                                                    className="max-w-[180px] w-auto h-[180px] object-cover rounded-md mx-auto"
                                                 />
                                             </td>
 
-                                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{managerBlog?.createdAt ? formatDateDMYHM(managerBlog.createdAt) : ''}</td>
+                                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{managerBlog?.createdAt ? formatDateDMYHM(managerBlog.createdAt) : ''}</td>
 
-                                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                                 {managerBlog?.status === 0
                                                     ? <dd className="me-2 inline-flex items-center rounded bg-red-100 px-2.5 py-2 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
                                                         Inactive

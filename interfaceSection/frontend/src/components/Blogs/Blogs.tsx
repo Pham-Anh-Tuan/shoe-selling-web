@@ -6,14 +6,29 @@ import { useNavigate } from 'react-router-dom';
 const Blogs = () => {
     const [sumBlogs, setSumBlogs] = useState<SumBlog[]>([]);
 
-    const getSumBlogs = async () => {
-        const { data } = await blogApi.getSumBlogs();
-        console.log(data);
-        setSumBlogs(data);
-    }
+    const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
+    // const getSumBlogs = async () => {
+    //     const { data } = await blogApi.getSumBlogs();
+    //     console.log(data);
+    //     setSumBlogs(data);
+    // }
+
+    const loadBlogs = async (pageParam: number) => {
+        try {
+            const { data } = await blogApi.getSumBlogs(pageParam, 12);
+            setSumBlogs((prev) => [...prev, ...data.content]);
+            setTotalPages(data.totalPages);
+            setPage(data.number + 1); // cập nhật trang tiếp theo
+        } catch (error) {
+            console.error("Lỗi khi gọi API:", error);
+        }
+    };
 
     useEffect(() => {
-        getSumBlogs();
+        setSumBlogs([]);
+        setPage(0); // reset page
+        loadBlogs(0);
     }, []);
 
     const navigate = useNavigate();
@@ -61,11 +76,13 @@ const Blogs = () => {
                     </div>
                     {/* view all button */}
                     <div className="flex justify-center">
-                        <button className="text-center mt-10 cursor-pointer bg-primary text-white py-1 px-5 rounded-md">
+                        <button onClick={() => loadBlogs(page)}
+                            className="text-center mt-10 cursor-pointer bg-primary text-white py-1 px-5 rounded-md">
                             XEM THÊM
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
     );

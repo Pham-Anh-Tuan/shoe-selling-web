@@ -2,9 +2,10 @@ import ProductUpdation from "./ProductUpdation";
 import ProductRead from "./ProductRead";
 import { useEffect, useState } from "react";
 import ProductAdd from "./ProductAdd";
-import { deleteProductApi, managerProductsApi } from "../../../api-client/api";
+import { deleteProductApi, managerProductsApi, productApi } from "../../../api-client/api";
 import formatCurrencyVND from '../../../hooks/FormatCurrency';
 import { set } from "lodash";
+import Pagination from "../../../hooks/Pagination";
 
 const ProductList = () => {
     const [showAdd, setShowAdd] = useState(false);
@@ -14,6 +15,7 @@ const ProductList = () => {
     const [updateId, setUpdateId] = useState<string>("");
     const [refresh, setRefresh] = useState(false);
     const [readId, setReadId] = useState<string>("");
+    const [totalProducts, setTotalProducts] = useState(0);
 
     const toggleAdd = () => {
         setShowAdd(!showAdd);
@@ -37,15 +39,27 @@ const ProductList = () => {
         status: number;
     }
 
-
+    const [page, setPage] = useState(0); // Trang hiện tại (bắt đầu từ 0)
+    const [totalPages, setTotalPages] = useState(1); // Tổng số trang
     const [productsData, setProductsData] = useState<Product[]>([]);
+
+    const loadProducts = async (pageParam: number) => {
+        try {
+            const { data } = await productApi.getManagerProducts(pageParam, 5);
+            setProductsData(data.content);
+            setTotalPages(data.totalPages);
+            setTotalProducts(data.totalElements);
+            setPage(data.number); // hoặc pageParam
+        } catch (error) {
+            console.error("Lỗi gọi API:", error);
+        }
+    };
+
     useEffect(() => {
-        const fetchApi = async () => {
-            const { data } = await managerProductsApi.getAll();
-            setProductsData(data);
-        };
-        fetchApi();
-    }, [refresh]);
+        setProductsData([]);
+        setPage(0); // reset page
+        loadProducts(0); // bắt đầu từ trang 0
+    }, [location.pathname]);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -74,16 +88,15 @@ const ProductList = () => {
     const deleteProduct = async () => {
         try {
             await deleteProductApi.deleteById(deleteId);
-            // setRefresh(prev => !prev);
-            // document.getElementById("deleteAlertId")?.classList.add("hidden");
             window.location.reload();
         } catch (error) {
             console.error("Xóa sản phẩm không thành công!", error);
         }
     };
 
+
     return (
-        <div className="p-4 w-full h-screen overflow-auto bg-gray-100 dark:bg-gray-900">
+        <div className="p-4 w-full h-screen overflow-x-hidden bg-gray-100 dark:bg-gray-900">
             <section className="antialiased mt-16 z-10">
                 <div className="mx-auto w-full">
 
@@ -94,7 +107,7 @@ const ProductList = () => {
                                 <h3 className="text-lg font-bold">
                                     Danh sách sản phẩm
                                 </h3>
-                                <span className="dark:text-white text-sm">Tổng số: {productsData.length}</span>
+                                <span className="dark:text-white text-sm">Tổng số: {totalProducts}</span>
                             </div>
                         </div>
                         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -123,15 +136,15 @@ const ProductList = () => {
                         </div>
 
                         {/* ádasd */}
-                        <div className="w-full overflow-scroll">
+                        <div className="w-full overflow-x-scroll">
                             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" className="px-4 py-4">Tên sản phẩm</th>
-                                        <th scope="col" className="px-4 py-3">Loại</th>
-                                        <th scope="col" className="px-4 py-3">Giá</th>
-                                        <th scope="col" className="px-4 py-3">Trạng thái</th>
-                                        <th scope="col" className="px-4 py-3">
+                                        <th scope="col" className="px-4 py-4 text-center">Tên sản phẩm</th>
+                                        <th scope="col" className="px-4 py-3 text-center">Loại</th>
+                                        <th scope="col" className="px-4 py-3 text-center">Giá</th>
+                                        <th scope="col" className="py-3 text-center">Trạng thái</th>
+                                        <th scope="col" className="px-4 py-3 text-center">
                                             <span className="sr-only">Actions</span>
                                         </th>
                                     </tr>
@@ -271,14 +284,15 @@ const ProductList = () => {
                             </table>
                         </div>
 
+                        <Pagination
+                            currentPage={page}
+                            totalPages={totalPages}
+                            onPageChange={(page) => loadProducts(page)}
+                        />
 
-
-                        <nav className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
+                        {/* <nav className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
                             <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                {/* Showing
-                                <span className="font-semibold text-gray-900 dark:text-white">1-10</span>
-                                of
-                                <span className="font-semibold text-gray-900 dark:text-white">1000</span> */}
+
                             </span>
                             <ul className="inline-flex items-stretch -space-x-px">
                                 <li>
@@ -313,7 +327,7 @@ const ProductList = () => {
                                     </a>
                                 </li>
                             </ul>
-                        </nav>
+                        </nav> */}
                     </div>
                 </div>
             </section>
@@ -358,10 +372,6 @@ const ProductList = () => {
                                 document.getElementById("deleteAlertId")?.classList.add("hidden");
                             }}
                                 type="button" className="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-orange-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Không</button>
-                            {/* <button onClick={() => {
-                                deleteProduct;
-                            }}
-                                type="button" className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">Có</button> */}
                             <button onClick={() => {
                                 deleteProduct();
                             }}

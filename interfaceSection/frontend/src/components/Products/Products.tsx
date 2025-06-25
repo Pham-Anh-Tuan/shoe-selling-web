@@ -24,6 +24,13 @@ const Products = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
+  const [selectedColors, setSelectedColors] = useState<{ [key: number]: number }>({});
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const keyword = queryParams.get("keyword")?.trim() || "";
+
   const updateLogStatus = () => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!token);
@@ -54,65 +61,49 @@ const Products = () => {
       console.error("Lỗi khi gọi API:", error);
     }
   };
-  useEffect(() => {
-    const pathTypes = getTypesFromPath(location.pathname);
-    setTypes(pathTypes); // lưu để dùng khi "XEM THÊM"
-    setProductsData([]); // reset
-    setPage(0); // reset page
-    loadProducts(pathTypes, 0); // gọi API trang đầu tiên
-  }, [location.pathname]);
+
+  const loadSearchResults = async () => {
+    try {
+      const { data } = await productApi.searchProducts(keyword, 0, 12);
+      setProductsData(data.content);
+      setTotalPages(data.totalPages);
+      setPage(data.number + 1);
+    } catch (err) {
+      console.error("Lỗi khi tìm sản phẩm:", err);
+    }
+  };
 
   // useEffect(() => {
-  //   const fetchApi = async () => {
-  //     try {
-  //       if (location.pathname === "/giay-nam") {
-  //         const { data } = await productApi.getProductByType([1, 2, 3, 4], 0, 12);
-  //         setProductsData(data);
-  //       } else if (location.pathname === "/giay-the-thao") {
-  //         const { data } = await productApi.getProductByType([1], 0, 12);
-  //         setProductsData(data);
-  //       } else if (location.pathname === "/giay-luoi") {
-  //         const { data } = await productApi.getProductByType([2], 0, 12);
-  //         setProductsData(data);
-  //       } else if (location.pathname === "/giay-boots") {
-  //         const { data } = await productApi.getProductByType([3], 0, 12);
-  //         setProductsData(data);
-  //       } else if (location.pathname === "/giay-tay-derby") {
-  //         const { data } = await productApi.getProductByType([4], 0, 12);
-  //         setProductsData(data);
-  //       } else if (location.pathname === "/dep-da-nam") {
-  //         const { data } = await productApi.getProductByType([5], 0, 12);
-  //         setProductsData(data);
-  //       } else if (location.pathname === "/phu-kien") {
-  //         const { data } = await productApi.getProductByType([6, 7], 0, 12);
-  //         setProductsData(data);
-  //       } else if (location.pathname === "/tui-cam-tay-nam") {
-  //         const { data } = await productApi.getProductByType([6], 0, 12);
-  //         setProductsData(data);
-  //       } else if (location.pathname === "/that-lung-nam") {
-  //         const { data } = await productApi.getProductByType([7], 0, 12);
-  //         setProductsData(data);
-  //       } else {
-  //         const { data } = await productApi.getProductByType([1], 0, 12);
-  //         setProductsData(data);
-  //       }
-  //     } catch (error) {
-  //       console.error("Lỗi khi gọi API:", error);
-  //     }
-  //   };
+  //   const pathTypes = getTypesFromPath(location.pathname);
+  //   setTypes(pathTypes); // lưu để dùng khi "XEM THÊM"
+  //   setProductsData([]); // reset
+  //   setPage(0); // reset page
+  //   loadProducts(pathTypes, 0); // gọi API trang đầu tiên
+  // }, [location.pathname]);
 
-  //   fetchApi();
-  // }, [location.pathname]); // chú ý thêm dependency
+  // useEffect(() => {
+  //   loadData();
+  // }, [keyword]);
 
+  useEffect(() => {
+    setProductsData([]); // reset
+    setPage(0);
 
-
+    if (keyword) {
+      loadSearchResults(); // tìm kiếm
+    } else {
+      const pathTypes = getTypesFromPath(location.pathname);
+      setTypes(pathTypes);
+      loadProducts(pathTypes, 0); // load theo type
+    }
+  }, [location.pathname, keyword]);
 
   useEffect(() => {
     updateLogStatus();
   }, []);
 
-  const [selectedColors, setSelectedColors] = useState<{ [key: number]: number }>({});
-  const navigate = useNavigate();
+
+
   return (
     <div className="mt-14 mb-12">
       <div className="container">

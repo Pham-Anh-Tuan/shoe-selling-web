@@ -7,6 +7,10 @@ import com.example.backend.core.response.blogRes.ManagerBlogRes;
 import com.example.backend.core.response.blogRes.SumBlogRes;
 import com.example.backend.userService.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +36,10 @@ public class BlogController {
     }
 
     @GetMapping(path = "/public/sumBlogs")
-    public ResponseEntity<List<SumBlogRes>> getManagerProducts() {
-        return ResponseEntity.ok(blogService.getSumBlogs());
+    public Page<SumBlogRes> getSumBlogs(@RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "9") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return blogService.getSumBlogs(pageable);
     }
 
     @GetMapping(path = "/public/blogPage/{id}")

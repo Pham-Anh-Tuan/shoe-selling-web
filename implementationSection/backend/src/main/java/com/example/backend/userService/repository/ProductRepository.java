@@ -20,7 +20,10 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     List<Product> findAllByStatusOrderByCreatedAtDesc(int status);
 
-    List<Product> findAllByTypeInOrderByCreatedAtDesc(List<Integer> type);
+    Page<Product> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
-    Page<Product> findAllByTypeInOrderByCreatedAtDesc(List<Integer> type, Pageable pageable);
+    Page<Product> findAllByStatusAndTypeInOrderByCreatedAtDesc(int status, List<Integer> type, Pageable pageable);
+
+    Page<Product> findByProductNameContainingIgnoreCaseAndStatus(String keyword, int status, Pageable pageable);
+
 }

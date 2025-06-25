@@ -36,33 +36,8 @@ public class ProductService {
         return productRepository.findById(id).orElse(null);
     }
 
-    public List<HomeProductRes> getProductsByTypeOrderByCreatedAtDesc(List<Integer> types) {
-        List<Product> products = productRepository.findAllByTypeInOrderByCreatedAtDesc(types);
-
-        return products.stream().map(product -> {
-            HomeProductRes res = new HomeProductRes();
-            res.setId(product.getId());
-            res.setProductName(product.getProductName());
-            res.setPrice(product.getPrice());
-
-            List<ColorWithImageRes> colorWithImageDTOs = product.getColors().stream().map(color -> {
-                ColorWithImageRes colorWithImageDTO = new ColorWithImageRes();
-                colorWithImageDTO.setColorHex(color.getColorHex());
-
-                // Lấy ảnh đầu tiên (nếu có)
-                String mainImage = color.getImages().isEmpty() ? null :
-                        color.getImages().get(0).getPath();
-                colorWithImageDTO.setMainImage(mainImage);
-                return colorWithImageDTO;
-            }).collect(Collectors.toList());
-
-            res.setColors(colorWithImageDTOs);
-            return res;
-        }).collect(Collectors.toList());
-    }
-
     public Page<HomeProductRes> getProductsByTypeOrderByCreatedAtDescAndPage(List<Integer> types, Pageable pageable) {
-        Page<Product> products = productRepository.findAllByTypeInOrderByCreatedAtDesc(types, pageable);
+        Page<Product> products = productRepository.findAllByStatusAndTypeInOrderByCreatedAtDesc(1, types, pageable);
 
         return products.map(product -> {
             HomeProductRes res = new HomeProductRes();
@@ -86,10 +61,9 @@ public class ProductService {
         });
     }
 
-    public List<HomeProductRes> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-
-        return products.stream().map(product -> {
+    public Page<HomeProductRes> searchProducts(String keyword, Pageable pageable) {
+        Page<Product> products = productRepository.findByProductNameContainingIgnoreCaseAndStatus(keyword, 1, pageable);
+        return products.map(product -> {
             HomeProductRes res = new HomeProductRes();
             res.setId(product.getId());
             res.setProductName(product.getProductName());
@@ -108,7 +82,20 @@ public class ProductService {
 
             res.setColors(colorWithImageDTOs);
             return res;
-        }).collect(Collectors.toList());
+        });
+    }
+
+    public Page<ManagerProductRes> getManagerProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return products.map(product -> {
+            ManagerProductRes res = new ManagerProductRes();
+            res.setId(product.getId());
+            res.setProductName(product.getProductName());
+            res.setType(product.getType());
+            res.setStatus(product.getStatus());
+            res.setPrice(product.getPrice());
+            return res;
+        });
     }
 
     public List<HomeProductRes> getAllProductsOrdered() {
@@ -132,19 +119,6 @@ public class ProductService {
             }).collect(Collectors.toList());
 
             res.setColors(colorWithImageDTOs);
-            return res;
-        }).collect(Collectors.toList());
-    }
-
-    public List<ManagerProductRes> getManagerProducts() {
-        List<Product> products = productRepository.findAll();
-        return products.stream().map(product -> {
-            ManagerProductRes res = new ManagerProductRes();
-            res.setId(product.getId());
-            res.setProductName(product.getProductName());
-            res.setType(product.getType());
-            res.setStatus(product.getStatus());
-            res.setPrice(product.getPrice());
             return res;
         }).collect(Collectors.toList());
     }
