@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "@react-oauth/google": "^0.12.2",
     "@tiptap/extension-code-block-lowlight": "^2.14.0",
     "@tiptap/extension-image": "^2.14.0",
     "@tiptap/extension-link": "^2.14.0",

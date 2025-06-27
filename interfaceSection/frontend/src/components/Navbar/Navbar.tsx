@@ -232,7 +232,9 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                             <div className="group relative cursor-pointer">
                                 <a href="/profile"
                                     className="flex items-center">
-                                    <img alt="" src={import.meta.env.VITE_API_URL_AVATAR_IMG + imageName} className="size-9 rounded-full" />
+                                    <img alt="" src={imageName.startsWith("https:")
+                                        ? imageName
+                                        : import.meta.env.VITE_API_URL_AVATAR_IMG + imageName} className="size-9 rounded-full" />
                                 </a>
                             </div>
                         )}

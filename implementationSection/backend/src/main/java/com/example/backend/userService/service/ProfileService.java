@@ -55,7 +55,7 @@ public class ProfileService {
         String newImageName = profileRequest.getImageName();
 
         if (!imageName.equals(newImageName)) {
-            if (!imageName.equals("userLogo192192adeal.png")) {
+            if (!imageName.equals("userLogo192192adeal.png") && !imageName.startsWith("https:")) {
                 Path imagePath = Paths.get(projectDir, "user/avatars", imageName);
                 try {
                     Files.deleteIfExists(imagePath);

@@ -23,6 +23,7 @@ import OrderSuccess from '../components/Payment/OrderSuccess';
 import BlogList from '../components/Admin/BlogManager/BlogList';
 import Blogs from '../components/Blogs/Blogs';
 import BlogDetail from '../components/BlogDetail/BlogDetail';
+import OAuth2Redirect from '../components/SignInOut/OAuth2Redirect';
 
 const AppRoutes = () => {
     const [signInPopup, setSignInPopup] = useState(false);
@@ -77,6 +78,8 @@ const AppRoutes = () => {
                     <Route path="tui-cam-tay-nam" element={<Products />} />
                     <Route path="that-lung-nam" element={<Products />} />
                     <Route path="products/" element={<Products />} />
+
+                    <Route path="/oauth2-redirect" element={<OAuth2Redirect />} />
                     
                     <Route path="productDetail/:id" element={
                         <>
@@ -105,7 +108,7 @@ const AppRoutes = () => {
 
                     <Route path="orderDetail" element={<OrderDetail />} />
 
-                    {localStorage.getItem("email") && (
+                    {localStorage.getItem("token") && (
                         <Route path="" element={<ProfileLayout />}>
                             <Route path="profile" index element={<Profile />} />
                             <Route path="password" element={<PassChange />} />

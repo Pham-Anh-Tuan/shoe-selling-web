@@ -26,6 +26,8 @@ const attachAuthToken = (axiosInstance: AxiosInstance): void => {
                     // Xoá token khỏi localStorage
                     localStorage.removeItem("token");
                     localStorage.removeItem("imageName");
+                    localStorage.removeItem("email");
+                    localStorage.removeItem("role");
 
                     // Phát sự kiện để cập nhật UI
                     window.dispatchEvent(new Event("logUpdated"));

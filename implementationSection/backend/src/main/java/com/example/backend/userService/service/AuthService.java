@@ -38,6 +38,10 @@ public class AuthService {
         account.setFullName(registerRequest.getFullName());
         account.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         account.setImageName("userLogo192192adeal.png");
+        account.setPhoneNumber("");
+        account.setShippingAddress("");
+        account.setGender(0);
+        account.setRole(2);
         accountRepository.save(account);
 
         return ResponseEntity.ok("Register successful");

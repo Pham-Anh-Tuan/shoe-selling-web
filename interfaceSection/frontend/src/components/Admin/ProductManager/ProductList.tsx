@@ -2,9 +2,8 @@ import ProductUpdation from "./ProductUpdation";
 import ProductRead from "./ProductRead";
 import { useEffect, useState } from "react";
 import ProductAdd from "./ProductAdd";
-import { deleteProductApi, managerProductsApi, productApi } from "../../../api-client/api";
+import { deleteProductApi, productApi } from "../../../api-client/api";
 import formatCurrencyVND from '../../../hooks/FormatCurrency';
-import { set } from "lodash";
 import Pagination from "../../../hooks/Pagination";
 
 const ProductList = () => {

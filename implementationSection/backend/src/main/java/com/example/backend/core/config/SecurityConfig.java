@@ -1,5 +1,6 @@
 package com.example.backend.core.config;
 
+import com.example.backend.core.security.CustomOAuth2SuccessHandler;
 import com.example.backend.core.security.JwtFilter;
 import com.example.backend.userService.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class SecurityConfig {
     @Autowired
     private JwtFilter jwtFilter;
 
+    @Autowired
+    private CustomOAuth2SuccessHandler oAuth2SuccessHandler;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -33,6 +37,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/staff/**").hasAnyRole("STAFF", "ADMIN")
                         .requestMatchers("/api/user/**").hasAnyRole("USER", "STAFF", "ADMIN")
                         .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth -> oauth
+                        .successHandler(oAuth2SuccessHandler)
                 )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((req, res, e) -> {

@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -32,7 +33,7 @@ public class ProductController {
     }
 
     @GetMapping(path = "/public/getProductsByType")
-    public Page<HomeProductRes> getProductsByTypeWithPaging(
+    public Map<String, Object> getProductsByTypeWithPaging(
             @RequestParam("types") List<Integer> types,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size
@@ -42,7 +43,7 @@ public class ProductController {
     }
 
     @GetMapping(path = "/public/search")
-    public Page<HomeProductRes> getProductsByTypeWithPaging(
+    public Map<String, Object> getProductsByTypeWithPaging(
             @RequestParam(defaultValue = "") String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size
@@ -52,7 +53,7 @@ public class ProductController {
     }
 
     @GetMapping(path = "/admin/managerProducts")
-    public Page<ManagerProductRes> getManagerProducts(@RequestParam(defaultValue = "0") int page,
+    public Map<String, Object> getManagerProducts(@RequestParam(defaultValue = "0") int page,
                                                                       @RequestParam(defaultValue = "5") int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
