@@ -7,6 +7,8 @@ import java.time.LocalDate;
 @Data
 public class ManagerOrderRes {
     private String id;
+    private String fullName;
+    private String customerEmail;
     private String phoneNumber;
     private LocalDate orderDate;
     private LocalDate deliveryDate;

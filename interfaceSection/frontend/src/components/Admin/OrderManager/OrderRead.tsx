@@ -138,7 +138,7 @@ const OrderRead: React.FC<OrderReadProps> = ({ readId, toggleRead }) => {
                     </div>
 
                     <div>
-                        <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Địa chỉ</label>
+                        <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Địa chỉ giao hàng</label>
                         <input disabled type="text" name="address" id="address" value={order.shippingAddress} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" />
                     </div>
 
@@ -218,7 +218,7 @@ const OrderRead: React.FC<OrderReadProps> = ({ readId, toggleRead }) => {
                         </div>
                     </div>
 
-                    <p className="text-right text-gray-400 text-sm mt-3">Cập nhật lần cuối: {order.emailUpdated}</p>
+                    <p className="text-left text-gray-400 text-sm mt-3">Cập nhật lần cuối: {order.emailUpdated}</p>
                 </form>
             </div >
         </div >

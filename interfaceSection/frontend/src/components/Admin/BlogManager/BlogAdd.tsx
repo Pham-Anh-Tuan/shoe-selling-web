@@ -127,9 +127,7 @@ export const BlogAdd: React.FC<BlogAddProps> = ({ toggleAdd }) => {
           </div>
 
           <div className="flex flex-col items-center justify-center space-y-1">
-
             <label htmlFor="title" className="block mb-2 text-base font-medium text-gray-900 dark:text-white">Ảnh đại điện bài viết</label>
-
             <div className="mb-1">
               <label className="">
                 <IoCloudUploadOutline className='text-gray-500 text-2xl cursor-pointer' />

@@ -89,9 +89,9 @@ const Profile = () => {
         formData.append("phoneNumber", profile.phoneNumber);
         formData.append("shippingAddress", profile.shippingAddress);
         formData.append("gender", profile.gender.toString());
-
+        formData.append("imageName", profile.imageName);
+        
         if (profile.imageFile) {
-            formData.append("imageName", profile.imageFile.name);
             formData.append("imageFile", profile.imageFile);
         }
 
@@ -196,14 +196,6 @@ const Profile = () => {
                     <div className="flex items-center gap-4">
                         <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-200">
                             <img
-                                // src={
-                                //     typeof profile.imageName === 'string'
-                                //         ? profile.imageName.startsWith('data:image') || profile.imageName.startsWith('blob:')
-                                //             ? profile.imageName // ảnh mới upload
-                                //             : import.meta.env.VITE_API_URL_AVATAR_IMG + profile.imageName // ảnh từ server
-                                //         : '/path/to/default-image.jpg'
-                                // }
-
                                 src={
                                     typeof profile.imageName === 'string'
                                       ? profile.imageName.startsWith('data:image') ||
@@ -213,9 +205,8 @@ const Profile = () => {
                                         : import.meta.env.VITE_API_URL_AVATAR_IMG + profile.imageName
                                       : '/path/to/default-image.jpg'
                                   }
-                                alt="Profile" className="w-max h-max object-cover" />
+                                alt="Profile" className="w-full h-full object-cover object-center" />
                         </div>
-
                     </div>
                     <div className="mt-4">
                         <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" id="profileImage" />

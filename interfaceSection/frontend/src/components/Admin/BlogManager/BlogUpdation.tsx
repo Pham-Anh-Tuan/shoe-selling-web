@@ -170,11 +170,11 @@ export const BlogUpdation: React.FC<BlogUpdationProps> = ({ updateId, toggleUpda
 
                 className="w-48 h-48 object-cover shadow border" />
 
-              <MdOutlineCancel className="absolute top-0 right-0 w-5 h-5 bg-white cursor-pointer text-gray-500 rounded-full -translate-y-1/2 translate-x-1/2"
+              {/* <MdOutlineCancel className="absolute top-0 right-0 w-5 h-5 bg-white cursor-pointer text-gray-500 rounded-full -translate-y-1/2 translate-x-1/2"
                 onClick={() => {
                   setThumbnailName("");
                   setThumbnailFile(null)
-                }} />
+                }} /> */}
             </div>
           </div>
 
@@ -214,9 +214,9 @@ export const BlogUpdation: React.FC<BlogUpdationProps> = ({ updateId, toggleUpda
              [&_div[data-align='left']>img]:mr-auto"
             />
           </div>
-          <p className="text-right text-gray-400 text-sm">Cập nhật lần cuối: {blog.email}</p>
+          <p className="text-left text-gray-400 text-sm">Cập nhật lần cuối: {blog.email}</p>
 
-          <div className="flex items-center space-x-4 justify-end mt-4">
+          <div className="flex items-center space-x-4 justify-end">
             <button type="submit" className="inline-flex items-center
         text-white bg-orange-400 hover:bg-orange-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-400 dark:hover:bg-orange-500">
               <IoDocumentTextOutline className="mr-1 -ml-1 w-5 h-5" />

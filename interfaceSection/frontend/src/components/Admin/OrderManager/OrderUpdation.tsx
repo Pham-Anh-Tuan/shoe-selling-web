@@ -34,6 +34,10 @@ const OrderUpdation: React.FC<OrderUpdationProps> = ({ updateId, toggleUpdate })
     setOrder(prev => ({ ...prev, paymentStatus: newStatus }));
   };
 
+  const setEmail = (userEmail: string) => {
+    setOrder(prev => ({ ...prev, email: userEmail }));
+  }
+
   useEffect(() => {
     if (!updateId) return;  // Chặn gọi API nếu id là undefined
     const fetchApi = async () => {
@@ -54,13 +58,21 @@ const OrderUpdation: React.FC<OrderUpdationProps> = ({ updateId, toggleUpdate })
 
   const updateOrder = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const userEmail = localStorage.getItem('email');
+
     try {
-      const response = await orderApi.updateOrder(order);
+      const updatedOrder = {
+        ...order,
+        email: userEmail || "", // Gán email vào bản sao của order
+      };
+
+      await orderApi.updateOrder(updatedOrder); // Gửi bản đã cập nhật email
+      window.location.reload();
     } catch (error: any) {
       alertError(error?.response?.data);
     }
-    window.location.reload();
   };
+  
   return (
     <div className="relative p-4 w-full max-w-xl max-h-full">
       <div className="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
@@ -113,9 +125,10 @@ const OrderUpdation: React.FC<OrderUpdationProps> = ({ updateId, toggleUpdate })
 
           </div>
 
-          <p className="text-right text-gray-400 text-sm">Cập nhật lần cuối: {order.email}</p>
+          <p className="text-left text-gray-400 text-sm">Cập nhật lần cuối: {order.email}</p>
 
-          <div className="flex items-center space-x-4">
+          {/* <div className="flex items-center space-x-4"> */}
+          <div className="flex items-center space-x-4 justify-end">
             <button type="submit" className="text-white bg-orange-700 hover:bg-orange-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-600 dark:hover:bg-orange-700">Cập nhật</button>
             <button onClick={toggleUpdate}
               type="button" className="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600">Hủy</button>

@@ -42,6 +42,17 @@ public class ProductController {
         return productService.getProductsByTypeOrderByCreatedAtDescAndPage(types, pageable);
     }
 
+    @GetMapping("/public/related")
+    public Map<String, Object> getRelatedProducts(
+            @RequestParam List<Integer> types,
+            @RequestParam String excludedId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return productService.getProductsByTypeAndExcludeId(types, excludedId, pageable);
+    }
+
     @GetMapping(path = "/public/search")
     public Map<String, Object> getProductsByTypeWithPaging(
             @RequestParam(defaultValue = "") String keyword,
@@ -52,12 +63,21 @@ public class ProductController {
         return productService.searchProducts(keyword, pageable);
     }
 
-    @GetMapping(path = "/admin/managerProducts")
+    @GetMapping(path = "/staff/managerProducts")
     public Map<String, Object> getManagerProducts(@RequestParam(defaultValue = "0") int page,
                                                                       @RequestParam(defaultValue = "5") int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         return productService.getManagerProducts(pageable);
+    }
+
+    @GetMapping(path = "/staff/searchManagerProducts")
+    public Map<String, Object> searchManagerProducts(@RequestParam(defaultValue = "") String keyword,
+                                                     @RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "5") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return productService.searchManagerProducts(keyword, pageable);
     }
 
     @GetMapping(path = "/public/productDetail/{id}")

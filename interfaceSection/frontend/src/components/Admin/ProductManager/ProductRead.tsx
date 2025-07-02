@@ -219,7 +219,7 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
                             </tbody>
                         </table>
                     </div>
-                    <p className="text-right text-gray-400 text-sm">Cập nhật lần cuối: {product.email}</p>
+                    <p className="text-left text-gray-400 text-sm">Cập nhật lần cuối: {product.email}</p>
                 </form>
             </div>
         </div>

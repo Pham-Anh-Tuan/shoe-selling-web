@@ -1,140 +1,122 @@
-import Img1 from "../../assets/male-sneaker/sneaker.png";
-import Img2 from "../../assets/male-sneaker/sneaker2.png";
-import Img3 from "../../assets/male-sneaker/sneaker3.png";
-import Img4 from "../../assets/male-sneaker/sneaker4.png";
-import Img5 from "../../assets/male-sneaker/sneaker5.png";
-import Img6 from "../../assets/male-sneaker/sneaker6.png";
-import Button from "../Shared/Button";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { productApi } from "../../api-client/api";
+import formatCurrencyVND from '../../hooks/FormatCurrency';
+import { FaHeart } from "react-icons/fa6";
 
-const ProductsData = [
-  {
-    id: 1,
-    img: Img1,
-    title: "Giày Thể Thao Sneaker MULGATI YC25051P",
-    rating: 5.0,
-    color: "white",
-    price: "2,200,000₫",
-    aosDelay: "0",
-  },
-  {
-    id: 2,
-    img: Img2,
-    title: "Giày Thể Thao Sneaker MULGATI HX483A",
-    rating: 4.5,
-    color: "Red",
-    price: "2,400,000₫",
-    aosDelay: "200",
-  },
-  {
-    id: 3,
-    img: Img3,
-    title: "Giày Sneaker MULGATI HX487A",
-    rating: 4.7,
-    color: "brown",
-    price: "2,400,000₫",
-    aosDelay: "400",
-  },
-  {
-    id: 4,
-    img: Img4,
-    title: "Giày Thể Thao MULGATI Urban Runner S383",
-    rating: 4.4,
-    color: "Yellow",
-    price: "1,990,000₫",
-    aosDelay: "600",
-  },
-  {
-    id: 5,
-    img: Img5,
-    title: "Giày Thể Thao Sneaker Classic Retro M32016",
-    rating: 4.5,
-    color: "Pink",
-    price: "2,400,000₫",
-    aosDelay: "800",
-  },
-  {
-    id: 6,
-    img: Img6,
-    title: "Giày Thể Thao MULGATI Trekker M31099",
-    rating: 4.5,
-    color: "Pink",
-    price: "2,700,000₫",
-    aosDelay: "800",
-  },
-];
+interface ColorWithImage {
+  colorHex: string;
+  mainImage: string;
+}
 
-const RelatedProducts = () => {
+interface Product {
+  id: string;
+  productName: string;
+  price: number;
+  colors: ColorWithImage[];
+}
+
+interface RelatedProductsProps {
+  excludedId: string;
+  types: number[];
+};
+
+const RelatedProducts: React.FC<RelatedProductsProps> = ({ excludedId, types }) => {
+  const [productsData, setProductsData] = useState<Product[]>([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  // const [types, setTypes] = useState<number[]>([]);
+
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  const [selectedColors, setSelectedColors] = useState<{ [key: number]: number }>({});
+
+  const navigate = useNavigate();
+
+  const updateLogStatus = () => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!token);
+  };
+
+  const loadProducts = async (typesParam: number[], pageParam: number) => {
+    try {
+      const { data } = await productApi.getRelatedProducts(typesParam, excludedId, pageParam, 8);
+      setProductsData((prev) => [...prev, ...data.content]);
+      setTotalPages(data.totalPages);
+      setPage(data.number + 1); // cập nhật trang tiếp theo
+    } catch (error) {
+      console.error("Lỗi khi gọi API:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    updateLogStatus();
+    loadProducts(types, 0); // load theo type
+  }, []);
+
   return (
-    <div className="mb-2">
-      <div className="border-t border-gray-200 pt-8">
-        {/* Header section */}
-        <div className="text-center mb-10 max-w-[600px] mx-auto">
-          <h1 data-aos="fade-up" className="text-3xl font-bold">
-            SẢN PHẨM TƯƠNG TỰ
-          </h1>
-        </div>
-        {/* Body section */}
-        <div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center gap-5">
-            {/* card section */}
-            {ProductsData.map((data) => (
-              <div key={data.id}>
+    <div className="border-t border-gray-200 pt-8">
+      {/* Header section */}
+      <div className="text-center mb-10 max-w-[600px] mx-auto">
+        <h1 data-aos="fade-up" className="text-3xl font-bold">
+          SẢN PHẨM TƯƠNG TỰ
+        </h1>
+      </div>
+
+      {/* Body section */}
+      <div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center gap-5">
+          {productsData.map((data, index) => (
+            <div key={data.id}>
+              <div
+                data-aos="fade-up"
+                className="group space-y-3"
+              >
                 <div
-                  data-aos="fade-up"
-                  data-aos-delay={data.aosDelay}
-                  className="group space-y-3"
-                >
-                  <div className="relative">
-                    <img
-                      src={data.img}
-                      alt=""
-
-                      className="w-[380px] h-[300px] object-cover rounded-md"
-                    />
-                    {/* hover button*/}
-                    <div className="hidden group-hover:flex absolute top-1/2 -translate-y-1/2 
-                left-1/2 -translate-x-1/2 h-full w-full text-center
-                group-hover:backdrop-blur-sm justify-center 
-                items-center duration-200">
-                      <Link to="/ProductDetail">
-                        <Button
-                          text={"Xem chi tiết"}
-                          bgColor={"bg-primary"}
-                          textColor={"text-white"} />
-                      </Link>
+                  className="relative cursor-pointer">
+                  <img
+                    src={import.meta.env.VITE_API_URL_IMG + data.colors[selectedColors[index] ?? 0].mainImage}
+                    alt=""
+                    onClick={() => navigate(`/productDetail/${data.id}`)}
+                    className="w-[350px] sm:w-[380px] h-[300px] object-cover rounded-md"
+                  />
+                  {!isLoggedIn && (
+                    <div className="absolute top-4 left-4">
+                      <FaHeart className='text-gray-400 text-2xl hover:text-red-500' />
                     </div>
-                  </div>
-                </div>
-                <div className="sm:w-[217px] md:w-[217px] lg:w-[217px] xl:w-[281px]">
-                  <h3 className="uppercase truncate text-center">{data.title}</h3>
-                  <p className="text-sm text-gray-600 font-bold text-center dark:text-white">{data.price}</p>
-                  <div className="flex items-center justify-center gap-2">
-                    {/* single color */}
-                    <div className="color-selector">
-                      <input type="radio" name="color" className="hidden" id="color-white" />
-                      <label htmlFor="color-white" className="border border-gray-200 rounded-full h-6 w-6 cursor-pointer shadow-sm bg-white block"></label>
-                    </div>
-                    {/* single color end*/}
-
-                    {/* single color */}
-                    <div className="color-selector">
-                      <input type="radio" name="color" className="hidden" id="color-blue" />
-                      <label htmlFor="color-blue" className="text-xs border border-gray-200 rounded-full h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm bg-blue-950"></label>
-                    </div>
-                    {/* single color end*/}
-                  </div>
+                  )}
                 </div>
               </div>
-            ))}
-          </div>
-          {/* view all button */}
+              <div className="w-[350px] sm:w-[270px] md:w-[217px] lg:w-[217px] xl:w-[281px]">
+                <h3 className="uppercase truncate text-center">{data.productName}</h3>
+                <p className="text-sm text-gray-600 font-bold text-center dark:text-white"> {formatCurrencyVND(data?.price || 0)}</p>
+                <div className="flex items-center justify-center gap-2">
+                  {data.colors.map((color, i) => (
+                    <div key={i} className="color-selector">
+                      <input onChange={() =>
+                        setSelectedColors((prev) => ({ ...prev, [index]: i }))
+                      }
+                        type="radio" name={`color-${index}`} className="hidden" id={`color-${index}-${i}`} />
+                      <label style={{ backgroundColor: color.colorHex }}
+                        htmlFor={`color-${index}-${i}`} className="text-xs border border-gray-200 rounded-full h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm"></label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {page < totalPages && (
           <div className="flex justify-center">
-            <button className="text-center mt-10 cursor-pointer bg-primary text-white py-1 px-5 rounded-md">
+            <button className="text-center mt-10 cursor-pointer bg-primary text-white py-1 px-5 rounded-md"
+              onClick={() => loadProducts(types, page)}>
               XEM THÊM
             </button>
           </div>
-        </div>
+        )}
+
       </div>
     </div>
   );

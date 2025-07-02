@@ -2,12 +2,15 @@ package com.example.backend.userService.service;
 
 import com.example.backend.core.config.BlogImgApi;
 import com.example.backend.core.config.ImageConfig;
+import com.example.backend.core.mapper.ManagerBlogResMapper;
+import com.example.backend.core.mapper.SumBlogResMapper;
 import com.example.backend.core.request.BlogRequest;
 import com.example.backend.core.response.*;
 import com.example.backend.core.response.blogRes.ManagerBlogRes;
 import com.example.backend.core.response.blogRes.SumBlogRes;
 import com.example.backend.core.utils.ImageProcessor;
 import com.example.backend.userService.model.Blog;
+import com.example.backend.userService.model.Order;
 import com.example.backend.userService.repository.BlogRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,15 +70,31 @@ public class BlogService {
         blogRepository.save(blog);
     }
 
-    public Page<SumBlogRes> getSumBlogs(Pageable pageable) {
-        Page<Blog> blogs = blogRepository.findAllByStatusOrderByCreatedAtDesc(1, pageable);
-        return blogs.map(blog -> {
-            SumBlogRes res = new SumBlogRes();
-            res.setId(blog.getId());
-            res.setTitle(blog.getTitle());
-            res.setThumbnailName(blog.getThumbnailName());
-            return res;
-        });
+    private Map<String, Object> toPagedResponse(Page<Blog> blogsPage, Function<Page<Blog>, List<?>> mapper) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", mapper.apply(blogsPage));
+        response.put("totalElements", blogsPage.getTotalElements());
+        response.put("totalPages", blogsPage.getTotalPages());
+        response.put("number", blogsPage.getNumber());
+        response.put("size", blogsPage.getSize());
+        response.put("hasNext", blogsPage.hasNext());
+        response.put("hasPrevious", blogsPage.hasPrevious());
+        return response;
+    }
+
+    public Map<String, Object> getSumBlogs(Pageable pageable) {
+        Page<Blog> blogsPage = blogRepository.findAllByStatusOrderByCreatedAtDesc(1, pageable);
+        return toPagedResponse(blogsPage, SumBlogResMapper::toSumBlogResList);
+    }
+
+    public Map<String, Object> getManagerBlogs(Pageable pageable) {
+        Page<Blog> blogsPage = blogRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return toPagedResponse(blogsPage, ManagerBlogResMapper::toManagerBlogResList);
+    }
+
+    public Map<String, Object> searchManagerBlogs(String keyword, Pageable pageable) {
+        Page<Blog> blogsPage = blogRepository.findByTitleContainingIgnoreCase(keyword, pageable);
+        return toPagedResponse(blogsPage, ManagerBlogResMapper::toManagerBlogResList);
     }
 
     public BlogPageRes getBlogPage(String blogId) {
@@ -104,19 +124,6 @@ public class BlogService {
         res.setContent(blog.getContent());
         res.setEmail(blog.getEmail());
         return res;
-    }
-
-    public List<ManagerBlogRes> getManagerBlogs() {
-        List<Blog> blogs = blogRepository.findAllByOrderByCreatedAtDesc();
-        return blogs.stream().map(blog -> {
-            ManagerBlogRes res = new ManagerBlogRes();
-            res.setId(blog.getId());
-            res.setTitle(blog.getTitle());
-            res.setThumbnailName(blog.getThumbnailName());
-            res.setStatus(blog.getStatus());
-            res.setCreatedAt(blog.getCreatedAt());
-            return res;
-        }).collect(Collectors.toList());
     }
 
     @Transactional
@@ -167,7 +174,7 @@ public class BlogService {
     }
 
     @Transactional
-    public ResponseEntity<String> updateBlog( BlogRequest blogRequest) {
+    public ResponseEntity<String> updateBlog(BlogRequest blogRequest) {
         String blogId = blogRequest.getId();
         Optional<Blog> optionalBlog = blogRepository.findById(blogId);
         if (optionalBlog.isEmpty()) {

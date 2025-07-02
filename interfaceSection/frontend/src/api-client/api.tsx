@@ -60,7 +60,15 @@ export const productApi = {
         params.append("page", page.toString());
         params.append("size", size.toString());
 
-        return axiosClient.get(`/api/admin/managerProducts`, { params });
+        return axiosClient.get(`/api/staff/managerProducts`, { params });
+    },
+
+    searchManagerProducts(keyword: string, page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("keyword", keyword);
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+        return axiosClient.get(`/api/staff/searchManagerProducts`, { params });
     },
 
     searchProducts(keyword: string, page: number, size: number) {
@@ -69,6 +77,20 @@ export const productApi = {
         params.append("page", page.toString());
         params.append("size", size.toString());
         return axiosClient.get(`/api/public/search`, { params });
+    },
+
+    getRelatedProducts(types: number[], excludedId: string, page: number, size: number) {
+        const params = new URLSearchParams();
+
+        types.forEach((type) => {
+            params.append("types", type.toString());
+        });
+
+        params.append("excludedId", excludedId);
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+
+        return axiosClient.get(`/api/public/related`, { params });
     }
 };
 
@@ -93,6 +115,35 @@ export const profileApi = {
 
     getProfileSumByEmail(email: String) {
         return axiosClient.get('/api/user/getProfileSumByEmail/' + email);
+    },
+}
+
+export const accountApi = {
+    addAccount(formData: FormData) {
+        return axiosServer.post('/api/admin/addAccount', formData);
+    },
+
+    updateAccount(formData: FormData) {
+        return axiosServer.put('/api/admin/updateAccount', formData);
+    },
+
+    getAccountDetail(id: String) {
+        return axiosClient.get('/api/admin/getAccountDetail/' + id);
+    },
+
+    getManagerAccounts(page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+        return axiosClient.get('/api/admin/managerAccounts', { params });
+    },
+
+    searchManagerAccounts(keyword: string, page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("keyword", keyword);
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+        return axiosClient.get(`/api/admin/searchManagerAccounts`, { params });
     },
 }
 
@@ -121,6 +172,21 @@ export const blogApi = {
         params.append("size", size.toString());
         return axiosClient.get('/api/public/sumBlogs', { params });
     },
+    
+    getManagerBlogs(page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+        return axiosClient.get('/api/staff/managerBlogs', { params });
+    },
+
+    searchManagerBlogs(keyword: string, page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("keyword", keyword);
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+        return axiosClient.get(`/api/staff/searchManagerBlogs`, { params });
+    },
 
     getBlogPage(id: String) {
         return axiosClient.get('/api/public/blogPage/' + id);
@@ -129,20 +195,28 @@ export const blogApi = {
     getBlogDetail(id: String) {
         return axiosClient.get('/api/admin/blogDetail/' + id);
     },
-
-    getManagerBlogs() {
-        return axiosClient.get('/api/admin/managerBlogs');
-    },
-
 }
 
 export const orderApi = {
     createOrder(order: Order) {
         return axiosClient.post('/api/user/createOrder', order);
     },
-    getManagerOrders() {
-        return axiosClient.get('/api/admin/managerOrders');
+    getManagerOrders(page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+
+        return axiosClient.get('/api/staff/managerOrders', { params });
     },
+
+    searchManagerOrders(keyword: string, page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("keyword", keyword);
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+        return axiosClient.get(`/api/staff/searchManagerOrders`, { params });
+    },
+
     getById(id: String) {
         return axiosClient.get('/api/admin/orderDetail/' + id);
     },

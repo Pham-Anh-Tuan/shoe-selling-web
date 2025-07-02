@@ -366,7 +366,9 @@ const ProductDetail = () => {
             {/* product description end */}
 
             {/* related products */}
-            <RelatedProducts />
+            {id && product?.type && (
+                <RelatedProducts excludedId={id} types={[product?.type]} />
+            )}
             {/* related products end*/}
 
             <ToastContainer />

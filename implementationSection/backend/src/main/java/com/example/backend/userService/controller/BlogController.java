@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -36,10 +37,26 @@ public class BlogController {
     }
 
     @GetMapping(path = "/public/sumBlogs")
-    public Page<SumBlogRes> getSumBlogs(@RequestParam(defaultValue = "0") int page,
-                                        @RequestParam(defaultValue = "9") int size) {
+    public Map<String, Object> getSumBlogs(@RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "9") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         return blogService.getSumBlogs(pageable);
+    }
+
+    @GetMapping(path = "/staff/managerBlogs")
+    public Map<String, Object> getManagerBlogs(@RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return blogService.getManagerBlogs(pageable);
+    }
+
+    @GetMapping(path = "/staff/searchManagerBlogs")
+    public Map<String, Object> searchManagerBlogs(@RequestParam(defaultValue = "") String keyword,
+                                                   @RequestParam(defaultValue = "0") int page,
+                                                   @RequestParam(defaultValue = "5") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return blogService.searchManagerBlogs(keyword, pageable);
     }
 
     @GetMapping(path = "/public/blogPage/{id}")
@@ -50,11 +67,6 @@ public class BlogController {
     @GetMapping(path = "/admin/blogDetail/{id}")
     public ResponseEntity<BlogRequest> getBlogDetail(@PathVariable("id") String id) {
         return ResponseEntity.ok(blogService.getBlogDetail(id));
-    }
-
-    @GetMapping(path = "/admin/managerBlogs")
-    public ResponseEntity<List<ManagerBlogRes>> getManagerBlogs() {
-        return ResponseEntity.ok(blogService.getManagerBlogs());
     }
 
     @DeleteMapping("/admin/deleteBlogById/{id}")

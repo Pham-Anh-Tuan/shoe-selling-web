@@ -41,6 +41,7 @@ public class AuthService {
         account.setPhoneNumber("");
         account.setShippingAddress("");
         account.setGender(0);
+        account.setStatus(1);
         account.setRole(2);
         accountRepository.save(account);
 

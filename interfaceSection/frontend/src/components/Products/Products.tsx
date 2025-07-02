@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { homeProductsApi, productApi } from "../../api-client/api";
+import { productApi } from "../../api-client/api";
 import formatCurrencyVND from '../../hooks/FormatCurrency';
 import { FaHeart } from "react-icons/fa6";
 
@@ -30,6 +30,9 @@ const Products = () => {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const keyword = queryParams.get("keyword")?.trim() || "";
+  const [totalProducts, setTotalProducts] = useState(0);
+
+  const [category, setCategory] = useState<string>("SẢN PHẨM MỚI NHẤT");
 
   const updateLogStatus = () => {
     const token = localStorage.getItem('token');
@@ -38,16 +41,36 @@ const Products = () => {
 
   const getTypesFromPath = (path: string): number[] => {
     switch (path) {
-      case "/giay-nam": return [1, 2, 3, 4];
-      case "/giay-the-thao": return [1];
-      case "/giay-luoi": return [2];
-      case "/giay-boots": return [3];
-      case "/giay-tay-derby": return [4];
-      case "/dep-da-nam": return [5];
-      case "/phu-kien": return [6, 7];
-      case "/tui-cam-tay-nam": return [6];
-      case "/that-lung-nam": return [7];
-      default: return [1];
+      case "/giay-nam":
+        setCategory("GIÀY NAM")
+        return [1, 2, 3, 4];
+      case "/giay-the-thao":
+        setCategory("GIÀY THỂ THAO")
+        return [1];
+      case "/giay-luoi":
+        setCategory("GIÀY LƯỜI")
+        return [2];
+      case "/giay-boots":
+        setCategory("GIÀY BOOTS")
+        return [3];
+      case "/giay-tay-derby":
+        setCategory("GIÀY TÂY DERBY")
+        return [4];
+      case "/dep-da-nam":
+        setCategory("DÉP DA NAM")
+        return [5];
+      case "/phu-kien":
+        setCategory("PHỤ KIỆN")
+        return [6, 7];
+      case "/tui-cam-tay-nam":
+        setCategory("TÚI CẦM TAY NAM")
+        return [6];
+      case "/that-lung-nam":
+        setCategory("THẮT LƯNG NAM")
+        return [7];
+      default:
+        setCategory("SẢN PHẨM NỔI BẬT")
+        return [1];
     }
   };
 
@@ -62,35 +85,25 @@ const Products = () => {
     }
   };
 
-  const loadSearchResults = async () => {
+  const loadSearchResults = async (pageParam: number) => {
     try {
-      const { data } = await productApi.searchProducts(keyword, 0, 12);
-      setProductsData(data.content);
+      const { data } = await productApi.searchProducts(keyword, pageParam, 12);
+      setProductsData((prev) => [...prev, ...data.content]);
       setTotalPages(data.totalPages);
       setPage(data.number + 1);
+      setTotalProducts(data.totalElements);
     } catch (err) {
       console.error("Lỗi khi tìm sản phẩm:", err);
     }
   };
-
-  // useEffect(() => {
-  //   const pathTypes = getTypesFromPath(location.pathname);
-  //   setTypes(pathTypes); // lưu để dùng khi "XEM THÊM"
-  //   setProductsData([]); // reset
-  //   setPage(0); // reset page
-  //   loadProducts(pathTypes, 0); // gọi API trang đầu tiên
-  // }, [location.pathname]);
-
-  // useEffect(() => {
-  //   loadData();
-  // }, [keyword]);
 
   useEffect(() => {
     setProductsData([]); // reset
     setPage(0);
 
     if (keyword) {
-      loadSearchResults(); // tìm kiếm
+      setCategory("TÌM KIẾM");
+      loadSearchResults(0); // tìm kiếm
     } else {
       const pathTypes = getTypesFromPath(location.pathname);
       setTypes(pathTypes);
@@ -105,14 +118,39 @@ const Products = () => {
 
 
   return (
-    <div className="mt-14 mb-12">
+    <div className="mt-10 mb-12">
       <div className="container">
         {/* Header section */}
         <div className="text-center mb-10 max-w-[600px] mx-auto">
           <h1 data-aos="fade-up" className="text-3xl font-bold">
-            SẢN PHẨM MỚI NHẤT
+            {category}
           </h1>
+          {keyword && (
+            <p className="text-base mt-2">
+              Có {totalProducts} sản phẩm cho tìm kiếm
+            </p>
+          )}
         </div>
+
+        {keyword && (
+          <div className="mb-4 mt-[-30px]">
+            <p className="text-sm text-gray-800">
+              Kết quả tìm kiếm cho <span className="font-bold">"{keyword}"</span>.
+            </p>
+          </div>
+        )}
+
+        {/* {keyword && (
+          <div className="mb-6">
+            <p className="text-sm text-gray-600 mb-1">
+              Kết quả tìm kiếm cho "<span className="font-medium">{keyword}</span>"
+            </p>
+            <p className="text-lg font-semibold">
+              Có {productsData.length} sản phẩm cho tìm kiếm
+            </p>
+          </div>
+        )} */}
+
         {/* Body section */}
         <div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center gap-5">
@@ -164,8 +202,10 @@ const Products = () => {
           </div> */}
           {page < totalPages && (
             <div className="flex justify-center">
-              <button className="text-center mt-10 cursor-pointer bg-primary text-white py-1 px-5 rounded-md"
-                onClick={() => loadProducts(types, page)}>
+              <button
+                className="text-center mt-10 cursor-pointer bg-primary text-white py-1 px-5 rounded-md"
+                onClick={() => keyword ? loadSearchResults(page) : loadProducts(types, page)}
+              >
                 XEM THÊM
               </button>
             </div>

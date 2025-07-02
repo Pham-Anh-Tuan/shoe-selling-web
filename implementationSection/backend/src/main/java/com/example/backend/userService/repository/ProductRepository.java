@@ -10,12 +10,6 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, String> {
     boolean existsById(String id);
 
-    // Sắp xếp toàn bộ danh sách Product theo createdAt
-    List<Product> findAllByOrderByCreatedAtAsc();
-
-    // Sắp xếp toàn bộ danh sách Product theo createdAt
-    List<Product> findAllByOrderByCreatedAtDesc();
-
     boolean existsByProductName(String productName);
 
     List<Product> findAllByStatusOrderByCreatedAtDesc(int status);
@@ -25,5 +19,9 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     Page<Product> findAllByStatusAndTypeInOrderByCreatedAtDesc(int status, List<Integer> type, Pageable pageable);
 
     Page<Product> findByProductNameContainingIgnoreCaseAndStatus(String keyword, int status, Pageable pageable);
+
+    Page<Product> findByProductNameContainingIgnoreCase(String keyword, Pageable pageable);
+
+    Page<Product> findByStatusAndTypeInAndIdNotOrderByCreatedAtDesc(int status, List<Integer> type, String excludedId, Pageable pageable);
 
 }

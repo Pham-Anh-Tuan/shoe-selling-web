@@ -34,7 +34,7 @@ const Blogs = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="mt-14 mb-12">
+        <div className="mt-10 mb-12">
             <div className="container">
                 {/* Header section */}
                 <div className="text-center mb-10 max-w-[600px] mx-auto">
@@ -75,12 +75,14 @@ const Blogs = () => {
                         ))}
                     </div>
                     {/* view all button */}
-                    <div className="flex justify-center">
-                        <button onClick={() => loadBlogs(page)}
-                            className="text-center mt-10 cursor-pointer bg-primary text-white py-1 px-5 rounded-md">
-                            XEM THÊM
-                        </button>
-                    </div>
+                    {page < totalPages && (
+                        <div className="flex justify-center">
+                            <button onClick={() => loadBlogs(page)}
+                                className="text-center mt-10 cursor-pointer bg-primary text-white py-1 px-5 rounded-md">
+                                XEM THÊM
+                            </button>
+                        </div>
+                    )}
                 </div>
 
             </div>

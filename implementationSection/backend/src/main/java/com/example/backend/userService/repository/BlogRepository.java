@@ -12,8 +12,13 @@ import java.util.List;
 @Repository
 public interface BlogRepository extends JpaRepository<Blog, String> {
     List<Blog> findAllByStatus(int status);
+
     List<Blog> findAllByOrderByCreatedAtDesc();
 
+    Page<Blog> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
     Page<Blog> findAllByStatusOrderByCreatedAtDesc(int status, Pageable pageable);
+
+    Page<Blog> findByTitleContainingIgnoreCase(String keyword, Pageable pageable);
 }
 

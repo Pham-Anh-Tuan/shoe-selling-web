@@ -345,7 +345,7 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
         }
         // toggleRefresh();
         // toggleAdd();
-        
+
     }
 
     return (
@@ -554,12 +554,23 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
                         </table>
                     </div>
 
-                    <button type="submit" className="text-white inline-flex items-center bg-orange-400 hover:bg-orange-500 font-medium rounded-md text-sm px-4 py-2.5 text-center dark:bg-orange-400 dark:hover:bg-orange-500">
-                        <svg className="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                        </svg>
-                        Thêm sản phẩm
-                    </button>
+                    <div className="flex items-center space-x-4 justify-end mt-4">
+                        <button type="submit" className=" text-white inline-flex items-center bg-orange-400 hover:bg-orange-500 font-medium rounded-md text-sm px-4 py-2.5 text-center dark:bg-orange-400 dark:hover:bg-orange-500">
+                            <svg className="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                            </svg>
+                            Thêm sản phẩm
+                        </button>
+
+                        <button
+                            onClick={toggleAdd}
+                            type="button" className="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600">
+                            <svg className="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            Hủy
+                        </button>
+                    </div>
 
                 </form>
             </div>

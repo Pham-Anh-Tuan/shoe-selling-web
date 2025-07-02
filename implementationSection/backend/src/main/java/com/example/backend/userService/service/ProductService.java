@@ -1,5 +1,7 @@
 package com.example.backend.userService.service;
 
+import com.example.backend.core.mapper.HomeProductResMapper;
+import com.example.backend.core.mapper.ManagerProductResMapper;
 import com.example.backend.core.request.*;
 import com.example.backend.core.response.ColorWithImageRes;
 import com.example.backend.core.response.HomeProductRes;
@@ -23,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,101 +37,41 @@ public class ProductService {
         return productRepository.findById(id).orElse(null);
     }
 
-    public Map<String, Object> getProductsByTypeOrderByCreatedAtDescAndPage(List<Integer> types, Pageable pageable) {
-        Page<Product> productsPage = productRepository.findAllByStatusAndTypeInOrderByCreatedAtDesc(1, types, pageable);
-
-        List<HomeProductRes> productDTOs = productsPage.getContent().stream().map(product -> {
-            HomeProductRes res = new HomeProductRes();
-            res.setId(product.getId());
-            res.setProductName(product.getProductName());
-            res.setPrice(product.getPrice());
-
-            List<ColorWithImageRes> colorWithImageDTOs = product.getColors().stream().map(color -> {
-                ColorWithImageRes colorWithImageDTO = new ColorWithImageRes();
-                colorWithImageDTO.setColorHex(color.getColorHex());
-
-                // Lấy ảnh đầu tiên (nếu có)
-                String mainImage = color.getImages().isEmpty() ? null :
-                        color.getImages().get(0).getPath();
-                colorWithImageDTO.setMainImage(mainImage);
-                return colorWithImageDTO;
-            }).collect(Collectors.toList());
-
-            res.setColors(colorWithImageDTOs);
-            return res;
-        }).collect(Collectors.toList());
-
+    private Map<String, Object> toPagedResponse(Page<Product> productsPage, Function<Page<Product>, List<?>> mapper) {
         Map<String, Object> response = new HashMap<>();
-        response.put("content", productDTOs);
+        response.put("content", mapper.apply(productsPage));
         response.put("totalElements", productsPage.getTotalElements());
         response.put("totalPages", productsPage.getTotalPages());
         response.put("number", productsPage.getNumber());
         response.put("size", productsPage.getSize());
         response.put("hasNext", productsPage.hasNext());
         response.put("hasPrevious", productsPage.hasPrevious());
-
         return response;
     }
 
+    public Map<String, Object> getProductsByTypeOrderByCreatedAtDescAndPage(List<Integer> types, Pageable pageable) {
+        Page<Product> productsPage = productRepository.findAllByStatusAndTypeInOrderByCreatedAtDesc(1, types, pageable);
+        return toPagedResponse(productsPage, HomeProductResMapper::toHomeProductResList);
+    }
+
+    public Map<String, Object> getProductsByTypeAndExcludeId(List<Integer> types, String excludedId, Pageable pageable) {
+        Page<Product> productsPage = productRepository.findByStatusAndTypeInAndIdNotOrderByCreatedAtDesc(1, types, excludedId, pageable);
+        return toPagedResponse(productsPage, HomeProductResMapper::toHomeProductResList);
+    }
+
     public Map<String, Object> searchProducts(String keyword, Pageable pageable) {
-        Page<Product> productsPage = productRepository
-                .findByProductNameContainingIgnoreCaseAndStatus(keyword, 1, pageable);
-
-        List<HomeProductRes> productDTOs = productsPage.getContent().stream().map(product -> {
-            HomeProductRes res = new HomeProductRes();
-            res.setId(product.getId());
-            res.setProductName(product.getProductName());
-            res.setPrice(product.getPrice());
-
-            List<ColorWithImageRes> colorWithImageDTOs = product.getColors().stream().map(color -> {
-                ColorWithImageRes dto = new ColorWithImageRes();
-                dto.setColorHex(color.getColorHex());
-
-                String mainImage = color.getImages().isEmpty() ? null :
-                        color.getImages().get(0).getPath();
-                dto.setMainImage(mainImage);
-
-                return dto;
-            }).collect(Collectors.toList());
-
-            res.setColors(colorWithImageDTOs);
-            return res;
-        }).collect(Collectors.toList());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("content", productDTOs);
-        response.put("totalElements", productsPage.getTotalElements());
-        response.put("totalPages", productsPage.getTotalPages());
-        response.put("number", productsPage.getNumber());
-        response.put("size", productsPage.getSize());
-        response.put("hasNext", productsPage.hasNext());
-        response.put("hasPrevious", productsPage.hasPrevious());
-
-        return response;
+        Page<Product> productsPage = productRepository.findByProductNameContainingIgnoreCaseAndStatus(keyword, 1, pageable);
+        return toPagedResponse(productsPage, HomeProductResMapper::toHomeProductResList);
     }
 
     public Map<String, Object> getManagerProducts(Pageable pageable) {
         Page<Product> productsPage = productRepository.findAllByOrderByCreatedAtDesc(pageable);
-        List<ManagerProductRes> productDTOs = productsPage.getContent().stream().map(product -> {
-            ManagerProductRes res = new ManagerProductRes();
-            res.setId(product.getId());
-            res.setProductName(product.getProductName());
-            res.setType(product.getType());
-            res.setStatus(product.getStatus());
-            res.setPrice(product.getPrice());
-            return res;
-        }).collect(Collectors.toList());
+        return toPagedResponse(productsPage, ManagerProductResMapper::toManagerProductResList);
+    }
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("content", productDTOs);
-        response.put("totalElements", productsPage.getTotalElements());
-        response.put("totalPages", productsPage.getTotalPages());
-        response.put("number", productsPage.getNumber());
-        response.put("size", productsPage.getSize());
-        response.put("hasNext", productsPage.hasNext());
-        response.put("hasPrevious", productsPage.hasPrevious());
-
-        return response;
+    public Map<String, Object> searchManagerProducts(String keyword, Pageable pageable) {
+        Page<Product> productsPage = productRepository.findByProductNameContainingIgnoreCase(keyword, pageable);
+        return toPagedResponse(productsPage, ManagerProductResMapper::toManagerProductResList);
     }
 
     public List<HomeProductRes> getAllProductsOrdered() {

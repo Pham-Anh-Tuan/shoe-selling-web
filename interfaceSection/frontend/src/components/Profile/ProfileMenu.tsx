@@ -44,14 +44,17 @@ export const ProfileMenu = () => {
                         <span className={`ms-2 ${location.pathname.toLowerCase() === '/product-favorite' ? 'text-red-600' : ''}`}>Sản Phẩm Yêu Thích</span>
                     </a>
                 </li>
-                {localStorage.getItem("role") === "1" && (
-                    <li>
-                        <a href="admin" className='flex items-center'>
-                            <LuChartColumnIncreasing className='text-green-500 text-xl' />
-                            <span className="ms-2">Trình Quản Lý</span>
-                        </a>
-                    </li>
-                )}
+                {(
+                    localStorage.getItem("role") === "1" ||
+                    localStorage.getItem("role") === "3"
+                ) && (
+                        <li>
+                            <a href="admin" className='flex items-center'>
+                                <LuChartColumnIncreasing className='text-green-500 text-xl' />
+                                <span className="ms-2">Trình Quản Lý</span>
+                            </a>
+                        </li>
+                    )}
 
                 <li>
                     <button onClick={() => handleLogout()} className='flex items-center'>

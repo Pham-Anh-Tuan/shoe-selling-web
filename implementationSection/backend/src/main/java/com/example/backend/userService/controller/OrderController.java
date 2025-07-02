@@ -7,11 +7,15 @@ import com.example.backend.core.response.ManagerOrderRes;
 import com.example.backend.core.response.OrderDetailRes;
 import com.example.backend.userService.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -24,9 +28,21 @@ public class OrderController {
         return orderService.createOrder(orderRequest);
     }
 
-    @GetMapping(path = "/admin/managerOrders")
-    public ResponseEntity<List<ManagerOrderRes>> getManagerOrders() {
-        return ResponseEntity.ok(orderService.getManagerOrders());
+    @GetMapping(path = "/staff/managerOrders")
+    public Map<String, Object> getManagerOrders(@RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "5") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("orderDate").descending());
+        return orderService.getManagerOrders(pageable);
+    }
+
+    @GetMapping(path = "/staff/searchManagerOrders")
+    public Map<String, Object> searchManagerOrders(@RequestParam(defaultValue = "") String keyword,
+                                                     @RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "5") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("orderDate").descending());
+        return orderService.searchManagerOrders(keyword, pageable);
     }
 
     @GetMapping(path = "/admin/orderDetail/{id}")

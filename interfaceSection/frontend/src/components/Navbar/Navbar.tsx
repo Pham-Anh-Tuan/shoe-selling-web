@@ -158,17 +158,16 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
         <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
             {/* upper bar */}
             <div className="bg-primary/40 py-2">
-                {/* <div className="bg-blue-300 py-2"> */}
                 <div className="container flex justify-between items-center">
                     <div>
-                        <Link to="">
+                        <a href="/">
                             <div className="font-bold 
                     text-xl sm:text-xl flex gap-2 items-center">
                                 <img src={Logo} alt="Logo"
                                     className="w-12" />
                                 KuShoe
                             </div>
-                        </ Link>
+                        </ a>
                     </div>
 
                     {/* search bar*/}
@@ -229,12 +228,12 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                                 </button>
                             </div>
                         ) : (
-                            <div className="group relative cursor-pointer">
+                            <div className="group relative cursor-pointer size-9">
                                 <a href="/profile"
                                     className="flex items-center">
                                     <img alt="" src={imageName.startsWith("https:")
                                         ? imageName
-                                        : import.meta.env.VITE_API_URL_AVATAR_IMG + imageName} className="size-9 rounded-full" />
+                                        : import.meta.env.VITE_API_URL_AVATAR_IMG + imageName} className="size-9 rounded-full object-cover object-center bg-gray-200" />
                                 </a>
                             </div>
                         )}
@@ -265,16 +264,6 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
             {/* lower bar */}
             <div className="flex justify-center">
                 <ul className="sm:flex hidden items-center gap-4">
-                    {/* <div>
-                        <Link to="">
-                            <div
-                                className="inline-block px-4
-                                hover:text-primary font-medium"
-                            >
-                                TRANG CHỦ
-                            </div>
-                        </Link>
-                    </div> */}
                     {/* Simple Dropdown and Links*/}
                     {Menu.map((data) => (
                         <li key={data.id} className="group relative cursor-pointer">

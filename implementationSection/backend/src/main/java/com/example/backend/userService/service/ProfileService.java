@@ -1,5 +1,6 @@
 package com.example.backend.userService.service;
 
+import com.example.backend.core.config.ImageConfig;
 import com.example.backend.core.request.ProfileRequest;
 import com.example.backend.core.response.ProfileRes;
 import com.example.backend.core.response.ProfileSumRes;
@@ -56,7 +57,7 @@ public class ProfileService {
 
         if (!imageName.equals(newImageName)) {
             if (!imageName.equals("userLogo192192adeal.png") && !imageName.startsWith("https:")) {
-                Path imagePath = Paths.get(projectDir, "user/avatars", imageName);
+                Path imagePath = Paths.get(projectDir, ImageConfig.avatarPath, imageName);
                 try {
                     Files.deleteIfExists(imagePath);
                 } catch (IOException e) {
@@ -67,7 +68,7 @@ public class ProfileService {
             MultipartFile file = profileRequest.getImageFile();
             if (file != null) {
                 String fileName = UUID.randomUUID().toString() + ".png";
-                Path uploadPath = Paths.get(projectDir, "user/avatars", fileName);
+                Path uploadPath = Paths.get(projectDir, ImageConfig.avatarPath, fileName);
                 account.setImageName(fileName);
                 try {
                     Files.createDirectories(uploadPath.getParent()); // tạo thư mục nếu chưa có

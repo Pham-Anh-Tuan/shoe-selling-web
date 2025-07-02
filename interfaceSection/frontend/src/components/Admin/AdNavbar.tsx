@@ -43,6 +43,16 @@ const AdNavbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const handleLogout = () => {
+    // Xóa token khỏi localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('imageName');
+    localStorage.removeItem('email');
+    localStorage.removeItem('role');
+
+    window.location.href = '/';
+  };
+
   return (
     <div className="relative">
       <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200 z-40 fixed w-full">
@@ -94,10 +104,10 @@ const AdNavbar = () => {
               <div>
                 <DarkMode />
               </div>
-              <div className="group relative cursor-pointer">
+              <div className="group relative cursor-pointer size-9">
                 <a href="/profile"
                   className="flex items-center">
-                  <img alt="" src={import.meta.env.VITE_API_URL_AVATAR_IMG + imageName} className="size-9 rounded-full" />
+                  <img alt="" src={import.meta.env.VITE_API_URL_AVATAR_IMG + imageName} className="size-9 rounded-full object-cover object-center bg-gray-200" />
                 </a>
               </div>
             </div>
@@ -116,44 +126,50 @@ const AdNavbar = () => {
                   </div>
                 </li>
                 <li>
-                  <a href="/admin" className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group mt-10 ${location.pathname === '/Admin' ? 'bg-white' : 'dark:text-white'}`}>
+                  <a href="/admin" className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group mt-10 ${location.pathname === '/admin' ? 'bg-white' : 'dark:text-white'}`}>
                     <AiFillDashboard className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                     <span className="ms-3">Tổng quan</span>
                   </a>
                 </li>
                 <li>
-                  <a href="/admin/productList" className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group ${location.pathname === '/Admin/ProductList' ? 'bg-white' : 'dark:text-white'}`}>
+                  <a href="/admin/productList" className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group ${location.pathname === '/admin/productList' ? 'bg-white' : 'dark:text-white'}`}>
                     <AiFillProduct className="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                     <span className="flex-1 ms-3 whitespace-nowrap">Sản phẩm</span>
                   </a>
                 </li>
                 <li>
-                  <a href="/admin/orderList" className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group ${location.pathname === '/Admin/OrderList' ? 'bg-white' : 'dark:text-white'}`}>
+                  <a href="/admin/orderList" className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group ${location.pathname === '/admin/orderList' ? 'bg-white' : 'dark:text-white'}`}>
                     <svg className="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
                       <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z" />
                     </svg>
                     <span className="flex-1 ms-3 whitespace-nowrap">Đơn hàng</span>
                   </a>
                 </li>
+                {localStorage.getItem("role") === "1" && (
+                    <li>
+                      <a href="/admin/accountList" className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group ${location.pathname === '/admin/accountList' ? 'bg-white' : 'dark:text-white'}`}>
+                        <svg className="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                          <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
+                        </svg>
+                        <span className="flex-1 ms-3 whitespace-nowrap">Tài khoản</span>
+                      </a>
+                    </li>
+                  )}
+
                 <li>
-                  <a href="/admin/accountList" className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group ${location.pathname === '/Admin/AccountList' ? 'bg-white' : 'dark:text-white'}`}>
-                    <svg className="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                      <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
-                    </svg>
-                    <span className="flex-1 ms-3 whitespace-nowrap">Tài khoản</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="/admin/blogList" className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group ${location.pathname === '/Admin/HistoryList' ? 'bg-white' : 'dark:text-white'}`}>
+                  <a href="/admin/blogList" className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group ${location.pathname === '/admin/blogList' ? 'bg-white' : 'dark:text-white'}`}>
                     <IoDocumentText className="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                     <span className="flex-1 ms-3 whitespace-nowrap">Bài viết</span>
                   </a>
                 </li>
                 <li>
-                  <a href="#" className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group ${location.pathname === '/Admin/SignOut' ? 'bg-white' : 'dark:text-white'}`}>
+                  <button
+                    onClick={() => handleLogout()}
+                    className="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
                     <FaSignOutAlt className="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                    <span className="flex-1 ms-3 whitespace-nowrap">Đăng xuất</span>
-                  </a>
+                    <span className="ms-3 whitespace-nowrap dark:text-white">Đăng xuất</span>
+                  </button>
                 </li>
 
               </ul>

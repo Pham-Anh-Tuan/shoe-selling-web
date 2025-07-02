@@ -1,6 +1,7 @@
 package com.example.backend.userService.service;
 
 import com.example.backend.core.dto.OrderUpdationDTO;
+import com.example.backend.core.mapper.ManagerOrderResMapper;
 import com.example.backend.core.request.OrderItemRequest;
 import com.example.backend.core.request.OrderRequest;
 import com.example.backend.core.response.ManagerOrderRes;
@@ -16,15 +17,15 @@ import com.example.backend.userService.repository.OrderRepository;
 import com.example.backend.userService.repository.ProductRepository;
 import com.example.backend.userService.repository.SizeQuantityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -131,20 +132,26 @@ public class OrderService {
         orderRepository.save(orderDetail);
     }
 
+    private Map<String, Object> toPagedResponse(Page<Order> ordersPage, Function<Page<Order>, List<?>> mapper) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", mapper.apply(ordersPage));
+        response.put("totalElements", ordersPage.getTotalElements());
+        response.put("totalPages", ordersPage.getTotalPages());
+        response.put("number", ordersPage.getNumber());
+        response.put("size", ordersPage.getSize());
+        response.put("hasNext", ordersPage.hasNext());
+        response.put("hasPrevious", ordersPage.hasPrevious());
+        return response;
+    }
 
-    public List<ManagerOrderRes> getManagerOrders() {
-        List<Order> orders = orderRepository.findAllByOrderByOrderDateDesc();
-        return orders.stream().map(order -> {
-            ManagerOrderRes res = new ManagerOrderRes();
-            res.setId(order.getId());
-            res.setPhoneNumber(order.getPhoneNumber());
-            res.setOrderDate(order.getOrderDate());
-            res.setDeliveryDate(order.getDeliveryDate());
-            res.setTotalPrice(order.getTotalPrice());
-            res.setShippingStatus(order.getShippingStatus());
-            res.setPaymentStatus(order.getPaymentStatus());
-            return res;
-        }).collect(Collectors.toList());
+    public Map<String, Object> getManagerOrders(Pageable pageable) {
+        Page<Order> ordersPage = orderRepository.findAllByOrderByOrderDateDesc(pageable);
+        return toPagedResponse(ordersPage, ManagerOrderResMapper:: toManagerOrderResList);
+    }
+
+    public Map<String, Object> searchManagerOrders(String keyword, Pageable pageable) {
+        Page<Order> ordersPage = orderRepository.findByIdPrefixOrderByOrderDateDesc(keyword, pageable);
+        return toPagedResponse(ordersPage, ManagerOrderResMapper:: toManagerOrderResList);
     }
 
     public OrderDetailRes getOrderDetail(String orderId) {

@@ -34,12 +34,6 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
-//        Object pictureAttr = oAuth2User.getAttribute("picture");
-//        String imageName = null;
-//
-//        if (pictureAttr instanceof String) {
-//            imageName = (String) pictureAttr;
-//        }
 
         Object pictureAttr = oAuth2User.getAttribute("picture");
         String imageName = null;
@@ -75,11 +69,11 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             account.setPhoneNumber("");
             account.setShippingAddress("");
             account.setGender(0);
+            account.setStatus(1);
             accountRepository.save(account);
         } else {
             // ✅ Nếu đã tồn tại, có thể cập nhật thông tin nếu muốn
             account = accountOptional.get();
-            name = account.getFullName();
             imageName = account.getImageName();
         }
 
