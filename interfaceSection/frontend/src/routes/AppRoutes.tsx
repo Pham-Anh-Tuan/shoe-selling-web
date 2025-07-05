@@ -24,6 +24,9 @@ import BlogList from '../components/Admin/BlogManager/BlogList';
 import Blogs from '../components/Blogs/Blogs';
 import BlogDetail from '../components/BlogDetail/BlogDetail';
 import OAuth2Redirect from '../components/SignInOut/OAuth2Redirect';
+import Interest from '../components/Interest/Interest';
+import TopTypes from '../components/TopTypes/TopTypes';
+import BannerList from '../components/Admin/BannerManager/BannerList';
 
 const AppRoutes = () => {
     const [signInPopup, setSignInPopup] = useState(false);
@@ -66,7 +69,9 @@ const AppRoutes = () => {
                 />}>
                     <Route index element={<>
                         <Hero />
+                        <TopTypes />
                         <Products />
+                        <Interest />
                     </>} />
                     <Route path="giay-nam" element={<Products />} />
                     <Route path="giay-the-thao" element={<Products />} />
@@ -130,6 +135,7 @@ const AppRoutes = () => {
                             <Route path="orderList" element={<OrderList />} />
                             <Route path="accountList" element={<AccountList />} />
                             <Route path="blogList" element={<BlogList />} />
+                            <Route path="bannerList" element={<BannerList />} />
                         </Route>
                     )}
 

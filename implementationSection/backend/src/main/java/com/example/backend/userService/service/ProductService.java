@@ -1,5 +1,6 @@
 package com.example.backend.userService.service;
 
+import com.example.backend.core.config.ImageConfig;
 import com.example.backend.core.mapper.HomeProductResMapper;
 import com.example.backend.core.mapper.ManagerProductResMapper;
 import com.example.backend.core.request.*;
@@ -130,7 +131,7 @@ public class ProductService {
                 String projectDir = System.getProperty("user.dir");
 
                 String fileName = UUID.randomUUID().toString() + ".png";
-                Path uploadPath = Paths.get(projectDir, "user/uploads", fileName);
+                Path uploadPath = Paths.get(projectDir, ImageConfig.uploadPath, fileName);
 
                 try {
                     Files.createDirectories(uploadPath.getParent()); // tạo thư mục nếu chưa có
@@ -232,7 +233,7 @@ public class ProductService {
                     // Trường hợp update ảnh hoặc thêm ảnh
                     if (file != null) {
                         String fileName = UUID.randomUUID().toString() + ".png";
-                        Path uploadPath = Paths.get(projectDir, "user/uploads", fileName);
+                        Path uploadPath = Paths.get(projectDir, ImageConfig.uploadPath, fileName);
                         image.setPath(fileName);
                         try {
                             Files.createDirectories(uploadPath.getParent()); // tạo thư mục nếu chưa có
@@ -254,7 +255,7 @@ public class ProductService {
                     image.setPath(fileName);
                     MultipartFile file = imageRequest.getImageFile();
                     if (file != null) {
-                        Path uploadPath = Paths.get(projectDir, "user/uploads", fileName);
+                        Path uploadPath = Paths.get(projectDir, ImageConfig.uploadPath, fileName);
 
                         try {
                             Files.createDirectories(uploadPath.getParent()); // tạo thư mục nếu chưa có
@@ -299,7 +300,7 @@ public class ProductService {
             for (Color color : product.getColors()) {
                 for (Image image : color.getImages()) {
                     String fileName = image.getPath();
-                    Path imagePath = Paths.get(projectDir, "user/uploads", fileName);
+                    Path imagePath = Paths.get(projectDir, ImageConfig.uploadPath, fileName);
                     try {
                         Files.deleteIfExists(imagePath);
                     } catch (IOException e) {

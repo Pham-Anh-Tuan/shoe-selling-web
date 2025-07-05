@@ -40,4 +40,9 @@ public class ImageController {
         return imageService.getImage(imageName, "blogImages");
     }
 
+    @GetMapping("/bannerImages/{imageName}")
+    public ResponseEntity<byte[]> getBannerImage(@PathVariable String imageName) throws IOException {
+        return imageService.getImage(imageName, "banners");
+    }
+
 }

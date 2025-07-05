@@ -29,6 +29,9 @@ public class Banner {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "status")
+    private int status;
+
     @Column(nullable = false, length = 100)
     private String email;
 

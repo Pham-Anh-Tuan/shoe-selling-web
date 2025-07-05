@@ -32,7 +32,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class BlogService {
@@ -169,7 +168,6 @@ public class BlogService {
 
         // 3. XÓA BLOG
         blogRepository.deleteById(blogId);
-
         return ResponseEntity.ok("Đã xóa blog thành công và các ảnh liên quan.");
     }
 

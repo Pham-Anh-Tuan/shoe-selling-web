@@ -45,23 +45,23 @@ public class OrderController {
         return orderService.searchManagerOrders(keyword, pageable);
     }
 
-    @GetMapping(path = "/admin/orderDetail/{id}")
+    @GetMapping(path = "/staff/orderDetail/{id}")
     public ResponseEntity<OrderDetailRes> getOrderDetail(@PathVariable("id") String id) {
         return ResponseEntity.ok(orderService.getOrderDetail(id));
     }
 
-    @GetMapping(path = "/admin/orderUpdation/{id}")
+    @GetMapping(path = "/staff/orderUpdation/{id}")
     public ResponseEntity<OrderUpdationDTO> getOrderUpdation(@PathVariable("id") String id) {
         return ResponseEntity.ok(orderService.getOrderUpdation(id));
     }
 
-    @DeleteMapping("/admin/cancelOrder/{id}")
+    @DeleteMapping("/staff/cancelOrder/{id}")
     public ResponseEntity<?> cancelOrder(@PathVariable("id") String id) {
         orderService.cancelOrder(id);
         return ResponseEntity.ok("orderService.getOrderUpdation(id)");
     }
 
-    @PostMapping(value ="/admin/updateOrder")
+    @PostMapping(value ="/staff/updateOrder")
     public ResponseEntity<?> updateOrder(@RequestBody OrderUpdationDTO orderUpdationDTO) {
         orderService.updateOrder(orderUpdationDTO);
         return ResponseEntity.ok("Order updated successfully");

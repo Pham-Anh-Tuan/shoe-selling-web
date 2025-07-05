@@ -118,13 +118,14 @@ const Products = () => {
 
 
   return (
-    <div className="mt-10 mb-12">
+    <div className="mt-12 mb-12">
       <div className="container">
         {/* Header section */}
         <div className="text-center mb-10 max-w-[600px] mx-auto">
           <h1 data-aos="fade-up" className="text-3xl font-bold">
             {category}
           </h1>
+          <div className="h-1 w-16 bg-primary mx-auto mt-2 rounded-full"></div>
           {keyword && (
             <p className="text-base mt-2">
               Có {totalProducts} sản phẩm cho tìm kiếm

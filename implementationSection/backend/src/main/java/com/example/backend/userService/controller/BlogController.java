@@ -25,13 +25,13 @@ public class BlogController {
     @Autowired
     private BlogService blogService;
 
-    @PostMapping(value = "/admin/createBlog", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/staff/createBlog", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> createBlog(@ModelAttribute BlogRequest blogRequest) {
         blogService.createBlog(blogRequest);
         return ResponseEntity.ok("Blog added successfully.");
     }
 
-    @PutMapping(value ="/admin/updateBlog", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value ="/staff/updateBlog", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateBlog(@ModelAttribute BlogRequest blogRequest) {
         return blogService.updateBlog(blogRequest);
     }
@@ -64,12 +64,12 @@ public class BlogController {
         return ResponseEntity.ok(blogService.getBlogPage(id));
     }
 
-    @GetMapping(path = "/admin/blogDetail/{id}")
+    @GetMapping(path = "/staff/blogDetail/{id}")
     public ResponseEntity<BlogRequest> getBlogDetail(@PathVariable("id") String id) {
         return ResponseEntity.ok(blogService.getBlogDetail(id));
     }
 
-    @DeleteMapping("/admin/deleteBlogById/{id}")
+    @DeleteMapping("/staff/deleteBlogById/{id}")
     public ResponseEntity<?> deleteBlogById(@PathVariable("id") String id) {
         return blogService.deleteBlogById(id);
     }

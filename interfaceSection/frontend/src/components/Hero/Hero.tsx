@@ -1,31 +1,33 @@
-import Image1 from "../../assets/hero/slide1.png";
-import Image2 from "../../assets/hero/slide2.png";
-import Image3 from "../../assets/hero/slide3.png";
+import Image1 from "../../assets/hero/top3.png";
+import Image2 from "../../assets/hero/top2.png";
+import Image3 from "../../assets/hero/top1.png";
 import Slider from "react-slick";
+import { useEffect, useState } from "react";
+import { bannerApi } from "../../api-client/api";
 
-const ImageList = [
-  {
-    id: 1,
-    img: Image1,
-    title: "Giày chạy bộ Tree Runners dành cho nữ",
-    description:
-      "Giày thể thao nhẹ và thoáng mát được người hâm mộ yêu thích, được thiết kế để mang hàng ngày.",
-  },
-  {
-    id: 2,
-    img: Image2,
-    title: "Giày chạy bộ nam Tree Runner Go",
-    description:
-      "Giày thể thao hàng ngày thoáng khí, được nâng cấp với độ bền và đệm được cải thiện.",
-  },
-  {
-    id: 3,
-    img: Image3,
-    title: "Tất không lộ hàng mọi lúc",
-    description:
-      "Nhẹ, thoáng khí và được thiết kế để di chuyển và nhún nhảy mà không bị xê dịch.",
-  },
-];
+// const ImageList = [
+//   {
+//     id: 1,
+//     img: Image1,
+//     title: "Giày thể thao Allbirds Women Wool Runner",
+//     description:
+//       "Giày thể thao nhẹ và thoáng mát được người hâm mộ yêu thích, được thiết kế để mang hàng ngày.",
+//   },
+//   {
+//     id: 2,
+//     img: Image2,
+//     title: "Giày chạy bộ nam Tree Runner Go",
+//     description:
+//       "Giày thể thao hàng ngày thoáng khí, được nâng cấp với độ bền và đệm được cải thiện.",
+//   },
+//   {
+//     id: 3,
+//     img: Image3,
+//     title: "Giày Ecco M Core White chính hãng",
+//     description:
+//       "Nhẹ, thoáng khí và được thiết kế để di chuyển và nhún nhảy mà không bị xê dịch.",
+//   },
+// ];
 
 const Hero = () => {
   var settings = {
@@ -41,6 +43,28 @@ const Hero = () => {
     pauseOnFocus: true,
   };
 
+  interface HomeBanner {
+    id: string;
+    title: string;
+    content: string;
+    imageName: string;
+  }
+
+  const [homeBanners, setHomeBanners] = useState<HomeBanner[]>([]);
+
+  const loadBanners = async () => {
+    try {
+      const { data } = await bannerApi.getHomeBanners();
+      setHomeBanners(data);
+    } catch (error) {
+      console.error("Lỗi gọi API:", error);
+    }
+  };
+
+  useEffect(() => {
+    loadBanners();
+  }, []);
+
   return (
     <div className="relative overflow-hidden min-h-[550px] sm:min-h-[650px] bg-gray-100 flex justify-center items-center dark:bg-gray-950 dark:text-white duration-200 ">
       {/* background pattern */}
@@ -48,22 +72,22 @@ const Hero = () => {
       {/* hero section */}
       <div className="container pb-8 sm:pb-0">
         <Slider {...settings}>
-          {ImageList.map((data) => (
+          {homeBanners.map((data) => (
             <div key={data.id}>
               <div className="grid grid-cols-1 sm:grid-cols-2">
                 {/* text content section */}
                 <div className="flex flex-col justify-center gap-4 pt-12 sm:pt-0 text-center sm:text-left order-2 sm:order-1 relative z-10">
                   <h1
-                  
+
                     className="text-5xl sm:text-6xl lg:text-7xl font-bold"
                   >
                     {data.title}
                   </h1>
                   <p
-                    
+
                     className="text-sm"
                   >
-                    {data.description}
+                    {data.content}
                   </p>
                   {/* <div
                     
@@ -78,14 +102,21 @@ const Hero = () => {
                 {/* image section */}
                 <div className="order-1 sm:order-2">
                   <div
-                    
+
                     className="relative z-10"
                   >
                     <img
-                      src={data.img}
+                      src={
+                        typeof data.imageName === 'string'
+                            ? data.imageName.startsWith('data:image') || data.imageName.startsWith('blob:')
+                                ? data.imageName // ảnh mới upload
+                                : import.meta.env.VITE_API_URL_BANNER_IMG + data.imageName // ảnh từ server
+                            : '/path/to/default-image.jpg'
+                    }
                       alt=""
-                      className="w-[300px] h-[300px] sm:h-[450px] sm:w-[450px] sm:scale-105 lg:scale-120 object-contain mx-auto"
+                      className="w-[300px] h-[300px] sm:h-[450px] sm:w-[450px] sm:scale-105 lg:scale-120 object-contain mx-auto drop-shadow-xl"
                     />
+
                   </div>
                 </div>
               </div>

@@ -1,40 +1,42 @@
 import { useEffect, useState } from 'react';
 import Img1 from "../../../assets/male-sneaker/sneaker-blue.png";
-import { BlogAdd } from './BlogAdd';
-import { ManagerBlog } from './BlogInterface';
-import { blogApi } from '../../../api-client/api';
+import { bannerApi } from '../../../api-client/api';
 import formatDateDMYHM from '../../../hooks/DateTimeFormat';
-import { BlogUpdation } from './BlogUpdation';
 import { alertError } from '../../Shared/AlertError';
 import { ToastContainer } from 'react-toastify';
 import Pagination from '../../../hooks/Pagination';
+import { ManagerBanner } from './BannerInterface';
+import { BannerAdd } from './BannerAdd';
+import { BannerUpdation } from './BannerUpdation';
 
-const BlogList = () => {
+const BannerList = () => {
     const [showAdd, setShowAdd] = useState(false);
-    const [showUpdate, setShowUpdate] = useState(false);
-    const [updateId, setUpdateId] = useState<string>("");
-    const [deleteId, setDeleteId] = useState<string>("");
-
     const toggleAdd = () => {
         setShowAdd(!showAdd);
     };
+
+    const [showUpdate, setShowUpdate] = useState(false);
+    const [updateId, setUpdateId] = useState<string>("");
     const toggleUpdate = () => {
         setShowUpdate(!showUpdate);
     };
 
+    const [deleteId, setDeleteId] = useState<string>("");
+
+
     const [page, setPage] = useState(0); // Trang hiện tại (bắt đầu từ 0)
     const [totalPages, setTotalPages] = useState(1); // Tổng số trang
-    const [totalBlogs, setTotalBlogs] = useState(0);
+    const [totalBanners, setTotalBanners] = useState(0);
     const [keyword, setKeyword] = useState("");
 
-    const [managerBlogs, setManagerBlogs] = useState<ManagerBlog[]>([]);
+    const [managerBanners, setManagerBanners] = useState<ManagerBanner[]>([]);
 
-    const loadBlogs = async (pageParam: number) => {
+    const loadBanners = async (pageParam: number) => {
         try {
-            const { data } = await blogApi.getManagerBlogs(pageParam, 5);
-            setManagerBlogs(data.content);
+            const { data } = await bannerApi.getManagerBanners(pageParam, 5);
+            setManagerBanners(data.content);
             setTotalPages(data.totalPages);
-            setTotalBlogs(data.totalElements);
+            setTotalBanners(data.totalElements);
             setPage(data.number); // hoặc pageParam
         } catch (error) {
             console.error("Lỗi gọi API:", error);
@@ -44,10 +46,10 @@ const BlogList = () => {
     const loadSearchResults = async (pageParam: number, e?: React.FormEvent) => {
         if (e) e.preventDefault();
         try {
-            const { data } = await blogApi.searchManagerBlogs(keyword.trim(), pageParam, 5);
-            setManagerBlogs(data.content);
+            const { data } = await bannerApi.searchManagerBanners(keyword.trim(), pageParam, 5);
+            setManagerBanners(data.content);
             setTotalPages(data.totalPages);
-            setTotalBlogs(data.totalElements);
+            setTotalBanners(data.totalElements);
             setPage(data.number);
         } catch (err) {
             console.error("Lỗi khi tìm sản phẩm:", err);
@@ -55,20 +57,20 @@ const BlogList = () => {
     };
 
     useEffect(() => {
-        setManagerBlogs([]);
+        setManagerBanners([]);
         setPage(0); // reset page
-        loadBlogs(0); // bắt đầu từ trang 0
+        loadBanners(0); // bắt đầu từ trang 0
     }, []);
 
     useEffect(() => {
         if (keyword.trim() === "") {
-            loadBlogs(0);
+            loadBanners(0);
         }
     }, [keyword]);
 
-    const deleteBlog = async () => {
+    const deleteBanner = async () => {
         try {
-            await blogApi.deleteBlogById(deleteId);
+            await bannerApi.deleteBannerById(deleteId);
             window.location.reload();
         } catch (error: any) {
             alertError(error?.response?.data);
@@ -84,14 +86,14 @@ const BlogList = () => {
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                             <div className="flex-1 flex flex-col">
                                 <h3 className="text-lg font-bold">
-                                    Danh sách bài viết
+                                    Danh sách banner
                                 </h3>
-                                <span className="dark:text-white text-sm">Tổng số: {totalBlogs}</span>
+                                <span className="dark:text-white text-sm">Tổng số: {totalBanners}</span>
                             </div>
                         </div>
                         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                             <div className="w-full md:w-1/2">
-                            <form className="flex items-center" onSubmit={(e) => loadSearchResults(0, e)}>
+                                <form className="flex items-center" onSubmit={(e) => loadSearchResults(0, e)}>
                                     <label htmlFor="simple-search" className="sr-only">Search</label>
                                     <div className="relative w-full">
                                         <button
@@ -104,17 +106,18 @@ const BlogList = () => {
                                         <input
                                             value={keyword}
                                             onChange={(e) => setKeyword(e.target.value)}
-                                            type="text" id="simple-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Tìm kiếm theo tiêu đề bài viết" required />
+                                            type="text" id="simple-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Tìm kiếm theo tiêu đề" required />
                                     </div>
                                 </form>
                             </div>
                             <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                                <button onClick={toggleAdd}
+                                <button
+                                    onClick={toggleAdd}
                                     type="button" className="flex items-center justify-center text-white bg-primary hover:bg-orange-400 font-medium rounded-lg text-sm px-4 py-2 dark:bg-orange-600 dark:hover:bg-orange-700 ">
                                     <svg className="h-3.5 w-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                         <path clipRule="evenodd" fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                                     </svg>
-                                    Thêm bài viết
+                                    Thêm banner
                                 </button>
                             </div>
                         </div>
@@ -132,34 +135,34 @@ const BlogList = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {managerBlogs.map((managerBlog) => (
-                                        <tr key={managerBlog.id}
+                                    {managerBanners.map((managerBanner) => (
+                                        <tr key={managerBanner.id}
                                             className="border-b dark:border-gray-700">
                                             <th scope="row" className="px-4 py-3 font-medium text-gray-900  dark:text-white">
-                                                <p className='w-44'> {managerBlog.title}</p>
+                                                <p className='w-44'> {managerBanner.title}</p>
                                             </th>
                                             <td className="py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 <img
                                                     src={
-                                                        typeof managerBlog.thumbnailName === 'string'
-                                                            ? managerBlog.thumbnailName.startsWith('data:image') || managerBlog.thumbnailName.startsWith('blob:')
-                                                                ? managerBlog.thumbnailName // ảnh mới upload
-                                                                : import.meta.env.VITE_API_URL_THUMB_IMG + managerBlog.thumbnailName // ảnh từ server
+                                                        typeof managerBanner.imageName === 'string'
+                                                            ? managerBanner.imageName.startsWith('data:image') || managerBanner.imageName.startsWith('blob:')
+                                                                ? managerBanner.imageName // ảnh mới upload
+                                                                : import.meta.env.VITE_API_URL_BANNER_IMG + managerBanner.imageName // ảnh từ server
                                                             : '/path/to/default-image.jpg'
                                                     }
-                                                    alt="Blog"
+                                                    alt="Banner"
                                                     className="max-w-[180px] w-auto h-[180px] object-cover rounded-md mx-auto"
                                                 />
                                             </td>
 
-                                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{managerBlog?.createdAt ? formatDateDMYHM(managerBlog.createdAt) : ''}</td>
+                                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{managerBanner?.createdAt ? formatDateDMYHM(managerBanner.createdAt) : ''}</td>
 
                                             <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                                                {managerBlog?.status === 0
+                                                {managerBanner?.status === 0
                                                     ? <dd className="me-2 inline-flex items-center rounded bg-red-100 px-2.5 py-2 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
                                                         Inactive
                                                     </dd>
-                                                    : managerBlog?.status === 1
+                                                    : managerBanner?.status === 1
                                                         ? <dd className="me-2 inline-flex items-center rounded bg-green-100 px-2.5 py-2 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
                                                             Active
                                                         </dd> : "Không xác định"}
@@ -169,7 +172,7 @@ const BlogList = () => {
                                                 <div className="flex items-center space-x-4">
                                                     <button
                                                         onClick={() => {
-                                                            setUpdateId(managerBlog.id);
+                                                            setUpdateId(managerBanner.id);
                                                             toggleUpdate();
                                                         }}
                                                         type="button" className="w-28 py-2 px-3 flex items-center text-sm font-medium text-center text-white
@@ -190,11 +193,12 @@ const BlogList = () => {
                                                     Xem
                                                 </button> */}
 
-                                                    <button onClick={() => {
-                                                        setDeleteId(managerBlog.id);
-                                                        const dropdown = document.getElementById("deleteAlertId");
-                                                        dropdown?.classList.toggle("hidden");
-                                                    }}
+                                                    <button
+                                                        onClick={() => {
+                                                            setDeleteId(managerBanner.id);
+                                                            const dropdown = document.getElementById("deleteAlertId");
+                                                            dropdown?.classList.toggle("hidden");
+                                                        }}
                                                         type="button" className="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600">
                                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 -ml-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                             <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
@@ -214,7 +218,7 @@ const BlogList = () => {
                             currentPage={page}
                             totalPages={totalPages}
                             onPageChange={(page) => {
-                                keyword.trim() ? loadSearchResults(page) : loadBlogs(page);
+                                keyword.trim() ? loadSearchResults(page) : loadBanners(page);
                             }}
                         />
                     </div>
@@ -222,14 +226,14 @@ const BlogList = () => {
             </section >
 
             {showAdd && (
-                <div tabIndex={-1} aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full bg-black bg-opacity-50">
-                    <BlogAdd toggleAdd={toggleAdd} />
+                <div className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full bg-black bg-opacity-50">
+                    <BannerAdd toggleAdd={toggleAdd} />
                 </div>
             )}
 
             {showUpdate && (
-                <div tabIndex={-1} aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full bg-black bg-opacity-50">
-                    <BlogUpdation updateId={updateId} toggleUpdate={toggleUpdate} />
+                <div className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full bg-black bg-opacity-50">
+                    <BannerUpdation updateId={updateId} toggleUpdate={toggleUpdate} />
                 </div>
             )}
 
@@ -249,15 +253,16 @@ const BlogList = () => {
                         <svg className="text-orange-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
-                        <p className="mb-4 text-gray-500 dark:text-gray-300">Bạn có chắc chắn muốn xóa bài viết này không?</p>
+                        <p className="mb-4 text-gray-500 dark:text-gray-300">Bạn có chắc chắn muốn xóa banner này không?</p>
                         <div className="flex justify-center items-center space-x-4">
                             <button onClick={() => {
                                 document.getElementById("deleteAlertId")?.classList.add("hidden");
                             }}
                                 type="button" className="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600">Không</button>
-                            <button onClick={() => {
-                                deleteBlog();
-                            }}
+                            <button
+                                onClick={() => {
+                                    deleteBanner();
+                                }}
                                 type="button" className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700">Có</button>
                         </div>
                     </div>
@@ -268,4 +273,4 @@ const BlogList = () => {
     )
 }
 
-export default BlogList;
+export default BannerList;

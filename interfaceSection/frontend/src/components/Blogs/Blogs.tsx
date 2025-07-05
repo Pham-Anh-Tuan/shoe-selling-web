@@ -41,6 +41,7 @@ const Blogs = () => {
                     <h1 data-aos="fade-up" className="text-3xl font-bold">
                         TẤT CẢ BÀI VIẾT
                     </h1>
+                    <div className="h-1 w-16 bg-primary mx-auto mt-2 rounded-full"></div>
                 </div>
                 {/* Body section */}
                 <div>

@@ -1,5 +1,6 @@
 package com.example.backend.core.utils;
 
+import com.example.backend.core.config.ImageConfig;
 import com.example.backend.core.request.ColorUpdateRequest;
 import com.example.backend.core.request.ImageRequest;
 import com.example.backend.userService.model.Color;
@@ -38,7 +39,7 @@ public class UpdateProductUtil {
         for (Color color : deleteColors) {
             for (Image image : color.getImages()) {
                 String fileName = image.getPath();
-                Path imagePath = Paths.get(projectDir, "user/uploads", fileName);
+                Path imagePath = Paths.get(projectDir, ImageConfig.uploadPath, fileName);
                 try {
                     Files.deleteIfExists(imagePath);
                 } catch (IOException e) {
@@ -72,7 +73,7 @@ public class UpdateProductUtil {
         String projectDir = System.getProperty("user.dir");
         for (Image image : deleteImages) {
             String fileName = image.getPath();
-            Path imagePath = Paths.get(projectDir, "user/uploads", fileName);
+            Path imagePath = Paths.get(projectDir, ImageConfig.uploadPath, fileName);
             try {
                 Files.deleteIfExists(imagePath);
             } catch (IOException e) {

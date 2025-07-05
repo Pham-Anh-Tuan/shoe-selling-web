@@ -27,11 +27,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping(path = "/public/homeProducts")
-    public ResponseEntity<List<HomeProductRes>> getProducts() {
-        return ResponseEntity.ok(productService.getAllProductsOrdered());
-    }
-
     @GetMapping(path = "/public/getProductsByType")
     public Map<String, Object> getProductsByTypeWithPaging(
             @RequestParam("types") List<Integer> types,
@@ -87,16 +82,17 @@ public class ProductController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping(value = "/admin/addProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/staff/addProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addProduct(@ModelAttribute ProductRequest productRequest) {
         return productService.addProduct(productRequest);
     }
-    @PutMapping(value ="/admin/updateProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+
+    @PutMapping(value ="/staff/updateProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateProduct(@ModelAttribute ProductUpdateRequest productUpdateRequest) {
         return productService.updateProduct(productUpdateRequest);
     }
 
-    @DeleteMapping("/admin/deleteProduct/{id}")
+    @DeleteMapping("/staff/deleteProduct/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable String id) {
         boolean deleted = productService.deleteProductById(id);
         if (deleted) {

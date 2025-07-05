@@ -1,15 +1,8 @@
-import { Blog } from '../components/Admin/BlogManager/BlogInterface';
 import { OrderUpdate } from '../components/Admin/OrderManager/OrderContext';
 import { CartItem } from '../components/Cart/CartContext';
 import { Order } from '../components/Payment/OrderInterface';
 import { LoginData, RegisterData } from '../components/SignInOut/authTypes';
 import { axiosClient, axiosServer } from './axiosClient';
-
-export const homeProductsApi = {
-    getAll() {
-        return axiosClient.get('/api/public/homeProducts');
-    },
-}
 
 export const productDetailApi = {
     getById(id: String) {
@@ -17,27 +10,21 @@ export const productDetailApi = {
     },
 }
 
-export const managerProductsApi = {
-    getAll() {
-        return axiosClient.get('/api/admin/managerProducts');
-    },
-}
-
 export const addProductApi = {
     addProduct(formData: FormData) {
-        return axiosServer.post('/api/admin/addProduct', formData);
+        return axiosServer.post('/api/staff/addProduct', formData);
     },
 }
 
 export const updateProductApi = {
     updateProduct(formData: FormData) {
-        return axiosServer.put('/api/admin/updateProduct', formData);
+        return axiosServer.put('/api/staff/updateProduct', formData);
     },
 }
 
 export const deleteProductApi = {
     deleteById(id: String) {
-        return axiosClient.delete(`/api/admin/deleteProduct/${id}`);
+        return axiosClient.delete(`/api/staff/deleteProduct/${id}`);
     },
 }
 
@@ -153,17 +140,54 @@ export const cartApi = {
     },
 }
 
+export const bannerApi = {
+    getBannerDetail(id: String) {
+        return axiosClient.get('/api/staff/bannerDetail/' + id);
+    },
+
+    getHomeBanners() {
+        return axiosClient.get('/api/public/homeBanners');
+    },
+
+    getManagerBanners(page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+        return axiosClient.get('/api/staff/managerBanners', { params });
+    },
+
+    searchManagerBanners(keyword: string, page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("keyword", keyword);
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+        return axiosClient.get(`/api/staff/searchManagerBanners`, { params });
+    },
+
+    createBanner(formData: FormData) {
+        return axiosServer.post('/api/staff/createBanner', formData);
+    },
+
+    updateBanner(formData: FormData) {
+        return axiosServer.post('/api/staff/updateBanner', formData);
+    },
+
+    deleteBannerById(id: String) {
+        return axiosClient.delete(`/api/staff/deleteBannerById/${id}`);
+    },
+}
+
 export const blogApi = {
     createBlog(formData: FormData) {
-        return axiosServer.post('/api/admin/createBlog', formData);
+        return axiosServer.post('/api/staff/createBlog', formData);
     },
 
     updateBlog(formData: FormData) {
-        return axiosServer.put('/api/admin/updateBlog', formData);
+        return axiosServer.put('/api/staff/updateBlog', formData);
     },
 
     deleteBlogById(id: String) {
-        return axiosClient.delete(`/api/admin/deleteBlogById/${id}`);
+        return axiosClient.delete(`/api/staff/deleteBlogById/${id}`);
     },
 
     getSumBlogs(page: number, size: number) {
@@ -193,7 +217,7 @@ export const blogApi = {
     },
 
     getBlogDetail(id: String) {
-        return axiosClient.get('/api/admin/blogDetail/' + id);
+        return axiosClient.get('/api/staff/blogDetail/' + id);
     },
 }
 
@@ -201,6 +225,7 @@ export const orderApi = {
     createOrder(order: Order) {
         return axiosClient.post('/api/user/createOrder', order);
     },
+
     getManagerOrders(page: number, size: number) {
         const params = new URLSearchParams();
         params.append("page", page.toString());
@@ -218,15 +243,15 @@ export const orderApi = {
     },
 
     getById(id: String) {
-        return axiosClient.get('/api/admin/orderDetail/' + id);
+        return axiosClient.get('/api/staff/orderDetail/' + id);
     },
     getUpdationById(id: String) {
-        return axiosClient.get('/api/admin/orderUpdation/' + id);
+        return axiosClient.get('/api/staff/orderUpdation/' + id);
     },
     updateOrder(orderUpdate: OrderUpdate) {
-        return axiosClient.post('/api/admin/updateOrder', orderUpdate);
+        return axiosClient.post('/api/staff/updateOrder', orderUpdate);
     },
     deleteById(id: String) {
-        return axiosClient.delete(`/api/admin/cancelOrder/${id}`);
+        return axiosClient.delete(`/api/staff/cancelOrder/${id}`);
     },
 }

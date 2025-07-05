@@ -178,7 +178,7 @@ export const Navbar: React.FC<NavbarProps> = ({ handleSignInPopup }) => {
                                 <div className="relative w-full">
                                     <input value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        type="text" id="simple-search1" className="w-[160px] md:w-[200px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block h-8" placeholder="Tên sản phẩm..." required />
+                                        type="text" id="simple-search1" className="w-[160px] md:w-[200px] bg-gray-50 border border-gray-100 text-gray-900 text-sm rounded-md focus:ring-primary focus:border-primary block h-8" placeholder="Tên sản phẩm..." required />
                                 </div>
                                 <button type="submit" className="bg-gradient-to-r from-primary to-secondary rounded-md px-2 py-0 ms-2 text-sm font-medium text-white h-8">
                                     {/* <button type="submit" className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-md px-2 py-0 ms-2 text-sm font-medium text-white h-8"> */}
