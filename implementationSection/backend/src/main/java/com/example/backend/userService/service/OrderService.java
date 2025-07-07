@@ -1,12 +1,14 @@
 package com.example.backend.userService.service;
 
 import com.example.backend.core.dto.OrderUpdationDTO;
+import com.example.backend.core.dto.UserOrderUpdationDTO;
 import com.example.backend.core.mapper.ManagerOrderResMapper;
+import com.example.backend.core.mapper.UserOrderResMapper;
 import com.example.backend.core.request.OrderItemRequest;
 import com.example.backend.core.request.OrderRequest;
-import com.example.backend.core.response.ManagerOrderRes;
 import com.example.backend.core.response.OrderDetailRes;
 import com.example.backend.core.response.OrderItemRes;
+import com.example.backend.core.response.UserOrderDetailRes;
 import com.example.backend.core.utils.ProductUtil;
 import com.example.backend.userService.model.Account;
 import com.example.backend.userService.model.Order;
@@ -26,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -144,6 +145,11 @@ public class OrderService {
         return response;
     }
 
+    public Map<String, Object> getUserOrders(String email, List<Integer> shippingStatus, Pageable pageable) {
+        Page<Order> ordersPage = orderRepository.findByAccount_EmailAndShippingStatusInOrderByOrderDateDesc(email, shippingStatus, pageable);
+        return toPagedResponse(ordersPage, UserOrderResMapper:: toUserOrderResList);
+    }
+
     public Map<String, Object> getManagerOrders(Pageable pageable) {
         Page<Order> ordersPage = orderRepository.findAllByOrderByOrderDateDesc(pageable);
         return toPagedResponse(ordersPage, ManagerOrderResMapper:: toManagerOrderResList);
@@ -191,6 +197,37 @@ public class OrderService {
         return res;
     }
 
+    public UserOrderDetailRes getUserOrderDetail(String orderId) {
+        Optional<Order> order = orderRepository.findById(orderId);
+        if (!order.isPresent()) {
+            return null;
+        }
+        Order orderDetail = order.get();
+        UserOrderDetailRes res = new UserOrderDetailRes();
+        res.setId(orderDetail.getId());
+        res.setPhoneNumber(orderDetail.getPhoneNumber());
+        res.setShippingAddress(orderDetail.getShippingAddress());
+        res.setTotalPrice(orderDetail.getTotalPrice());
+        res.setDeliveryDate(orderDetail.getDeliveryDate());
+        res.setPayMethod(orderDetail.getPayMethod());
+        res.setShippingStatus(orderDetail.getShippingStatus());
+        List<OrderItemRes> orderItemResList = new ArrayList<>();
+
+        List<OrderItem> orderItems = orderDetail.getOrderItems();
+        for (OrderItem orderItem : orderItems) {
+            OrderItemRes orderItemRes = new OrderItemRes();
+            orderItemRes.setProductName(orderItem.getProductName());
+            orderItemRes.setColorHex(orderItem.getColorHex());
+            orderItemRes.setSize(orderItem.getSize());
+            orderItemRes.setPurchaseQuantity(orderItem.getPurchaseQuantity());
+            orderItemRes.setPrice(orderItem.getPrice());
+            orderItemRes.setPath(orderItem.getPath());
+            orderItemResList.add(orderItemRes);
+        }
+        res.setOrderItems(orderItemResList);
+        return res;
+    }
+
     public OrderUpdationDTO getOrderUpdation(String orderId) {
         Optional<Order> order = orderRepository.findById(orderId);
         if (!order.isPresent()) {
@@ -203,6 +240,31 @@ public class OrderService {
                 orderDetail.getPaymentStatus(),
                 orderDetail.getEmail());
         return res;
+    }
+
+    public UserOrderUpdationDTO getUserOrderUpdation(String orderId) {
+        Optional<Order> order = orderRepository.findById(orderId);
+        if (!order.isPresent()) {
+            return null;
+        }
+        Order orderDetail = order.get();
+        UserOrderUpdationDTO res = new UserOrderUpdationDTO(orderDetail.getId(),
+                orderDetail.getPhoneNumber(),
+                orderDetail.getShippingAddress(),
+                orderDetail.getPayMethod());
+        return res;
+    }
+
+    public void updateUserOrder(UserOrderUpdationDTO userOrderUpdationDTO) {
+        Optional<Order> order = orderRepository.findById(userOrderUpdationDTO.getId());
+        if (!order.isPresent()) {
+            return;
+        }
+        Order orderDetail = order.get();
+        orderDetail.setPhoneNumber(userOrderUpdationDTO.getPhoneNumber());
+        orderDetail.setShippingAddress(userOrderUpdationDTO.getShippingAddress());
+        orderDetail.setPayMethod(userOrderUpdationDTO.getPayMethod());
+        orderRepository.save(orderDetail);
     }
 
     public void updateOrder(OrderUpdationDTO orderUpdationDTO) {

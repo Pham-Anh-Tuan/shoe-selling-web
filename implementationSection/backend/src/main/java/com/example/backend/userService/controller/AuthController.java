@@ -1,5 +1,6 @@
 package com.example.backend.userService.controller;
 
+import com.example.backend.core.request.ChangePasswordRequest;
 import com.example.backend.core.request.RegisterRequest;
 import com.example.backend.userService.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,10 @@ public class AuthController {
     @PostMapping("/public/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
         return authService.login(request);
+    }
+
+    @PostMapping("/user/changePassword")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) {
+        return authService.changePassword(request.getEmail(), request.getOldPassword(), request.getNewPassword());
     }
 }

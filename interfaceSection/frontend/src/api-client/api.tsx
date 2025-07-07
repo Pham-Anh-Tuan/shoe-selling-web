@@ -89,6 +89,10 @@ export const authApi = {
     register(registerData: RegisterData) {
         return axiosClient.post('/api/public/register', registerData);
     },
+
+    changePassword(formData: FormData) {
+        return axiosClient.post('/api/user/changePassword', formData);
+    },
 };
 
 export const profileApi = {
@@ -103,6 +107,8 @@ export const profileApi = {
     getProfileSumByEmail(email: String) {
         return axiosClient.get('/api/user/getProfileSumByEmail/' + email);
     },
+
+
 }
 
 export const accountApi = {
@@ -226,6 +232,20 @@ export const orderApi = {
         return axiosClient.post('/api/user/createOrder', order);
     },
 
+    getUserOrders(shippingStatus: number[], email: string, page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("email", email);
+
+        shippingStatus.forEach((st) => {
+            params.append("shippingStatus", st.toString());
+        });
+
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+
+        return axiosClient.get('/api/user/userOrders', { params });
+    },
+
     getManagerOrders(page: number, size: number) {
         const params = new URLSearchParams();
         params.append("page", page.toString());
@@ -245,13 +265,28 @@ export const orderApi = {
     getById(id: String) {
         return axiosClient.get('/api/staff/orderDetail/' + id);
     },
+
+    getUserOrderDetail(id: String) {
+        return axiosClient.get('/api/user/userOrderDetail/' + id);
+    },
+
     getUpdationById(id: String) {
         return axiosClient.get('/api/staff/orderUpdation/' + id);
     },
+
+    getUserUpdationById(id: String) {
+        return axiosClient.get('/api/user/userOrderUpdation/' + id);
+    },
+
     updateOrder(orderUpdate: OrderUpdate) {
         return axiosClient.post('/api/staff/updateOrder', orderUpdate);
     },
+
+    updateUserOrder(formData: FormData) {
+        return axiosClient.post('/api/user/updateUserOrder', formData);
+    },
+
     deleteById(id: String) {
-        return axiosClient.delete(`/api/staff/cancelOrder/${id}`);
+        return axiosClient.delete(`/api/user/cancelOrder/${id}`);
     },
 }

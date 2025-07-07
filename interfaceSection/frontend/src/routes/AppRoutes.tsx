@@ -111,7 +111,7 @@ const AppRoutes = () => {
 
                     <Route path="orderSuccess" element={<OrderSuccess />} />
 
-                    <Route path="orderDetail" element={<OrderDetail />} />
+                    <Route path="orderDetail/:id" element={<OrderDetail />} />
 
                     {localStorage.getItem("token") && (
                         <Route path="" element={<ProfileLayout />}>

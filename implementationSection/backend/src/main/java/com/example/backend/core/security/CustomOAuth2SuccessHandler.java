@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -74,6 +75,11 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         } else {
             // ✅ Nếu đã tồn tại, có thể cập nhật thông tin nếu muốn
             account = accountOptional.get();
+            if (account.getStatus() == 0) {
+                String redirectUrl = "http://localhost:5173?error=" + URLEncoder.encode("Tài khoản này đã bị khóa.", "UTF-8");
+                response.sendRedirect(redirectUrl);
+                return;
+            }
             imageName = account.getImageName();
         }
 

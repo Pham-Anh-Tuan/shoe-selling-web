@@ -37,6 +37,8 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
                 alertError("Email không tồn tại.");
             } else if (message === "Invalid password") {
                 alertError("Mật khẩu không đúng.");
+            } else if (message === "Account blocked") {
+                alertError("Tài khoản này đã bị khóa.");
             } else {
                 alertError("Đăng nhập thất bại.");
             }

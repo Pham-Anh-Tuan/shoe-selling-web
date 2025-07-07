@@ -12,6 +12,8 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, String> {
     List<Order> findAllByOrderByOrderDateDesc();
 
+    Page<Order> findByAccount_EmailAndShippingStatusInOrderByOrderDateDesc(String email, List<Integer> shippingStatus, Pageable pageable);
+
     Page<Order> findAllByOrderByOrderDateDesc(Pageable pageable);
 
     @Query("SELECT o FROM Order o WHERE SUBSTRING(o.id, 1, 11) = :idPrefix ORDER BY o.orderDate DESC")
