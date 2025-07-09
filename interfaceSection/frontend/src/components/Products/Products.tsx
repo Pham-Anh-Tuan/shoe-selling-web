@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { productApi } from "../../api-client/api";
+import { favoriteApi, productApi } from "../../api-client/api";
 import formatCurrencyVND from '../../hooks/FormatCurrency';
 import { FaHeart } from "react-icons/fa6";
+import { alertSuccess } from "../Shared/AlertSuccess";
+import { alertError } from "../Shared/AlertError";
 
 interface ColorWithImage {
   colorHex: string;
@@ -113,8 +115,41 @@ const Products = () => {
 
   useEffect(() => {
     updateLogStatus();
+    loadFavoriteProducts();
   }, []);
 
+  const handleToggleFavorite = async (productId: string) => {
+    try {
+      const email = localStorage.getItem("email");
+      if (email) {
+        const response = await favoriteApi.toggleFavorite(email, productId);
+        // Toggle trong local state
+        setFavoriteProductIds((prev) =>
+          prev.includes(productId)
+            ? prev.filter((id) => id !== productId)
+            : [...prev, productId]
+        );
+
+        alertSuccess(response.data);
+      }
+    } catch (error: any) {
+      alertError(error?.response?.data);
+    }
+  };
+
+  const [favoriteProductIds, setFavoriteProductIds] = useState<string[]>([]);
+
+  const loadFavoriteProducts = async () => {
+    try {
+      const email = localStorage.getItem("email");
+      if (!email) return;
+      let response = await favoriteApi.getFavoriteProductIds(email);
+      let data = response.data;
+      setFavoriteProductIds(data);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách yêu thích:", error);
+    }
+  };
 
 
   return (
@@ -141,17 +176,6 @@ const Products = () => {
           </div>
         )}
 
-        {/* {keyword && (
-          <div className="mb-6">
-            <p className="text-sm text-gray-600 mb-1">
-              Kết quả tìm kiếm cho "<span className="font-medium">{keyword}</span>"
-            </p>
-            <p className="text-lg font-semibold">
-              Có {productsData.length} sản phẩm cho tìm kiếm
-            </p>
-          </div>
-        )} */}
-
         {/* Body section */}
         <div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center gap-5">
@@ -169,11 +193,28 @@ const Products = () => {
                       onClick={() => navigate(`/productDetail/${data.id}`)}
                       className="w-[350px] sm:w-[380px] h-[300px] object-cover rounded-md"
                     />
-                    {!isLoggedIn && (
-                      <div className="absolute top-4 left-4">
+                    {/* {!isLoggedIn && (
+                      <div onClick={() => handleToggleFavorite(data.id)}
+                        className="absolute top-4 left-4">
                         <FaHeart className='text-gray-400 text-2xl hover:text-red-500' />
                       </div>
+                    )} */}
+
+                    {!isLoggedIn && (
+                      <div
+                        className="absolute top-4 left-4 cursor-pointer"
+                        onClick={() => handleToggleFavorite(data.id)}
+                      >
+                        <FaHeart
+                          className={
+                            favoriteProductIds.includes(data.id)
+                              ? "text-red-500 text-2xl"
+                              : "text-gray-400 text-2xl hover:text-red-500"
+                          }
+                        />
+                      </div>
                     )}
+
                   </div>
                 </div>
                 <div className="w-[350px] sm:w-[270px] md:w-[217px] lg:w-[217px] xl:w-[281px]">
@@ -204,7 +245,7 @@ const Products = () => {
           {page < totalPages && (
             <div className="flex justify-center">
               <button
-                className="text-center mt-10 cursor-pointer bg-primary text-white py-1 px-5 rounded-md"
+                className="text-center mt-4 cursor-pointer bg-primary text-white py-1 px-5 rounded-md"
                 onClick={() => keyword ? loadSearchResults(page) : loadProducts(types, page)}
               >
                 XEM THÊM

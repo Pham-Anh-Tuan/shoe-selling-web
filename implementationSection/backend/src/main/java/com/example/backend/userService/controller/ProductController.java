@@ -1,15 +1,12 @@
 package com.example.backend.userService.controller;
 
 import com.example.backend.core.request.ProductUpdateRequest;
-import com.example.backend.core.response.HomeProductRes;
-import com.example.backend.core.response.ManagerProductRes;
 import com.example.backend.core.response.ProductDetailRes;
 import com.example.backend.core.mapper.ProductDetailMapper;
 import com.example.backend.userService.model.Product;
 import com.example.backend.core.request.ProductRequest;
 import com.example.backend.userService.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

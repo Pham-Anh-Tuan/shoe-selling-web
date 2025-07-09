@@ -109,36 +109,6 @@ const Chart = () => {
 
     return (
         <div className='w-full p-4 bg-gray-100 dark:bg-gray-900'>
-            {/* <div className="flex items-center justify-center gap-4 mt-16">
-                <div className='flex gap-4 bg-white dark:bg-gray-800 rounded-2xl p-3 shadow'>
-                    <div className='flex flex-col gap-1'>
-                        <label htmlFor="date" className="text-xl font-medium">
-                            Ngày:
-                        </label>
-                        <input
-                            type="date"
-                            id="date"
-                            className="border rounded-md px-2 py-1 w-36 text-blue-600 dark:bg-gray-800"
-                            value={selectedDate}
-                            onChange={(e) => {
-                                const date = e.target.value;
-                                setSelectedDate(date);
-                                setDailyRevenue(dailySalesData[date] ?? null);
-                            }}
-                        />
-                    </div>
-
-                    <div className='flex flex-col gap-1'>
-                        <label htmlFor="date" className="text-xl font-medium">
-                            Doanh thu:
-                        </label>
-                        <p className="text-lg text-blue-600">
-                            {dailyRevenue !== null ? formatVND2(dailyRevenue) : "Không có số liệu"}
-                        </p>
-                    </div>
-                </div>
-            </div> */}
-
             <div className="mx-auto bg-white dark:bg-gray-800 rounded-md shadow mt-16 pt-3">
                 <h2 className="text-2xl font-semibold mb-4 text-center">
                     Doanh thu hàng tháng - {selectedYear}

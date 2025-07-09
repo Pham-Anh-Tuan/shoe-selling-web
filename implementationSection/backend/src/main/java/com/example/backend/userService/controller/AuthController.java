@@ -29,4 +29,10 @@ public class AuthController {
     public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) {
         return authService.changePassword(request.getEmail(), request.getOldPassword(), request.getNewPassword());
     }
+
+    @PostMapping("/public/forgotPassword")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        return authService.forgotPassword(email);
+    }
 }

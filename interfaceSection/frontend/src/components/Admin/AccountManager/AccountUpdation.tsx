@@ -119,7 +119,6 @@ export const AccountUpdation: React.FC<AccountUpdationProps> = ({ updateId, togg
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // Kiểm tra mật khẩu khớp
-        console.log("mk là: " +  account.password + "d");
         if (account.password !== "") {
             if (account.password !== confirmPass) {
                 alertError("Mật khẩu và nhập lại mật khẩu không khớp.");
@@ -148,7 +147,7 @@ export const AccountUpdation: React.FC<AccountUpdationProps> = ({ updateId, togg
         }
 
         try {
-            const response = await accountApi.updateAccount(formData);
+            await accountApi.updateAccount(formData);
             window.location.reload();
         } catch (error: any) {
             alertError(error?.response?.data);
@@ -214,6 +213,9 @@ export const AccountUpdation: React.FC<AccountUpdationProps> = ({ updateId, togg
                             <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" >Nhập lại mật khẩu</label>
                             <div className="relative block w-full">
                                 <input
+                                    onKeyDown={(e) => {
+                                        if (e.key === " ") e.preventDefault();
+                                    }}
                                     onChange={(e) => setConfirmPass(e.target.value.replace(/\s/g, ""))}
                                     type={showConfirmPassword ? "text" : "password"}
                                     name="confirm-password"

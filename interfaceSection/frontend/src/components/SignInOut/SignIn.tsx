@@ -48,15 +48,21 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
 
     const emailRef = useRef<HTMLInputElement>(null);
 
-    const handleInvalid = (e: React.FormEvent<HTMLInputElement>) => {
+    const handleEmailInvalid = (e: React.FormEvent<HTMLInputElement>) => {
         const input = e.currentTarget;
-
         if (input.validity.valueMissing) {
             input.setCustomValidity("Vui lòng điền vào trường này.");
         } else if (input.validity.typeMismatch && input.type === "email") {
             input.setCustomValidity("Vui lòng nhập đúng định dạng email.");
         } else {
             input.setCustomValidity(""); // reset nếu hợp lệ
+        }
+    };
+
+    const handlePasswordInvalid = (e: React.FormEvent<HTMLInputElement>) => {
+        const input = e.currentTarget;
+        if (input.validity.valueMissing) {
+            input.setCustomValidity("Vui lòng điền vào trường này.");
         }
     };
 
@@ -93,15 +99,17 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
                                     <div>
                                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                                         <input ref={emailRef}
-                                            onInvalid={handleInvalid}
+                                            onInvalid={handleEmailInvalid}
                                             onInput={handleInput}
                                             onChange={handleChange}
-                                            type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+                                            type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:border-gray-300 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
                                     </div>
                                     <div>
                                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mật khẩu</label>
-                                        <input onChange={handleChange}
-                                            type="password" name="password" id="password" placeholder="" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                                        <input onInvalid={handlePasswordInvalid}
+                                            onInput={handleInput}
+                                            onChange={handleChange}
+                                            type="password" name="password" id="password" placeholder="" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:border-gray-300 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required />
                                     </div>
                                     <div className="flex items-center justify-end">
                                         <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500" onClick={() => { setSignInPopup(false); handleForgotPWPopup() }}>Quên mật khẩu?</a>
@@ -123,9 +131,9 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
                                             </svg>
                                             Google
                                         </button>
-                                        <button 
-                                        onClick={handleFacebookLogin}
-                                        type="button" className="w-full flex items-center justify-center gap-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        <button
+                                            onClick={handleFacebookLogin}
+                                            type="button" className="w-full flex items-center justify-center gap-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                                                 <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99h-2.54v-2.89h2.54V9.41c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.62.77-1.62 1.56v1.87h2.76l-.44 2.89h-2.32v6.99C18.34 21.12 22 16.99 22 12" />
                                             </svg>

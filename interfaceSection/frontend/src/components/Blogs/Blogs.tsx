@@ -79,7 +79,7 @@ const Blogs = () => {
                     {page < totalPages && (
                         <div className="flex justify-center">
                             <button onClick={() => loadBlogs(page)}
-                                className="text-center mt-10 cursor-pointer bg-primary text-white py-1 px-5 rounded-md">
+                                className="text-center mt-4 cursor-pointer bg-primary text-white py-1 px-5 rounded-md">
                                 XEM THÊM
                             </button>
                         </div>

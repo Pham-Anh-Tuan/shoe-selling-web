@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +27,9 @@ public class AuthService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailService emailService;
 
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
         if (accountRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
@@ -108,5 +112,48 @@ public class AuthService {
 
         return ResponseEntity.ok("Đổi mật khẩu thành công.");
     }
+
+    public ResponseEntity<String> forgotPassword(String email) {
+        Optional<Account> optionalAccount = accountRepository.findByEmail(email);
+
+        if (optionalAccount.isEmpty()) {
+            return ResponseEntity.badRequest().body("Email không tồn tại.");
+        }
+
+        Account account = optionalAccount.get();
+
+        // Tạo mật khẩu mới ngẫu nhiên (8 ký tự bao gồm chữ và số)
+        String newPassword = generateRandomPassword(8);
+
+        // Mã hóa và cập nhật mật khẩu mới
+        account.setPassword(passwordEncoder.encode(newPassword));
+        accountRepository.save(account);
+
+        // Gửi mật khẩu mới qua email (giả sử có một service gửi email)
+        try {
+            emailService.sendEmail(
+                    email,
+                    "Khôi phục mật khẩu",
+                    "Mật khẩu mới của bạn là: " + newPassword
+            );
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Không thể gửi email. Vui lòng thử lại sau.");
+        }
+
+        return ResponseEntity.ok("Mật khẩu mới đã được gửi đến email của bạn.");
+    }
+
+    private String generateRandomPassword(int length) {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < length; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+
+        return sb.toString();
+    }
+
 
 }

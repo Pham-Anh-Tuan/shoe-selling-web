@@ -85,13 +85,15 @@ const DeliveryInfUpdation: React.FC<DeliveryInfUpdationProps> = ({ updateId, tog
                         <label htmlFor="address" className="block mb-2 text-base font-medium text-gray-900 dark:text-white">Địa chỉ</label>
                         <input type="address"
                             onChange={(e) => setShippingAddress(e.target.value)}
-                            value={order.shippingAddress} name="address" id="address" placeholder="" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                            value={order.shippingAddress} name="address" id="address" placeholder="" 
+                            className="bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none focus:border-gray-300 rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required />
                     </div>
                     <div>
                         <label htmlFor="tel" className="block mb-2 text-base font-medium text-gray-900 dark:text-white">Số điện thoại</label>
                         <input type="tel"
                             onChange={(e) => setPhoneNumber(e.target.value)}
-                            value={order.phoneNumber} name="tel" id="tel" placeholder="" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                            value={order.phoneNumber} name="tel" id="tel" placeholder="" 
+                            className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:border-gray-300 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required />
                     </div>
 
                     <h1 className="text-base font-medium text-slate-900 container dark:text-white px-0 py-3">Phương thức thanh toán</h1>

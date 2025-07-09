@@ -86,12 +86,17 @@ export const authApi = {
     login(loginData: LoginData) {
         return axiosClient.post('/api/public/login', loginData);
     },
+
     register(registerData: RegisterData) {
         return axiosClient.post('/api/public/register', registerData);
     },
 
     changePassword(formData: FormData) {
         return axiosClient.post('/api/user/changePassword', formData);
+    },
+
+    forgotPassword(formData: FormData) {
+        return axiosClient.post('/api/public/forgotPassword', formData);
     },
 };
 
@@ -108,7 +113,28 @@ export const profileApi = {
         return axiosClient.get('/api/user/getProfileSumByEmail/' + email);
     },
 
+}
 
+export const favoriteApi = {
+    toggleFavorite(email: string, productId: string) {
+        return axiosClient.post('/api/user/toggleFavorite', null, {
+            params: { email, productId }
+        });
+    },
+
+    getFavorites(email: string, page: number, size: number) {
+        const params = new URLSearchParams();
+        params.append("email", email);
+        params.append("page", page.toString());
+        params.append("size", size.toString());
+        return axiosClient.get(`/api/user/getFavorites`, { params });
+    },
+
+    getFavoriteProductIds(email: string) {
+        const params = new URLSearchParams();
+        params.append("email", email);
+        return axiosClient.get(`/api/user/getFavoriteProductIds`, { params });
+    }
 }
 
 export const accountApi = {
@@ -202,7 +228,7 @@ export const blogApi = {
         params.append("size", size.toString());
         return axiosClient.get('/api/public/sumBlogs', { params });
     },
-    
+
     getManagerBlogs(page: number, size: number) {
         const params = new URLSearchParams();
         params.append("page", page.toString());

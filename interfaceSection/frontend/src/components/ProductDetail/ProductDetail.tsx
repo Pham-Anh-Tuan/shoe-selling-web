@@ -6,11 +6,13 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { FaExchangeAlt } from "react-icons/fa";
 import { FiPhone } from "react-icons/fi";
 import { useParams } from "react-router-dom";
-import { productDetailApi } from "../../api-client/api";
+import { favoriteApi, productDetailApi } from "../../api-client/api";
 import formatCurrencyVND from '../../hooks/FormatCurrency';
 import { CartItem } from "../Cart/CartContext";
 import { toast, ToastContainer } from "react-toastify";
 import { FaHeart } from "react-icons/fa6";
+import { alertError } from "../Shared/AlertError";
+import { alertSuccess } from "../Shared/AlertSuccess";
 
 const ProductDetail = () => {
     const [count, setCount] = useState<number>(1);
@@ -155,6 +157,7 @@ const ProductDetail = () => {
     };
     useEffect(() => {
         updateLogStatus();
+        loadFavoriteProducts();
         // Tạo một sự kiện tuỳ chỉnh khi đăng nhập và đăng xuất
         const handleLogChange = () => {
             updateLogStatus();
@@ -167,6 +170,39 @@ const ProductDetail = () => {
         };
     }, []);
 
+    const handleToggleFavorite = async (productId: string) => {
+        try {
+            const email = localStorage.getItem("email");
+            if (email) {
+                const response = await favoriteApi.toggleFavorite(email, productId);
+                // Toggle trong local state
+                setFavoriteProductIds((prev) =>
+                    prev.includes(productId)
+                        ? prev.filter((id) => id !== productId)
+                        : [...prev, productId]
+                );
+
+                alertSuccess(response.data);
+            }
+        } catch (error: any) {
+            alertError(error?.response?.data);
+        }
+    };
+
+    const [favoriteProductIds, setFavoriteProductIds] = useState<string[]>([]);
+
+    const loadFavoriteProducts = async () => {
+        try {
+            const email = localStorage.getItem("email");
+            if (!email) return;
+            let response = await favoriteApi.getFavoriteProductIds(email);
+            let data = response.data;
+            setFavoriteProductIds(data);
+        } catch (error) {
+            console.error("Lỗi khi lấy danh sách yêu thích:", error);
+        }
+    };
+
     return (<div className="py-14 dark:bg-gray-950">
         <div className="container">
             {/* product properties */}
@@ -176,9 +212,23 @@ const ProductDetail = () => {
                     <div className="overflow-hidden aspect-square group relative rounded-md">
                         <img src={activeImg} alt="Zoomed"
                             className="w-full aspect-square object-cover transform transition-transform duration-500" />
-                        {!isLoggedIn && (
+                        {/* {!isLoggedIn && (
                             <div className="absolute top-4 left-4">
                                 <FaHeart className='text-gray-400 text-2xl hover:text-red-500 cursor-pointer' />
+                            </div>
+                        )} */}
+                        {!isLoggedIn && id && (
+                            <div
+                                className="absolute top-4 left-4 cursor-pointer"
+                                onClick={() => handleToggleFavorite(id)}
+                            >
+                                <FaHeart
+                                    className={
+                                        favoriteProductIds.includes(id)
+                                            ? "text-red-500 text-2xl"
+                                            : "text-gray-400 text-2xl hover:text-red-500"
+                                    }
+                                />
                             </div>
                         )}
                     </div>
