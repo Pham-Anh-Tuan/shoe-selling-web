@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -100,6 +101,7 @@ public class ProductService {
         }).collect(Collectors.toList());
     }
 
+    @Transactional
     public ResponseEntity<?> addProduct(ProductRequest productRequest) {
         Product product = new Product();
         product.setId(UUID.randomUUID().toString());
@@ -165,6 +167,7 @@ public class ProductService {
         return ResponseEntity.ok("Product added successful");
     }
 
+    @Transactional
     public ResponseEntity<?> updateProduct(ProductUpdateRequest productUpdateRequest) {
         Product product = productRepository.findById(productUpdateRequest.getId())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -290,6 +293,7 @@ public class ProductService {
         return ResponseEntity.ok("Product updated successful");
     }
 
+    @Transactional
     public boolean deleteProductById(String id) {
         if (productRepository.existsById(id)) {
             Product product = productRepository.findById(id).get();

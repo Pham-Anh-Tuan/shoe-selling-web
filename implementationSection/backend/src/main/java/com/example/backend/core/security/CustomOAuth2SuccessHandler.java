@@ -35,6 +35,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
+        String role = "2";
 
         Object pictureAttr = oAuth2User.getAttribute("picture");
         String imageName = null;
@@ -81,6 +82,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
                 return;
             }
             imageName = account.getImageName();
+            role = String.valueOf(account.getRole());
         }
 
         // Tạo JWT
@@ -92,7 +94,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
                 URLEncoder.encode(jwtToken, "UTF-8"),
                 URLEncoder.encode(email, "UTF-8"),
                 URLEncoder.encode(imageName, "UTF-8"),
-                URLEncoder.encode("2", "UTF-8")
+                URLEncoder.encode(role, "UTF-8")
         );
 
         response.sendRedirect(redirectUrl);

@@ -138,8 +138,6 @@ const AppRoutes = () => {
                             <Route path="bannerList" element={<BannerList />} />
                         </Route>
                     )}
-
-                {/* <Route path="/blogAdd" element={<BlogAdd />} /> */}
             </Routes>
         </Router>
     )

@@ -1,126 +1,178 @@
 import { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Label } from 'recharts';
+import { dashboardApi, orderApi } from '../../../api-client/api';
+import formatCurrencyVND from '../../../hooks/FormatCurrency';
+
+const cards = [
+    {
+        label: "Tổng số sản phẩm",
+        value: "345,768",
+        change: "+ 8%",
+        isIncrease: true,
+    },
+    {
+        label: "Số đơn hàng đã giao",
+        value: "31,385",
+        change: "+ 12,4",
+        isIncrease: true,
+    },
+    {
+        label: "Số sản phẩm bán ra",
+        value: "27,274",
+        change: "- 3,7",
+        isIncrease: false,
+    },
+    {
+        label: "Số sản phẩm trả về",
+        value: "3,506",
+        change: "- 12,4",
+        isIncrease: false,
+    },
+];
 const Chart = () => {
     type SalesMonth = {
         month: string;
         revenue: number;
     };
-    const salesData: Record<number, SalesMonth[]> = {
-        2022: [
-            { month: '1', revenue: 1000 },
-            { month: '2', revenue: 1500 },
-            { month: '3', revenue: 700 },
-            { month: '4', revenue: 1200 },
-            { month: '5', revenue: 2100 },
-            { month: '6', revenue: 1400 },
-            { month: '7', revenue: 1600 },
-            { month: '8', revenue: 2300 },
-            { month: '9', revenue: 1900 },
-            { month: '10', revenue: 1700 },
-            { month: '11', revenue: 2000 },
-            { month: '12', revenue: 2200 },
-        ],
-        2023: [
-            { month: '1', revenue: 1200 },
-            { month: '2', revenue: 2100 },
-            { month: '3', revenue: 800 },
-            { month: '4', revenue: 1600 },
-            { month: '5', revenue: 2400 },
-            { month: '6', revenue: 1800 },
-            { month: '7', revenue: 2000 },
-            { month: '8', revenue: 2700 },
-            { month: '9', revenue: 2200 },
-            { month: '10', revenue: 1900 },
-            { month: '11', revenue: 2300 },
-            { month: '12', revenue: 2500 },
-        ],
-        2024: [
-            { month: '1', revenue: 1300 },
-            { month: '2', revenue: 1800 },
-            { month: '3', revenue: 900 },
-            { month: '4', revenue: 1700 },
-            { month: '5', revenue: 2500 },
-            { month: '6', revenue: 1900 },
-            { month: '7', revenue: 2100 },
-            { month: '8', revenue: 2800 },
-            { month: '9', revenue: 2300 },
-            { month: '10', revenue: 2000 },
-            { month: '11', revenue: 2400 },
-            { month: '12', revenue: 2600 },
-        ],
-        2025: [
-            { month: '1', revenue: 1400 },
-            { month: '2', revenue: 1700 },
-            { month: '3', revenue: 2540 },
-            { month: '4', revenue: 230 },
-            { month: '5', revenue: 0 },
-            { month: '6', revenue: 0 },
-            { month: '7', revenue: 0 },
-            { month: '8', revenue: 0 },
-            { month: '9', revenue: 0 },
-            { month: '10', revenue: 0 },
-            { month: '11', revenue: 0 },
-            { month: '12', revenue: 0 },
-        ]
-    };
 
-    const [selectedYear, setSelectedYear] = useState<number>(2025);
-    const data = salesData[selectedYear];
+    interface SummaryData {
+        totalProductQuantity: number;
+        deliveredOrderCount: number;
+        soldProductCount: number;
+        returnedProductCount: number;
+    }
 
-    const formatVND = (value: number) => {
-        if (value >= 1000) {
-            return `${(value / 1000).toFixed(1)} triệu`;
+    const [summaryData, setSummaryData] = useState<SummaryData | null>(null);
+
+    const [availableYears, setAvailableYears] = useState<number[]>([]);
+    const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+    const [monthlyRevenue, setMonthlyRevenue] = useState<SalesMonth[]>([]);
+
+    const loadYears = async () => {
+        try {
+            const res = await orderApi.getAvailableYears();
+            const years = res.data;
+            setAvailableYears(years);
+            if (years.length > 0) {
+                setSelectedYear(years[0]); // chọn năm đầu tiên
+            }
+        } catch (err) {
+            console.error("Lỗi khi lấy danh sách năm:", err);
         }
-        return `${value.toLocaleString()}`;
     };
 
-    const formatVND2 = (value: number) => {
-        if (value >= 1000) {
-            return `${(value / 1000).toFixed(1)} triệu VND`;
+    const loadMonthly = async () => {
+        try {
+            const res = await orderApi.getMonthlyRevenue(selectedYear);
+            const data = await res.data;
+            setMonthlyRevenue(data);
+        } catch (err) {
+            console.error("Lỗi khi lấy doanh thu:", err);
         }
-        return `${value.toLocaleString()} VND`;
     };
 
-
-    // daily sale
-    const dailySalesData: Record<string, number> = {
-        '2025-04-01': 2500000,
-        '2025-04-02': 3200000,
-        '2025-04-03': 1800000,
-        '2025-04-04': 2750000,
-        '2025-04-07': 750000,
-        '2025-04-08': 250000,
-    };
-
-
-
-    const getToday = () => {
-        const today = new Date();
-        return today.toISOString().split('T')[0]; // "2025-04-06"
-    };
-
-    const [selectedDate, setSelectedDate] = useState<string>(getToday());
-    const [dailyRevenue, setDailyRevenue] = useState<number | null>(null);
+    const loadDashboardSummary = async () => {
+        try {
+            const res = await dashboardApi.getDashboardSummary();
+            setSummaryData(res.data);
+        } catch (err) {
+            console.error("Lỗi khi lấy doanh thu:", err);
+        }
+    }
 
     useEffect(() => {
-        // Lấy doanh thu theo ngày mặc định ban đầu
-        setDailyRevenue(dailySalesData[selectedDate] ?? null);
-    }, [selectedDate]);
+        loadDashboardSummary();
+        loadYears();
+    }, []);
+
+    useEffect(() => {
+        if (selectedYear) {
+            loadMonthly();
+        }
+    }, [selectedYear]);
+
+    const formatCurrencyTrVND = (value: number) => {
+        if (value >= 1000000) return `${value / 1000000}tr`;
+        if (value >= 1000) return `${value / 1000}k`;
+        return `${value}₫`;
+    };
+
+    const [selectedDate, setSelectedDate] = useState<string>("");
+    const [dailyRevenue, setDailyRevenue] = useState<number | null>(null);
+
+    const loadDailyRevenue = async (date: string) => {
+        try {
+            const response = await orderApi.getRevenueByDate(date);
+            setDailyRevenue(response.data.totalRevenue);
+        } catch (error) {
+            console.error("Lỗi khi lấy doanh thu:", error);
+            setDailyRevenue(null);
+        }
+    };
 
     return (
         <div className='w-full p-4 bg-gray-100 dark:bg-gray-900'>
-            <div className="mx-auto bg-white dark:bg-gray-800 rounded-md shadow mt-16 pt-3">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
+                {/* {cards.map((card, idx) => (
+                    <div
+                        key={idx}
+                        className="bg-white rounded-md shadow border p-6 flex flex-col gap-2"
+                    >
+                        <div
+                            className={`inline-flex items-center gap-1 text-sm font-medium px-2 py-0.5 rounded-md w-fit ${card.isIncrease
+                                ? "bg-green-100 text-green-700"
+                                : "bg-red-100 text-red-700"
+                                }`}
+                        >
+                            {card.isIncrease ? (
+                                <ArrowUp className="w-4 h-4" />
+                            ) : (
+                                <ArrowDown className="w-4 h-4" />
+                            )}
+                            {card.change}
+                        </div>
+                        <div className="text-2xl font-bold bg-green-100 text-green-700 w-fit px-2">{card.value}</div>
+                        <div className="text-gray-500 text-sm">{card.label}</div>
+                    </div>
+                ))} */}
+
+                <div
+                    className="bg-white rounded-md shadow border p-6 flex flex-col gap-2"
+                >
+                    <div className="text-2xl font-bold bg-green-100 text-green-700 w-fit px-2">{summaryData?.totalProductQuantity.toLocaleString()}</div>
+                    <div className="text-gray-500 text-sm">Tổng số sản phẩm</div>
+                </div>
+                <div
+                    className="bg-white rounded-md shadow border p-6 flex flex-col gap-2"
+                >
+                    <div className="text-2xl font-bold bg-green-100 text-green-700 w-fit px-2">{summaryData?.deliveredOrderCount.toLocaleString()}</div>
+                    <div className="text-gray-500 text-sm">Số đơn hàng đã giao</div>
+                </div>
+                <div
+                    className="bg-white rounded-md shadow border p-6 flex flex-col gap-2"
+                >
+                    <div className="text-2xl font-bold bg-green-100 text-green-700 w-fit px-2">{summaryData?.soldProductCount.toLocaleString()}</div>
+                    <div className="text-gray-500 text-sm">Số sản phẩm bán ra</div>
+                </div>
+                <div
+                    className="bg-white rounded-md shadow border p-6 flex flex-col gap-2"
+                >
+                    <div className="text-2xl font-bold bg-red-100 text-red-700 w-fit px-2">{summaryData?.returnedProductCount.toLocaleString()}</div>
+                    <div className="text-gray-500 text-sm">Số sản phẩm trả về</div>
+                </div>
+            </div>
+
+            <div className="mx-auto bg-white dark:bg-gray-800 rounded-md shadow mt-6 pt-3">
                 <h2 className="text-2xl font-semibold mb-4 text-center">
                     Doanh thu hàng tháng - {selectedYear}
                 </h2>
 
                 <div className="flex justify-center gap-2 mb-6">
-                    {Object.keys(salesData).map((year) => (
-
+                    {availableYears.map((year) => (
                         <button
                             key={year}
-                            onClick={() => setSelectedYear(+year)}
-                            className={`px-4 py-2 rounded-md border text-sm font-medium ${+year === selectedYear
+                            onClick={() => setSelectedYear(year)}
+                            className={`px-4 py-2 rounded-md border text-sm font-medium ${year === selectedYear
                                 ? 'bg-[#fea928] text-white'
                                 : 'bg-white text-[#fea928] border-[#fea928] hover:bg-orange-100'
                                 }`}
@@ -131,17 +183,17 @@ const Chart = () => {
                 </div>
 
                 <ResponsiveContainer width="100%" height={400}>
-                    <BarChart data={data} margin={{ top: 30, right: 30, left: 20, bottom: 40 }}>
+                    <BarChart data={monthlyRevenue} margin={{ top: 30, right: 30, left: 20, bottom: 40 }}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="month">
                             <Label value="Tháng" offset={-10} position="insideBottomRight" style={{ fill: '#fea928', fontWeight: 'bold' }} />
                         </XAxis>
-                        <YAxis tickFormatter={formatVND}>
+                        <YAxis tickFormatter={formatCurrencyTrVND}>
                             <Label
                                 value="VND"
                                 angle={0}
                                 position="top"
-                                offset={10}
+                                offset={18}
                                 style={{ textAnchor: 'middle', fill: '#fea928', fontWeight: 'bold' }}
                             />
                         </YAxis>
@@ -151,14 +203,13 @@ const Chart = () => {
                                     return (
                                         <div className="bg-white p-2 rounded shadow">
                                             <p className="text-sm font-medium dark:text-black">Tháng: {payload[0].payload.month}</p>
-                                            <p className="text-sm font-medium dark:text-black">Doanh thu: {formatVND2(payload[0].value)}</p>
+                                            <p className="text-sm font-medium dark:text-black">Doanh thu: {formatCurrencyVND(payload[0].value)}</p>
                                         </div>
                                     );
                                 }
                                 return null;
                             }}
                         />
-                        {/* <Bar dataKey="revenue" fill="#3b82f6" radius={[6, 6, 0, 0]} /> */}
                         <Bar dataKey="revenue" fill="#fea928" radius={[6, 6, 0, 0]} />
                     </BarChart>
                 </ResponsiveContainer>
@@ -177,7 +228,8 @@ const Chart = () => {
                                 onChange={(e) => {
                                     const date = e.target.value;
                                     setSelectedDate(date);
-                                    setDailyRevenue(dailySalesData[date] ?? null);
+                                    loadDailyRevenue(date);
+                                    // setDailyRevenue(dailySalesData[date] ?? null);
                                 }}
                             />
                         </div>
@@ -187,7 +239,7 @@ const Chart = () => {
                                 Doanh thu:
                             </label>
                             <p className="text-lg text-[#fea928]">
-                                {dailyRevenue !== null ? formatVND2(dailyRevenue) : "Không có số liệu"}
+                                {dailyRevenue !== null ? formatCurrencyVND(dailyRevenue) : "Không có số liệu"}
                             </p>
                         </div>
                     </div>

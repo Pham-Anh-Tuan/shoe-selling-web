@@ -21,4 +21,7 @@ public interface SizeQuantityRepository extends JpaRepository<SizeQuantity, Stri
             @Param("colorHex") String colorHex,
             @Param("size") int size
     );
+
+    @Query("SELECT SUM(sq.quantity) FROM SizeQuantity sq")
+    Long getTotalQuantity();
 }

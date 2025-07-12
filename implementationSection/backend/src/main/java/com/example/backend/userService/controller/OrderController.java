@@ -1,6 +1,8 @@
 package com.example.backend.userService.controller;
 
 import com.example.backend.core.dto.OrderUpdationDTO;
+import com.example.backend.core.dto.SalesDay;
+import com.example.backend.core.dto.SalesMonth;
 import com.example.backend.core.dto.UserOrderUpdationDTO;
 import com.example.backend.core.request.OrderRequest;
 import com.example.backend.core.request.ProductUpdateRequest;
@@ -12,10 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +50,25 @@ public class OrderController {
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("orderDate").descending());
         return orderService.getManagerOrders(pageable);
+    }
+
+    @GetMapping("/staff/monthlyRevenue")
+    public ResponseEntity<List<SalesMonth>> getMonthlyRevenue(@RequestParam int year) {
+        return ResponseEntity.ok(orderService.getMonthlyRevenue(year));
+    }
+
+    @GetMapping("/staff/available-years")
+    public ResponseEntity<List<Integer>> getAvailableYears() {
+        return ResponseEntity.ok(orderService.getAvailableYears());
+    }
+
+    @GetMapping("/staff/revenue-by-date")
+    public ResponseEntity<SalesDay> getRevenueByDate(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        SalesDay revenue = orderService.getRevenueByDate(date);
+        if (revenue == null) {
+            return ResponseEntity.ok(new SalesDay(date, 0.0)); // Trả về 0 nếu không có doanh thu
+        }
+        return ResponseEntity.ok(revenue);
     }
 
     @GetMapping(path = "/staff/searchManagerOrders")

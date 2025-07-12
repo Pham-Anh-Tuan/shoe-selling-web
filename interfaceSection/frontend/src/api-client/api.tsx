@@ -253,6 +253,12 @@ export const blogApi = {
     },
 }
 
+export const dashboardApi = {
+    getDashboardSummary() {
+        return axiosClient.get('/api/staff/statics-summary');
+    }
+}
+
 export const orderApi = {
     createOrder(order: Order) {
         return axiosClient.post('/api/user/createOrder', order);
@@ -278,6 +284,22 @@ export const orderApi = {
         params.append("size", size.toString());
 
         return axiosClient.get('/api/staff/managerOrders', { params });
+    },
+
+    getMonthlyRevenue(year: number) {
+        const params = new URLSearchParams();
+        params.append("year", year.toString());
+        return axiosClient.get('/api/staff/monthlyRevenue', { params });
+    },
+
+    getAvailableYears() {
+        return axiosClient.get('/api/staff/available-years');
+    },
+
+    getRevenueByDate(date: string) {
+        const params = new URLSearchParams();
+        params.append("date", date);
+        return axiosClient.get('/api/staff/revenue-by-date', { params });
     },
 
     searchManagerOrders(keyword: string, page: number, size: number) {

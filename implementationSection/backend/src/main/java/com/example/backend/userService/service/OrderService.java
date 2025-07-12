@@ -1,6 +1,8 @@
 package com.example.backend.userService.service;
 
 import com.example.backend.core.dto.OrderUpdationDTO;
+import com.example.backend.core.dto.SalesDay;
+import com.example.backend.core.dto.SalesMonth;
 import com.example.backend.core.dto.UserOrderUpdationDTO;
 import com.example.backend.core.mapper.ManagerOrderResMapper;
 import com.example.backend.core.mapper.UserOrderResMapper;
@@ -28,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -278,6 +281,38 @@ public class OrderService {
         orderDetail.setPaymentStatus(orderUpdationDTO.getPaymentStatus());
         orderDetail.setEmail(orderUpdationDTO.getEmail());
         orderRepository.save(orderDetail);
+    }
+
+    public List<SalesMonth> getMonthlyRevenue(int year) {
+        List<SalesMonth> data = orderRepository.findMonthlyRevenueByYear(year);
+
+        // Tạo Map từ Integer (tháng) sang revenue
+        Map<Integer, Double> monthMap = data.stream()
+                .collect(Collectors.toMap(
+                        sm -> Integer.parseInt(sm.getMonth()), // chuyển lại từ String về Integer
+                        SalesMonth::getRevenue
+                ));
+
+        List<SalesMonth> fullMonthList = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            fullMonthList.add(new SalesMonth(i, monthMap.getOrDefault(i, 0.0)));
+        }
+
+        return fullMonthList;
+    }
+
+    public List<Integer> getAvailableYears() {
+        List<Integer> years = orderRepository.findAllYearsWithPayMethod1();
+        int currentYear = LocalDate.now().getYear();
+        List<Integer> filtered = years.stream()
+                .filter(y -> y >= currentYear)
+                .sorted()
+                .collect(Collectors.toList());
+        return filtered;
+    }
+
+    public SalesDay getRevenueByDate(LocalDate date) {
+        return orderRepository.findRevenueByDate(date);
     }
 
 }
