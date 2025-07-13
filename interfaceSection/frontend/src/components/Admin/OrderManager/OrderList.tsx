@@ -92,11 +92,10 @@ const OrderList = () => {
     };
 
     return (
-        <div className='w-full min-h-screen p-4 bg-gray-100 dark:bg-gray-900 overflow-x-hidden'>
-            <section className="antialiased mt-16 z-10">
+        <div className='w-full p-4 bg-gray-100 dark:bg-gray-900 overflow-x-hidden mt-[60px]'>
+            <section className="antialiased z-10">
                 <div className="mx-auto w-full">
-
-
+                    
                     <div className=" bg-white dark:bg-gray-800 relative shadow-md rounded-md">
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                             <div className="flex-1 flex flex-col">

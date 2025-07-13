@@ -55,7 +55,7 @@ const AdNavbar = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="flex h-screen">
       <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200 z-40 fixed w-full">
         {/* upper bar */}
         <div className="bg-primary/40 py-2">
@@ -118,9 +118,9 @@ const AdNavbar = () => {
       </div>
 
       {!showMenu && (
-        <div className="static block w-64 h-full">
-          <aside id="default-sidebar" className="w-64 h-full" aria-label="Sidebar">
-            <div className="h-full px-3 py-4 overflow-y-auto bg-[#ffdda9] dark:bg-gray-800">
+        <div className="sticky top-0 block w-64 h-screen">
+          <div className="w-64 h-screen">
+            <div className="h-screen px-3 py-4 overflow-y-auto bg-[#ffdda9] dark:bg-gray-800">
               <ul className="space-y-2 font-medium">
                 <li>
                   <div className="flex items-center gap-4 p-2">
@@ -183,7 +183,7 @@ const AdNavbar = () => {
 
               </ul>
             </div>
-          </aside>
+          </div>
         </div>
       )}
     </div>

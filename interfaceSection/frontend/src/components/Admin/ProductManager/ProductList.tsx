@@ -120,8 +120,8 @@ const ProductList = () => {
 
     return (
         // <div className="p-4 w-full h-screen overflow-x-hidden bg-gray-100 dark:bg-gray-900">
-        <div className='w-full min-h-screen p-4 bg-gray-100 dark:bg-gray-900 overflow-x-hidden'>
-            <section className="antialiased mt-16 z-10">
+        <div className='w-full p-4 bg-gray-100 dark:bg-gray-900 overflow-x-hidden mt-[60px]'>
+            <section className="antialiased z-10">
                 <div className="mx-auto w-full">
 
                     {/* ádasd */}

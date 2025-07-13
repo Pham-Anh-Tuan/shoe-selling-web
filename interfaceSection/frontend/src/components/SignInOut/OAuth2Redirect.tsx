@@ -18,7 +18,11 @@ const OAuth2Redirect = () => {
             localStorage.setItem("imageName", imageName);
             localStorage.setItem("role", role);
 
-            window.location.href = "/";  // chuyển đến trang chính
+            if (String(role) === "1" || String(role) === "3") {
+                window.location.href = "/admin";
+            } else {
+                window.location.href = "/";  // chuyển đến trang chính
+            }
         } else {
             // Nếu thiếu dữ liệu thì quay về login
             navigate("/login");

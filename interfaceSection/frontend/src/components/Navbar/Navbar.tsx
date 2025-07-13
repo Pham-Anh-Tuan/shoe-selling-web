@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
-import { CartItem } from "../Cart/CartContext";
 
 export const Menu = [
     {

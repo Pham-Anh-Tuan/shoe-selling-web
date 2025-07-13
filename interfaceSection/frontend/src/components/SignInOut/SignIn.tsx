@@ -3,6 +3,7 @@ import { IoCloseOutline } from "react-icons/io5";
 import { LoginData } from "./authTypes";
 import { authApi } from "../../api-client/api";
 import { alertError } from "../Shared/AlertError";
+import { useNavigate } from "react-router-dom";
 
 interface SignInProps {
     signInPopup: boolean;
@@ -13,7 +14,7 @@ interface SignInProps {
 
 const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegisterPopup, handleForgotPWPopup }) => {
     const [form, setForm] = useState<LoginData>({ email: '', password: '' });
-
+    const navigate = useNavigate();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
@@ -30,7 +31,12 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
             localStorage.setItem('imageName', response.data?.imageName);
             localStorage.setItem('email', response.data?.email);
             localStorage.setItem('role', response.data?.role);
-            window.location.reload();
+
+            if (String(response.data?.role) === "1" || String(response.data?.role) === "3") {
+                window.location.href = "/admin";
+            } else {
+                window.location.reload();
+            }
         } catch (error: any) {
             const message = error.response.data;
             if (message === "Email not found") {

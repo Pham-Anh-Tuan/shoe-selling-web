@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Menu } from "./Navbar";
 import { FaCaretDown } from "react-icons/fa6";
 import Logo from "../../assets/logo.png";
 import { IoCloseOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 interface ResponsiveMenuProps {
     showMenu: boolean;
@@ -10,6 +11,15 @@ interface ResponsiveMenuProps {
 }
 
 const ResponsiveMenu: React.FC<ResponsiveMenuProps> = ({ showMenu, toggleMenu }) => {
+    const [searchTerm, setSearchTerm] = useState("");
+    const navigate = useNavigate();
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (searchTerm.trim()) {
+            navigate(`/products?keyword=${encodeURIComponent(searchTerm.trim())}`);
+        }
+    };
     return (
         <div
             className={`${showMenu ? "left-0" : "-left-[100%]"
@@ -112,26 +122,12 @@ const ResponsiveMenu: React.FC<ResponsiveMenuProps> = ({ showMenu, toggleMenu })
             </div>
 
             <div className="relative group sm:block mt-8">
-                {/* <input type="text" placeholder="Tìm kiếm"
-                    className="w-[200px] sm:w-[200px] 
-                                     transition-all
-                                        duration-300 rounded-full
-                                        border
-                                       border-gray-300 px-2 py-1
-                                        focus:outline-none 
-                                        focus:border-1
-                                        focus:border-primary
-                                        dark:border-gray-500
-                                        dark:bg-gray-800"
-                />
-                <IoMdSearch
-                    className="text-gray-500 group-hover:text-primary 
-                                        absolute top-1/2 -translate-y-1/2 right-10" /> */}
-
-                <form className="flex items-center max-w-sm mx-auto">
+                <form className="flex items-center max-w-sm mx-auto" onSubmit={handleSearch}>
                     <label htmlFor="simple-search2" className="sr-only">Search</label>
                     <div className="relative w-full">
-                        <input type="text" id="simple-search2" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5" placeholder="Tên sản phẩm..." required />
+                        <input value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            type="text" id="simple-search2" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-primary focus:border-primary block w-full p-2" placeholder="Tên sản phẩm..." required />
                     </div>
                     <button type="submit" className="bg-gradient-to-r from-primary to-secondary rounded-md p-2.5 ms-2 text-sm font-medium text-white">
                         <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">

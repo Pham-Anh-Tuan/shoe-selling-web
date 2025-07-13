@@ -111,8 +111,8 @@ const Chart = () => {
     };
 
     return (
-        <div className='w-full p-4 bg-gray-100 dark:bg-gray-900'>
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
+        <div className='w-full p-4 bg-gray-100 dark:bg-gray-900 overflow-x-hidden mt-[60px]'>
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* {cards.map((card, idx) => (
                     <div
                         key={idx}
@@ -137,32 +137,32 @@ const Chart = () => {
                 ))} */}
 
                 <div
-                    className="bg-white rounded-md shadow border p-6 flex flex-col gap-2"
+                    className="bg-white dark:bg-gray-800 rounded-md shadow p-6 flex flex-col gap-2"
                 >
                     <div className="text-2xl font-bold bg-green-100 text-green-700 w-fit px-2">{summaryData?.totalProductQuantity.toLocaleString()}</div>
-                    <div className="text-gray-500 text-sm">Tổng số sản phẩm</div>
+                    <div className="text-gray-500 text-sm dark:text-white">Tổng số sản phẩm</div>
                 </div>
                 <div
-                    className="bg-white rounded-md shadow border p-6 flex flex-col gap-2"
+                    className="bg-white dark:bg-gray-800 rounded-md shadow p-6 flex flex-col gap-2"
                 >
                     <div className="text-2xl font-bold bg-green-100 text-green-700 w-fit px-2">{summaryData?.deliveredOrderCount.toLocaleString()}</div>
-                    <div className="text-gray-500 text-sm">Số đơn hàng đã giao</div>
+                    <div className="text-gray-500 text-sm dark:text-white">Số đơn hàng đã giao</div>
                 </div>
                 <div
-                    className="bg-white rounded-md shadow border p-6 flex flex-col gap-2"
+                    className="bg-white dark:bg-gray-800 rounded-md shadow p-6 flex flex-col gap-2"
                 >
                     <div className="text-2xl font-bold bg-green-100 text-green-700 w-fit px-2">{summaryData?.soldProductCount.toLocaleString()}</div>
-                    <div className="text-gray-500 text-sm">Số sản phẩm bán ra</div>
+                    <div className="text-gray-500 text-sm dark:text-white">Số sản phẩm bán ra</div>
                 </div>
                 <div
-                    className="bg-white rounded-md shadow border p-6 flex flex-col gap-2"
+                    className="bg-white dark:bg-gray-800 rounded-md shadow p-6 flex flex-col gap-2"
                 >
                     <div className="text-2xl font-bold bg-red-100 text-red-700 w-fit px-2">{summaryData?.returnedProductCount.toLocaleString()}</div>
-                    <div className="text-gray-500 text-sm">Số sản phẩm trả về</div>
+                    <div className="text-gray-500 text-sm dark:text-white">Số sản phẩm trả về</div>
                 </div>
             </div>
 
-            <div className="mx-auto bg-white dark:bg-gray-800 rounded-md shadow mt-6 pt-3">
+            <div className="mx-auto bg-white dark:bg-gray-800 rounded-md shadow mt-4 pt-3">
                 <h2 className="text-2xl font-semibold mb-4 text-center">
                     Doanh thu hàng tháng - {selectedYear}
                 </h2>

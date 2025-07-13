@@ -76,8 +76,8 @@ const BlogList = () => {
     };
 
     return (
-        <div className='w-full min-h-screen p-4 bg-gray-100 dark:bg-gray-900 overflow-x-hidden'>
-            <section className="antialiased mt-16 z-10">
+        <div className='w-full p-4 bg-gray-100 dark:bg-gray-900 overflow-x-hidden mt-[60px]'>
+            <section className="antialiased z-10">
                 <div className="mx-auto w-full">
 
                     <div className=" bg-white dark:bg-gray-800 relative shadow-md rounded-md">

@@ -8,7 +8,7 @@ const Interest = () => {
     return (
         <div className="mb-6">
             <div className="container flex items-center">
-                <div className="grid grid-cols-2 gap-14 mx-auto p-6 w-full bg-gray-100 rounded-md">
+                <div className="grid grid-cols-2 gap-14 mx-auto p-6 w-full bg-gray-100 dark:bg-gray-800 rounded-md">
                     <div data-aos="fade-up" className="flex items-center gap-4">
                         <GiFoodTruck className="h-16 w-16 sm:h-20 sm:w-20 shadow-sm p-2 rounded-full bg-orange-100 dark:bg-orange-400" />
                         <p className='text-2xl sm:text-3xl'>Giao hàng siêu nhanh</p>

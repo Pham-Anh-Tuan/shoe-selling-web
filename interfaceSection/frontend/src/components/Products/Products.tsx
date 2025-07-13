@@ -169,7 +169,7 @@ const Products = () => {
         </div>
 
         {keyword && (
-          <div className="mb-4 mt-[-30px]">
+          <div className="text-center sm:text-left mb-4 mt-[-30px]">
             <p className="text-sm text-gray-800">
               Kết quả tìm kiếm cho <span className="font-bold">"{keyword}"</span>.
             </p>
