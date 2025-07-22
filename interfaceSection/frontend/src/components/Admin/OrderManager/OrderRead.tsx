@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import Img1 from "../../../assets/male-sneaker/sneaker.png";
-import Img2 from "../../../assets/male-sneaker/sneaker2.png";
 import { orderApi } from "../../../api-client/api";
 import getFirst11Characters from "../../../hooks/FormatString";
 import formatDateString from "../../../hooks/FormatDate";

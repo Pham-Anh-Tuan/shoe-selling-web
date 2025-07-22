@@ -1,4 +1,3 @@
-import React from 'react'
 import { FaExchangeAlt } from 'react-icons/fa'
 import { FiPhone } from 'react-icons/fi'
 import { GiFoodTruck } from 'react-icons/gi'

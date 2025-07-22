@@ -45,16 +45,8 @@ const DeliveryInfor = () => {
         setOrder(prev => ({ ...prev, payMethod }));
     };
 
-    const setTotalPrice = (totalPrice: number) => {
-        setOrder(prev => ({ ...prev, totalPrice }));
-    };
-
     const setEmail = (email: string) => {
         setOrder(prev => ({ ...prev, email }));
-    };
-
-    const setOrderProduct = (orderItemRequests: CartItem[]) => {
-        setOrder(prev => ({ ...prev, orderItemRequests }));
     };
 
     const getOrderData = async () => {
@@ -82,7 +74,7 @@ const DeliveryInfor = () => {
                 orderItemRequests: cart,
             };
             // console.log("Dữ liệu order đầy đủ:", JSON.stringify(updatedOrder, null, 2));
-            const response = await orderApi.createOrder(updatedOrder);
+            await orderApi.createOrder(updatedOrder);
             localStorage.removeItem('cart');
             navigate("/orderSuccess");
         } catch (error: any) {

@@ -31,7 +31,7 @@ const Register: React.FC<RegisterProps> = ({ registerPopup, setRegisterPopup, ha
         }
 
         try {
-            const response = await authApi.register(form);
+            await authApi.register(form);
             setRegisterPopup(false);
             alertSuccess("Đăng ký thành công!");
             // Lưu token nếu cần

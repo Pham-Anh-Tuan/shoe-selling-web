@@ -7,7 +7,6 @@ import Toolbar from "./Toolbar";
 import { CustomResizableImage } from "./CustomResizableImage";
 import { useEffect, useState } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
-import { MdOutlineCancel } from "react-icons/md";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { Blog } from "./BlogInterface";
 import { blogApi } from "../../../api-client/api";
@@ -119,7 +118,7 @@ export const BlogUpdation: React.FC<BlogUpdationProps> = ({ updateId, toggleUpda
     }
 
     try {
-      const response = await blogApi.updateBlog(formData);
+      await blogApi.updateBlog(formData);
       window.location.reload();
     } catch (error: any) {
       alertError(error?.response?.data);

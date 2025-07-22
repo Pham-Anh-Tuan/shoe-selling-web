@@ -3,7 +3,6 @@ import { IoCloseOutline } from "react-icons/io5";
 import { LoginData } from "./authTypes";
 import { authApi } from "../../api-client/api";
 import { alertError } from "../Shared/AlertError";
-import { useNavigate } from "react-router-dom";
 
 interface SignInProps {
     signInPopup: boolean;
@@ -14,7 +13,6 @@ interface SignInProps {
 
 const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegisterPopup, handleForgotPWPopup }) => {
     const [form, setForm] = useState<LoginData>({ email: '', password: '' });
-    const navigate = useNavigate();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
@@ -77,14 +75,14 @@ const SignIn: React.FC<SignInProps> = ({ signInPopup, setSignInPopup, handleRegi
     };
 
     const handleGoogleLogin = () => {
-        // window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=338328171761-h09irettn4jglq5jj6g2dujp14b5fgi2.apps.googleusercontent.com&redirect_uri=http://localhost:8080/login/oauth2/code/google&response_type=code&scope=email profile`;
-        window.location.href = `http://localhost:8080/oauth2/authorization/google`;
+        window.location.href = `https://kushoe.xyz/oauth2/authorization/google`;
     };
 
     const handleFacebookLogin = () => {
-        window.location.href = `http://localhost:8080/oauth2/authorization/facebook`;
+        window.location.href = `https://kushoe.xyz/oauth2/authorization/facebook`;
     };
 
+    // window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=338328171761-h09irettn4jglq5jj6g2dujp14b5fgi2.apps.googleusercontent.com&redirect_uri=http://localhost:8080/login/oauth2/code/google&response_type=code&scope=email profile`;
     return (
         <>
             {signInPopup && (

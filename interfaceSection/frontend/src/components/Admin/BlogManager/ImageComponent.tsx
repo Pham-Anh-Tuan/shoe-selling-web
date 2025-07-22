@@ -1,14 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef} from 'react';
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react';
 
 const ImageComponent: React.FC<NodeViewProps> = ({ node, updateAttributes, selected }) => {
   const { src, width, height, align } = node.attrs;
   const imageRef = useRef<HTMLImageElement>(null);
-  const [isResizing, setIsResizing] = useState(false);
 
   const startResize = (e: React.MouseEvent) => {
     e.preventDefault();
-    setIsResizing(true);
 
     const startX = e.clientX;
     const startWidth = imageRef.current?.offsetWidth ?? 0;
@@ -21,7 +19,6 @@ const ImageComponent: React.FC<NodeViewProps> = ({ node, updateAttributes, selec
     };
 
     const onMouseUp = () => {
-      setIsResizing(false);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
     };

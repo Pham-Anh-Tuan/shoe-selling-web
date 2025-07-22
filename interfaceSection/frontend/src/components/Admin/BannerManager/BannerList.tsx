@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Img1 from "../../../assets/male-sneaker/sneaker-blue.png";
 import { bannerApi } from '../../../api-client/api';
 import formatDateDMYHM from '../../../hooks/DateTimeFormat';
 import { alertError } from '../../Shared/AlertError';

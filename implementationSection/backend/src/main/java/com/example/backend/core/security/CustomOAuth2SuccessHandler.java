@@ -77,7 +77,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             // ✅ Nếu đã tồn tại, có thể cập nhật thông tin nếu muốn
             account = accountOptional.get();
             if (account.getStatus() == 0) {
-                String redirectUrl = "http://localhost:5173?error=" + URLEncoder.encode("Tài khoản này đã bị khóa.", "UTF-8");
+                String redirectUrl = "https://kushoe.xyz?error=" + URLEncoder.encode("Tài khoản này đã bị khóa.", "UTF-8");
                 response.sendRedirect(redirectUrl);
                 return;
             }
@@ -90,7 +90,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         // Encode các giá trị để tránh lỗi URL
         String redirectUrl = String.format(
-                "http://localhost:5173/oauth2-redirect?token=%s&email=%s&imageName=%s&role=%s",
+                "https://kushoe.xyz/oauth2-redirect?token=%s&email=%s&imageName=%s&role=%s",
                 URLEncoder.encode(jwtToken, "UTF-8"),
                 URLEncoder.encode(email, "UTF-8"),
                 URLEncoder.encode(imageName, "UTF-8"),

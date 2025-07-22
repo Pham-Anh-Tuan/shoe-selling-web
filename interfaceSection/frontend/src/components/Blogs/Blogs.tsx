@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SumBlog } from '../Admin/BlogManager/BlogInterface';
 import { blogApi } from '../../api-client/api';
 import { useNavigate } from 'react-router-dom';

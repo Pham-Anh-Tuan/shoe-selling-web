@@ -18,6 +18,7 @@ public class ImageService {
 
         // Tạo đường dẫn đến file ảnh
         Path imagePath = Paths.get(projectDir, "user/" + dir, imageName);
+
         if (!Files.exists(imagePath)) {
             return ResponseEntity.notFound().build(); // Trả về 404 nếu ảnh không tồn tại
         }

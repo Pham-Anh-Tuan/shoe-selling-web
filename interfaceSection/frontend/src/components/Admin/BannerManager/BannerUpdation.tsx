@@ -1,8 +1,6 @@
-
 import { useEffect, useState } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { MdOutlineCancel } from "react-icons/md";
-import { IoDocumentTextOutline } from "react-icons/io5";
 import { bannerApi } from "../../../api-client/api";
 import { ToastContainer } from "react-toastify";
 
@@ -55,10 +53,6 @@ export const BannerUpdation: React.FC<BannerUpdationProps> = ({ updateId, toggle
         setBanner(prev => ({ ...prev, status: newStatus }));
     };
 
-    const setEmail = (newEmail: string) => {
-        setBanner(prev => ({ ...prev, email: newEmail }));
-    };
-
     const loadBanner = async () => {
         try {
             const { data } = await bannerApi.getBannerDetail(updateId);
@@ -103,7 +97,7 @@ export const BannerUpdation: React.FC<BannerUpdationProps> = ({ updateId, toggle
         }
 
         try {
-            const response = await bannerApi.updateBanner(formData);
+            await bannerApi.updateBanner(formData);
             window.location.reload();
         } catch (error: any) {
             console.error("Error saving product:", error);

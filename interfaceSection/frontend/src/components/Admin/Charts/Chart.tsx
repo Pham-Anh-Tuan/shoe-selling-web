@@ -3,32 +3,6 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { dashboardApi, orderApi } from '../../../api-client/api';
 import formatCurrencyVND from '../../../hooks/FormatCurrency';
 
-const cards = [
-    {
-        label: "Tổng số sản phẩm",
-        value: "345,768",
-        change: "+ 8%",
-        isIncrease: true,
-    },
-    {
-        label: "Số đơn hàng đã giao",
-        value: "31,385",
-        change: "+ 12,4",
-        isIncrease: true,
-    },
-    {
-        label: "Số sản phẩm bán ra",
-        value: "27,274",
-        change: "- 3,7",
-        isIncrease: false,
-    },
-    {
-        label: "Số sản phẩm trả về",
-        value: "3,506",
-        change: "- 12,4",
-        isIncrease: false,
-    },
-];
 const Chart = () => {
     type SalesMonth = {
         month: string;
@@ -145,13 +119,13 @@ const Chart = () => {
                 <div
                     className="bg-white dark:bg-gray-800 rounded-md shadow p-6 flex flex-col gap-2"
                 >
-                    <div className="text-2xl font-bold bg-green-100 text-green-700 w-fit px-2">{summaryData?.deliveredOrderCount.toLocaleString()}</div>
+                    <div className="text-2xl font-bold bg-purple-100 text-purple-700 w-fit px-2">{summaryData?.deliveredOrderCount.toLocaleString()}</div>
                     <div className="text-gray-500 text-sm dark:text-white">Số đơn hàng đã giao</div>
                 </div>
                 <div
                     className="bg-white dark:bg-gray-800 rounded-md shadow p-6 flex flex-col gap-2"
                 >
-                    <div className="text-2xl font-bold bg-green-100 text-green-700 w-fit px-2">{summaryData?.soldProductCount.toLocaleString()}</div>
+                    <div className="text-2xl font-bold bg-blue-100 text-blue-700 w-fit px-2">{summaryData?.soldProductCount.toLocaleString()}</div>
                     <div className="text-gray-500 text-sm dark:text-white">Số sản phẩm bán ra</div>
                 </div>
                 <div

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Img1 from "../../../assets/male-sneaker/sneaker-blue.png";
 import { BlogAdd } from './BlogAdd';
 import { ManagerBlog } from './BlogInterface';
 import { blogApi } from '../../../api-client/api';

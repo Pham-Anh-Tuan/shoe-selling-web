@@ -8,7 +8,7 @@ interface ProductAddProps {
     toggleRefresh: () => void;
 }
 
-export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh }) => {
+export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd}) => {
     interface SizeQuantity {
         id: string;
         size: number;
@@ -338,7 +338,7 @@ export const ProductAdd: React.FC<ProductAddProps> = ({ toggleAdd, toggleRefresh
         });
 
         try {
-            const response = await addProductApi.addProduct(formData);
+            await addProductApi.addProduct(formData);
             window.location.reload();
         } catch (error: any) {
             alertError(error?.response?.data);

@@ -12,23 +12,10 @@ import java.util.List;
 
 @Configuration
 public class CorsConfig {
-    //    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/**")
-//                        .allowedOrigins("http://localhost:5173") //đúng origin
-//                        .allowedMethods("*")
-//                        .allowedHeaders("*")
-//                        .allowCredentials(true); // bắt buộc nếu dùng Authorization token
-//            }
-//        };
-//    }
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173", "http://192.168.1.9:5173")); // Không dùng "*"
+        config.setAllowedOrigins(List.of("http://localhost:5173", "http://kushoe.xyz", "https://kushoe.xyz")); // Không dùng "*"
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true); // Bắt buộc nếu có Authorization header hoặc cookie

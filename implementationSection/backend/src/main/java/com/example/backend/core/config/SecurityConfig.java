@@ -32,11 +32,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/public/**").permitAll()  // ✅ Cho phép truy cập không cần đăng nhập (ví dụ: đăng ký, đăng nhập)
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // 🔐 Chỉ admin mới truy cập được
-                        .requestMatchers("/api/staff/**").hasAnyRole("STAFF", "ADMIN")
-                        .requestMatchers("/api/user/**").hasAnyRole("USER", "STAFF", "ADMIN")
-                        .anyRequest().authenticated()
+                                .requestMatchers("/api/public/**").permitAll()
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN") // 🔐 Chỉ admin mới truy cập được
+                                .requestMatchers("/api/staff/**").hasAnyRole("STAFF", "ADMIN")
+                                .requestMatchers("/api/user/**").hasAnyRole("USER", "STAFF", "ADMIN")
+                                .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth
                         .successHandler(oAuth2SuccessHandler)
@@ -46,7 +46,7 @@ public class SecurityConfig {
                             res.setStatus(HttpStatus.UNAUTHORIZED.value());
                             res.setContentType("application/json");
                             res.setCharacterEncoding("UTF-8");
-                            res.getWriter().write("{\"message\": \"Unauthorized\"}");
+                            res.getWriter().write("{\"message\": \"Unauthorized3\"}");
                         })
                 );
 

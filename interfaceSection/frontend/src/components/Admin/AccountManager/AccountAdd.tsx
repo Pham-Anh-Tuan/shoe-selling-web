@@ -40,10 +40,6 @@ export const AccountAdd: React.FC<AccountAddProps> = ({ toggleAdd }) => {
         emailUpdate: ""
     });
 
-    const setId = (id: string) => {
-        setAccount((prev) => ({ ...prev, id }));
-    };
-
     const setEmail = (email: string) => {
         setAccount((prev) => ({ ...prev, email }));
     };
@@ -127,7 +123,7 @@ export const AccountAdd: React.FC<AccountAddProps> = ({ toggleAdd }) => {
         }
 
         try {
-            const response = await accountApi.addAccount(formData);
+            await accountApi.addAccount(formData);
             window.location.reload();
         } catch (error: any) {
             alertError(error?.response?.data);

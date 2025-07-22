@@ -46,7 +46,7 @@ const PassChange = () => {
         formData.append("newPassword", changePassword.newPassword);
 
         try {
-            const response = await authApi.changePassword(formData);
+            await authApi.changePassword(formData);
             window.location.reload();
         } catch (error: any) {
             alertError(error?.response?.data);

@@ -27,6 +27,9 @@ import OAuth2Redirect from '../components/SignInOut/OAuth2Redirect';
 import Interest from '../components/Interest/Interest';
 import TopTypes from '../components/TopTypes/TopTypes';
 import BannerList from '../components/Admin/BannerManager/BannerList';
+import Privacy from '../components/Shared/Privacy';
+import Terms from '../components/Shared/Terms';
+import DeleteAccount from '../components/Shared/DeleteAccount';
 
 const AppRoutes = () => {
     const [signInPopup, setSignInPopup] = useState(false);
@@ -83,6 +86,10 @@ const AppRoutes = () => {
                     <Route path="tui-cam-tay-nam" element={<Products />} />
                     <Route path="that-lung-nam" element={<Products />} />
                     <Route path="products/" element={<Products />} />
+
+                    <Route path="privacy" element={<Privacy />} />
+                    <Route path="terms" element={<Terms />} />
+                    <Route path="delete-account" element={<DeleteAccount />} />
 
                     <Route path="/oauth2-redirect" element={<OAuth2Redirect />} />
                     

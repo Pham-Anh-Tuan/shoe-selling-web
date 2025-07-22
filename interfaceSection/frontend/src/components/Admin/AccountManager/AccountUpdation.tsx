@@ -56,10 +56,6 @@ export const AccountUpdation: React.FC<AccountUpdationProps> = ({ updateId, togg
         loadAccount();
     }, [updateId]);
 
-    const setId = (id: string) => {
-        setAccount((prev) => ({ ...prev, id }));
-    };
-
     const setEmail = (email: string) => {
         setAccount((prev) => ({ ...prev, email }));
     };

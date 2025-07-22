@@ -31,11 +31,34 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private AccountRepository accountRepository;
 
+    private static final List<String> PUBLIC_URLS = List.of(
+            "/api/public/",
+            "/api/public/avatars/",
+            "/api/public/productImages/",
+            "/api/public/thumbnails/",
+            "/api/public/blogImages/",
+            "/api/public/bannerImages/",
+            "/public/",
+            "/public/avatars/",
+            "/public/productImages/",
+            "/public/thumbnails/",
+            "/public/blogImages/",
+            "/public/bannerImages/"
+    );
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
+
+        String path = request.getRequestURI().toString();
+
+        // Nếu là đường dẫn công khai thì bỏ qua JWT filter
+        if (PUBLIC_URLS.stream().anyMatch(path::startsWith)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         try {
             String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);

@@ -9,7 +9,7 @@ interface ProductUpdationProps {
     toggleRefresh: () => void;
 };
 
-const ProductUpdation: React.FC<ProductUpdationProps> = ({ updateId, toggleUpdate, toggleRefresh }) => {
+const ProductUpdation: React.FC<ProductUpdationProps> = ({ updateId, toggleUpdate }) => {
     interface SizeQuantity {
         id: string;
         size: number;
@@ -379,7 +379,7 @@ const ProductUpdation: React.FC<ProductUpdationProps> = ({ updateId, toggleUpdat
         });
 
         try {
-            const response = await updateProductApi.updateProduct(formData);
+            await updateProductApi.updateProduct(formData);
             window.location.reload();
         } catch (error: any) {
             alertError(error?.response?.data);

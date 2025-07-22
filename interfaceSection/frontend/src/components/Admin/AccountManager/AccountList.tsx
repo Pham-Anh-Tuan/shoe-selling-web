@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { FaLock } from "react-icons/fa";
-import { FaLockOpen } from "react-icons/fa";
 import { accountApi } from "../../../api-client/api";
 import formatDateDMYHM from "../../../hooks/DateTimeFormat";
 import Pagination from "../../../hooks/Pagination";
@@ -134,7 +132,7 @@ const AccountList = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {accountsData.map((data, index) => (
+                                    {accountsData.map((data) => (
                                         <tr key={data.id}
                                             className="border-b dark:border-gray-700">
                                             <th scope="row" className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">

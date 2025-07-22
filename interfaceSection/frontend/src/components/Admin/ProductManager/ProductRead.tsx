@@ -75,14 +75,6 @@ const ProductRead: React.FC<ProductReadProps> = ({ readId, toggleRead }) => {
         fetchApi();
     }, [readId]);
 
-    const setPrice = (newPrice: number) => {
-        setProduct((prevProduct) => ({
-            ...prevProduct,
-            price: newPrice < 0 ? 0 : newPrice, // Đảm bảo giá không âm
-        }));
-    };
-
-
     return (
         <div className="relative p-4 w-full max-w-2xl max-h-full">
             <div className="relative p-4 bg-white rounded-md shadow dark:bg-gray-800 sm:p-5">

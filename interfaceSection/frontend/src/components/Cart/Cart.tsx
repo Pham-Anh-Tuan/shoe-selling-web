@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { CartItem } from "./CartContext";
 import formatCurrencyVND from "../../hooks/FormatCurrency";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { cartApi } from "../../api-client/api";
 
 interface CartProps {

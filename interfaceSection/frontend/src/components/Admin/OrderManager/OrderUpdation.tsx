@@ -34,10 +34,6 @@ const OrderUpdation: React.FC<OrderUpdationProps> = ({ updateId, toggleUpdate })
     setOrder(prev => ({ ...prev, paymentStatus: newStatus }));
   };
 
-  const setEmail = (userEmail: string) => {
-    setOrder(prev => ({ ...prev, email: userEmail }));
-  }
-
   useEffect(() => {
     if (!updateId) return;  // Chặn gọi API nếu id là undefined
     const fetchApi = async () => {

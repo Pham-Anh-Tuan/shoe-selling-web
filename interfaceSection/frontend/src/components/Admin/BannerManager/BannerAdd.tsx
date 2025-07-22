@@ -2,9 +2,7 @@
 import { useState } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { MdOutlineCancel } from "react-icons/md";
-import { IoDocumentTextOutline } from "react-icons/io5";
 import { bannerApi } from "../../../api-client/api";
-
 
 interface BannerAddProps {
     toggleAdd: () => void;
@@ -49,12 +47,6 @@ export const BannerAdd: React.FC<BannerAddProps> = ({ toggleAdd }) => {
         setBanner(prev => ({ ...prev, status: newStatus }));
     };
 
-    const setEmail = (newEmail: string) => {
-        setBanner(prev => ({ ...prev, email: newEmail }));
-    };
-
-
-
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -84,7 +76,7 @@ export const BannerAdd: React.FC<BannerAddProps> = ({ toggleAdd }) => {
         }
 
         try {
-            const response = await bannerApi.createBanner(formData);
+            await bannerApi.createBanner(formData);
         } catch (error: any) {
             console.error("Error saving product:", error);
         }
@@ -92,7 +84,6 @@ export const BannerAdd: React.FC<BannerAddProps> = ({ toggleAdd }) => {
     }
 
     return (
-        // <div className="mx-auto mt-10 p-4 border rounded-xl shadow-xl bg-white">
         <div className="relative p-4 w-full max-w-2xl max-h-full">
             <div className="relative p-4 bg-white rounded-md shadow dark:bg-gray-800 sm:p-5">
 

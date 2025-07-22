@@ -1,6 +1,3 @@
-import Image1 from "../../assets/hero/top3.png";
-import Image2 from "../../assets/hero/top2.png";
-import Image3 from "../../assets/hero/top1.png";
 import Slider from "react-slick";
 import { useEffect, useState } from "react";
 import { bannerApi } from "../../api-client/api";
