@@ -19,14 +19,14 @@ ________________________________________
 ________________________________________
 4. Test Scenarios & Test Cases
 4.1 Authentication (Spring Security)
-| ID         | Test Case          | Steps                                        | Expected Result                          |
-|------------|-------------------|-----------------------------------------------|------------------------------------------|
-| TC-Auth-01 | User Registration | Enter valid email, fullname,                  | Display successful registration message  |
-|            |                   |  password, confirm password                   |                                          |
-| TC-Auth-02 | User Login        | Enter valid credentials                       | Login successful, redirect to homepage   |
-| TC-Auth-03 | Invalid Login     | Enter wrong password                          | Error message displayed                  |
-| TC-Auth-04 | Logout            | Click logout                                  | Local storage cleared,                   |
-|            |                   |                                               | redirect to homepage                     |
+| ID        | Test Case           | Steps                                | Expected Result                            |
+|-----------|---------------------|--------------------------------------|--------------------------------------------|
+| TC-Auth-01| User Registration   | Enter valid email, fullname,         | Display successful registration message    |
+|           |                     | password, confirm password           |                                            |
+| TC-Auth-02| User Login          | Enter valid credentials              | Login successful, redirect home            |
+| TC-Auth-03| Invalid Login       | Enter wrong password                 | Error message displayed                    |
+| TC-Auth-04| Logout              | Click logout                         | Local storage cleared, redirect to homepage|
+
 ________________________________________
 4.2 Product Management (REST API + JPA)
 | ID         | Test Case             | Steps                                | Expected Result        |
